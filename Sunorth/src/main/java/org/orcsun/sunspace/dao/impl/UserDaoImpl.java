@@ -30,7 +30,7 @@
 /*  43 */     parameters.put("credit", Integer.valueOf(u.getCredit()));
 /*  44 */     parameters.put("reputation", Integer.valueOf(u.getReputation()));
 /*     */ 
-/*  46 */     parameters.put("regtime", Long.valueOf(System.currentTimeMillis()));
+///*  46 */     parameters.put("regtime", Long.valueOf(System.currentTimeMillis()));
 /*  47 */     parameters.put("status", Integer.valueOf(u.getStatus()));
 /*     */ 
 /*  50 */     Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(
@@ -79,7 +79,7 @@
 /*  99 */       u.setEmail(rs.getString("email"));
 /* 100 */       u.setCredit(rs.getInt("credit"));
 /* 101 */       u.setReputation(rs.getInt("reputation"));
-/* 102 */       u.setRegtime(rs.getLong("regtime"));
+/* 102 */       u.setRegtime(rs.getTimestamp("regtime"));
 /* 103 */       u.setStatus(rs.getInt("status"));
 /* 104 */       return u;
 /*     */     }

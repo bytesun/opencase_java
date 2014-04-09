@@ -1,9 +1,12 @@
 /*    */ package org.orcsun.sunspace.object;
+
+import java.util.Date;
+
 /*    */ 
 /*    */ public class User
 /*    */ {
 /* 15 */   private long uid = 0L;
-/*    */   private long regtime;
+/*    */   private Date regtime;
 /*    */   private String name;
 /*    */   private String passwd;
 /*    */   private String email;
@@ -48,12 +51,13 @@
 /*    */   public void setReputation(int reputation) {
 /* 54 */     this.reputation = reputation;
 /*    */   }
-/*    */   public long getRegtime() {
-/* 57 */     return this.regtime;
-/*    */   }
-/*    */   public void setRegtime(long regtime) {
-/* 60 */     this.regtime = regtime;
-/*    */   }
+
+public Date getRegtime() {
+	return regtime;
+}
+public void setRegtime(Date regtime) {
+	this.regtime = regtime;
+}
 /*    */   public int getStatus() {
 /* 63 */     return this.status;
 /*    */   }

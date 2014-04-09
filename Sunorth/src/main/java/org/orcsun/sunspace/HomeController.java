@@ -137,6 +137,7 @@
 /*     */     }
 /*     */     catch (Exception e)
 /*     */     {
+				logger.error("Failed to register user:"+e.getMessage());
 /* 155 */       model.addAttribute("errormsg", e.getMessage());
 /*     */     }
 /* 157 */     String cid = req.getParameter("cid");
