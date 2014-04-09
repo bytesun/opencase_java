@@ -42,7 +42,9 @@
 /* 44 */           SimpleDateFormat formatter = new SimpleDateFormat("yyy-MM-dd");
 /* 45 */           Date date = formatter.parse((String)deadline);
 /* 46 */           todo.setDeadline(date);
-/*    */         }
+/*    */         }else{
+					todo.setDeadline(new Date());
+				 }
 /* 48 */         todo.setUser((User)user);
 /* 49 */         this.todoDao.addTodo(todo);
 /*    */       } catch (Exception e) {

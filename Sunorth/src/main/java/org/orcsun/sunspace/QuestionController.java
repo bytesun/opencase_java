@@ -172,14 +172,12 @@
 /*     */         try {
 /* 188 */           a.setAnswer(StringUtil.utf8(answer, "iso-8859-1"));
 /* 189 */           this.answerDao.addAnswer(a, lang);
-/*     */ 
-/* 191 */           Question q = this.quesDao.getQuestion(Long.parseLong(qid), lang);
-/* 192 */           int acnt = q.getAnswercnt() + 1;
-/* 193 */           q.setAnswercnt(acnt);
+					//increase answer cnt
+/* 191 */           this.quesDao.addAnswerCnt(Long.parseLong(qid),1,lang);
+					//mark the question is resolved
 /* 194 */           Object isresolved = req.getParameter("isresolved");
 /* 195 */           if (isresolved != null)
-/* 196 */             q.setResolved(true);
-/* 200 */           this.quesDao.updateQuestion(q, lang);
+	/* 200 */           this.quesDao.resolveQuestion(Long.parseLong(qid), lang);
 /*     */         } catch (Exception e) {
 /* 202 */           model.addAttribute("errormsg", e.getMessage());
 /*     */         }

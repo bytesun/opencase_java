@@ -25,4 +25,7 @@ public abstract interface QuestionDAO
   public abstract List<Question> findMyQuestions(long paramLong, String paramString);
 
   public abstract List<Comment> findComments(long paramLong, String paramString);
+  
+  public abstract int addAnswerCnt(long qid,int cnt,String lang);
+  public abstract int resolveQuestion(long qid,String lang);
 }

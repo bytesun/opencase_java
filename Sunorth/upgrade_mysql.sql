@@ -1,3 +1,7 @@
+--2014/4/9
+alter table todo modify column note text;
+alter table comment_en modify column comment text;
+alter table comment_en modify column comment text;
 --2014/4/8
 
 alter table question_en drop column qtime;
@@ -23,4 +27,7 @@ ALTER TABLE todo add column  ttime TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL;
 ALTER TABLE todo add column  deadline TIMESTAMP DEFAULT '0000-00-00 00:00:00' NOT NULL;
 
 ALTER TABLE users add column regtime TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL;
+
+ALTER TABLE answer_en add column  isanswer CHAR(5) DEFAULT 0;
+ALTER TABLE answer_zh add column  isanswer CHAR(5) DEFAULT 0;
 

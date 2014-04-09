@@ -5,11 +5,8 @@
 	<div class="col-md-8">
 	<!-- --------------category -->
 	<!-- parent category -->
-	
-		
 			
 			<ol class="breadcrumb">
-			<spring:message code="common.category" text="Category" />	
 			<c:choose>
 				<c:when test="${upcat!=null}">
 					<li>

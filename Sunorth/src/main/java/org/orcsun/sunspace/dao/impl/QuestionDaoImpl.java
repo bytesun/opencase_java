@@ -77,7 +77,7 @@
 /*     */ 
 /*     */   public List<Question> findNewQuestions(int cnt, String lang)
 /*     */   {
-/* 118 */     String sql = "select qid,pid,cid,question,tag,rate,answercnt,uid,description,qtime,status from question_" + lang + " order by qid desc limit " + cnt;
+/* 118 */     String sql = "select qid,pid,cid,question,tag,rate,answercnt,uid,description,qtime,status from question_" + lang + " where status=0 order by qtime,rate desc limit " + cnt;
 /* 119 */     logger.info(sql);
 /* 120 */     return getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
 /*     */   }
@@ -167,4 +167,16 @@
 /* 104 */       return q;
 /*     */     }
 /*     */   }
-/*     */ }
+/*     */
+@Override
+public int addAnswerCnt(long qid,int cnt,String lang) {
+	String sql ="update question_"+lang+" set answercnt=(answercnt+"+cnt+") where qid="+qid;
+	logger.info(sql);
+	return this.getJdbcTemplate().update(sql);
+}
+@Override
+public int resolveQuestion(long qid,String lang) {
+	String sql = "update question_"+lang+" set status=1 where qid="+qid;
+	logger.info(sql);
+	return this.getJdbcTemplate().update(sql);
+} }
