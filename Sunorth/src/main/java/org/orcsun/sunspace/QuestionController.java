@@ -178,10 +178,7 @@
 /* 193 */           q.setAnswercnt(acnt);
 /* 194 */           Object isresolved = req.getParameter("isresolved");
 /* 195 */           if (isresolved != null)
-/* 196 */             q.setStatus(9);
-/*     */           else {
-/* 198 */             q.setStatus(1);
-/*     */           }
+/* 196 */             q.setResolved(true);
 /* 200 */           this.quesDao.updateQuestion(q, lang);
 /*     */         } catch (Exception e) {
 /* 202 */           model.addAttribute("errormsg", e.getMessage());
@@ -217,7 +214,7 @@
 /* 234 */         a.setUser((User)u);
 /* 235 */         a.setAnswer(req.getParameter("answer"));
 /* 236 */         this.answerDao.addAnswer(a, lang);
-/* 237 */         q.setStatus(9);
+/* 237 */         q.setResolved(true);
 /* 238 */         this.quesDao.updateQuestion(q, lang);
 /*     */       }
 /* 240 */       return "redirect:/question/" + qid;
@@ -326,21 +323,24 @@
 /* 343 */         String vcomment = req.getParameter("vcomment");
 /* 344 */         int vote = 1;
 /* 345 */         if (req.getParameter("vdown") != null) vote = -1;
-/* 346 */         if (aid != null)
-/* 347 */           this.answerDao.voteAnswer(Long.parseLong(aid), vote, vcomment, ((User)u).getUid(), lang);
-/*     */       } catch (Exception e) {
+/* 346 */         if (aid != null){
+					if(req.getParameter("isanswer")!=null){
+						 this.answerDao.voteAnswer(Long.parseLong(aid), vote,1, vcomment, ((User)u).getUid(), lang);
+					}else{
+						 this.answerDao.voteAnswer(Long.parseLong(aid), vote,0, vcomment, ((User)u).getUid(), lang);
+						
+					}
+				}
+/*     */       }catch (Exception e) {
 /* 349 */         logger.error(e.getMessage());
 /* 350 */         model.addAttribute("errormsg", e.getMessage());
-/*     */       }
-/* 352 */       return "redirect:/question/" + qid;
-/*     */     }
+	/* 352 */  
+				}
+				return "redirect:/question/" + qid;
+			}			
 /* 354 */     String cid = req.getParameter("cid");
 /* 355 */     String pid = req.getParameter("pid");
 /* 356 */     return "redirect:/redirectLogin?cid=" + cid + "&pid=" + pid;
 /*     */   }
-/*     */ }
 
-/* Location:           E:\2014097ois-Sunorth-1.1.6\WEB-INF\classes\
- * Qualified Name:     org.orcsun.sunspace.QuestionController
- * JD-Core Version:    0.6.2
- */
+}

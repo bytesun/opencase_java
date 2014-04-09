@@ -1,11 +1,14 @@
 /*    */ package org.orcsun.sunspace.object;
+
+import java.util.Date;
+
 /*    */ 
 /*    */ public class Question
 /*    */ {
 /* 22 */   private long qid = 0L; private long pid = 0L; private long cid = 0L;
-/*    */   private long qtime;
+/*    */   private Date qtime;
 /* 23 */   private int rate = 0; private int answercnt = 0;
-/*    */   private int status;
+/*    */   private boolean resolved;
 /* 24 */   private String question = ""; private String description = ""; private String tag = "";
 /*    */   private User user;
 /*    */ 
@@ -58,13 +61,7 @@
 /*    */   public void setTag(String tag) {
 /* 73 */     this.tag = tag;
 /*    */   }
-/*    */   public long getQtime() {
-/* 76 */     return this.qtime;
-/*    */   }
-/*    */   public void setQtime(long qtime) {
-/* 79 */     this.qtime = qtime;
-/*    */   }
-/*    */ 
+
 /*    */   public User getUser()
 /*    */   {
 /* 84 */     return this.user;
@@ -72,18 +69,22 @@
 /*    */   public void setUser(User user) {
 /* 87 */     this.user = user;
 /*    */   }
-/*    */   public int getStatus() {
-/* 90 */     return this.status;
-/*    */   }
-/*    */   public void setStatus(int status) {
-/* 93 */     this.status = status;
-/*    */   }
+
+public Date getQtime() {
+	return qtime;
+}
+public void setQtime(Date qtime) {
+	this.qtime = qtime;
+}
+
+
+public boolean isResolved() {
+	return resolved;
+}
+public void setResolved(boolean resolved) {
+	this.resolved = resolved;
+}
 /*    */   public String toString() {
 /* 96 */     return this.question;
 /*    */   }
 /*    */ }
-
-/* Location:           E:\2014097ois-Sunorth-1.1.6\WEB-INF\classes\
- * Qualified Name:     org.orcsun.sunspace.object.Question
- * JD-Core Version:    0.6.2
- */

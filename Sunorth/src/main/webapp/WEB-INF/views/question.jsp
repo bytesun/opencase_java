@@ -35,9 +35,6 @@
 	  <div class="panel-foot">
 		<div>
 	  		<c:out value="${question.user.name}"/>
-
-			<jsp:setProperty name="dateValue" property="time" value="${question.qtime}" />
-		  	<fmt:formatDate value="${dateValue}" pattern="MM/dd/yyyy HH:mm:ss" />
 	  	</div>
 	  </div>
 	</div>		
@@ -79,8 +76,6 @@
 			  			<tr><td  style="word-wrap: break-word">  	
 						 	<c:out value="${comment.comment}"  escapeXml="false"/><br>
 						 	<!-- time -->
-						 	<jsp:setProperty name="dateValue" property="time" value="${answer.atime}" />
-					  		<fmt:formatDate value="${dateValue}" pattern="MM/dd/yyyy HH:mm:ss" />
 					  		<c:out value="${comment.user.name}"/>
 			    		</td></tr>
 			  		</c:forEach>
@@ -113,15 +108,12 @@
 	  			<tr><td  style="word-wrap: break-word">  	
 				 	 
 				 	<h3>
-				 	<button class="btn btn-default" data-toggle="modal" data-target=".proposalVote">
-				 	<span class="label label-info"><c:out value="${answer.rate}"/></span></button>
+				 	<button class="btn btn-success" data-toggle="modal" data-target=".proposalVote">
+				 	<c:out value="${answer.rate}"/></button>
 				 	
 				 	<c:out value="${answer.user.name}"/></h3>
 				 	 
 				 	<c:out value="${answer.answer}"  escapeXml="false"/><br>
-				 	<!-- time -->
-				 	<jsp:setProperty name="dateValue" property="time" value="${answer.atime}" />
-			  		<fmt:formatDate value="${dateValue}" pattern="MM/dd/yyyy HH:mm:ss" />
 			  		
 			  		<!-- vote -->
 				 	<c:if test="${user!=null}">
@@ -136,7 +128,9 @@
 							  		<textarea name="vcomment"  placeholder="<spring:message code="vote.comment.notice" text="Please give a comment about your vote..." />"></textarea>
 								  	<input type="submit" class="btn btn-success" name="vup" value="<spring:message code="vote.up" text="Vup" />">
 								  	<input type="submit" class="btn btn-success" name="vdown" value="<spring:message code="vote.down" text="Vdown" />">
-		
+									<c:if test="${user.uid!=answer.user.uid}">
+										<input type="checkbox" name="isanswer" value="1"><spring:message code="question.proposal.accept" text="Accept the proposal" />
+									</c:if>
 										
 							  </form>		
 						    </div>
@@ -158,7 +152,7 @@
 				</a>
 			</c:when>
 	
-			<c:when	 test="${user!=null && question.status < 9}">
+			<c:when	 test="${user!=null && !question.resolved}">
 				<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/answer" method="POST">
 					<input type="hidden" name="qid" value="${question.qid}">
 				  
@@ -171,8 +165,8 @@
 					<button type="submit" class="btn btn-success">
 					<spring:message code="question.proposal.submit" text="My Proposal" /></button>
 					<c:if test="${user.uid==question.user.uid}">
-					<input type="checkbox" value="IsResolved" name="isresolved">
-					<spring:message code="common.itsresolved" text="IsResolved"/>
+						<input type="checkbox" value="IsResolved" name="isresolved">
+						<spring:message code="common.itsresolved" text="IsResolved"/>
 					</c:if>
 				  </div>	 
 				</form>	

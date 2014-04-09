@@ -1,13 +1,17 @@
 /*    */ package org.orcsun.sunspace.object;
+
+import java.util.Date;
+
 /*    */ 
 /*    */ public class Answer
 /*    */ {
 /*    */   private long qid;
 /*    */   private long aid;
-/*    */   private long atime;
+/*    */   private Date atime;
 /*    */   private int rate;
 /*    */   private String answer;
 /*    */   private User user;
+		   private boolean answered;
 /*    */ 
 /*    */   public long getAid()
 /*    */   {
@@ -22,13 +26,20 @@
 /*    */   public void setQid(long qid) {
 /* 28 */     this.qid = qid;
 /*    */   }
-/*    */   public long getAtime() {
-/* 31 */     return this.atime;
-/*    */   }
-/*    */   public void setAtime(long atime) {
-/* 34 */     this.atime = atime;
-/*    */   }
-/*    */ 
+
+public Date getAtime() {
+	return atime;
+}
+public void setAtime(Date atime) {
+	this.atime = atime;
+}
+
+public boolean isAnswered() {
+	return answered;
+}
+public void setAnswered(boolean answered) {
+	this.answered = answered;
+}
 /*    */   public int getRate() {
 /* 38 */     return this.rate;
 /*    */   }
@@ -51,9 +62,6 @@
 /*    */   public void setUser(User user) {
 /* 57 */     this.user = user;
 /*    */   }
+
 /*    */ }
 
-/* Location:           E:\2014097ois-Sunorth-1.1.6\WEB-INF\classes\
- * Qualified Name:     org.orcsun.sunspace.object.Answer
- * JD-Core Version:    0.6.2
- */

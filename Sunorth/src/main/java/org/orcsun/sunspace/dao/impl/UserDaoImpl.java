@@ -55,7 +55,7 @@
 /*     */     }
 /*  76 */     return u;
 /*     */   }
-/*     */ 
+
 /*     */   public User findUserByEmail(String email) {
 /*  80 */     String sql = "select uid,name,passwd,email,credit,reputation,regtime,status from users where email='" + email + "'";
 /*  81 */     logger.info(sql);

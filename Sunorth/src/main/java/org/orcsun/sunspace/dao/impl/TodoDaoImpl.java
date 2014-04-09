@@ -20,10 +20,10 @@
 /*    */ 
 /*    */   public int addTodo(Todo td)
 /*    */   {
-/* 30 */     String sql = "insert into todo(todo,note,ttime,ttype,uid,priority,deadline) values(?,?,?,?,?,?,?)";
+/* 30 */     String sql = "insert into todo(todo,note,ttype,uid,priority,deadline) values(?,?,?,?,?,?)";
 /* 31 */     this.logger.info(sql);
 /*    */ 
-/* 33 */     Object[] args = { td.getTodo(), td.getNote(), Long.valueOf(System.currentTimeMillis()), Short.valueOf(td.getTtype()), Long.valueOf(td.getUser().getUid()), Short.valueOf(td.getPriority()), Long.valueOf(td.getDeadline()) };
+/* 33 */     Object[] args = { td.getTodo(), td.getNote(), Short.valueOf(td.getTtype()), Long.valueOf(td.getUser().getUid()), Short.valueOf(td.getPriority()), td.getDeadline() };
 /* 34 */     return getJdbcTemplate().update(sql, args);
 /*    */   }
 /*    */ 
@@ -35,7 +35,7 @@
 /*    */   public int updateTodo(Todo todo)
 /*    */   {
 /* 44 */     String sql = "update todo set todo=?, note=?, priority=?,deadline=?,status=? where tid=?";
-/* 45 */     Object[] args = { todo.getTodo(), todo.getNote(), Short.valueOf(todo.getPriority()), Long.valueOf(todo.getDeadline()), Short.valueOf(todo.getStatus()), Long.valueOf(todo.getTid()) };
+/* 45 */     Object[] args = { todo.getTodo(), todo.getNote(), Short.valueOf(todo.getPriority()), todo.getDeadline(), todo.isDone(), Long.valueOf(todo.getTid()) };
 /* 46 */     return getJdbcTemplate().update(sql, args);
 /*    */   }
 /*    */ 
@@ -47,7 +47,7 @@
 /*    */ 
 /*    */   public List<Todo> findTodayTodos(long uid)
 /*    */   {
-/* 57 */     String sql = "select tid,todo,note,ttime,ttype,priority,deadline,status from todo where uid=" + uid + " and status<>9 and (deadline=0 or (" + System.currentTimeMillis() + "-deadline)>0) order by priority";
+/* 57 */     String sql = "select tid,todo,note,ttime,ttype,priority,deadline,status from todo where uid=" + uid + " and status<>9 and  CURRENT_TIMESTAMP >= deadline order by priority";
 /* 58 */     this.logger.info(sql);
 /* 59 */     return getJdbcTemplate().query(sql, new TodoMapper(null));
 /*    */   }
@@ -59,7 +59,7 @@
 /* 89 */       sb.append(tid + ",");
 /* 90 */     sb.append("0");
 /* 91 */     this.logger.info("Done all these todos : " + sb);
-/* 92 */     return getJdbcTemplate().update("update todo set status=9,deadline=" + System.currentTimeMillis() + " where tid in (" + sb.toString() + ")");
+/* 92 */     return getJdbcTemplate().update("update todo set status=9,deadline=CURRENT_TIMESTAMP where tid in (" + sb.toString() + ")");
 /*    */   }
 /*    */ 
 /*    */   public static final class TodoMapper
@@ -78,12 +78,12 @@
 /* 72 */       td.setTodo(rs.getString("todo"));
 /* 73 */       td.setNote(rs.getString("note"));
 /* 74 */       td.setPriority(rs.getShort("priority"));
-/* 75 */       td.setTtime(rs.getLong("ttime"));
+/* 75 */       td.setTtime(rs.getTimestamp("ttime"));
 /* 76 */       td.setTtype(rs.getShort("ttype"));
-/* 77 */       td.setStatus(rs.getShort("status"));
+/* 77 */       td.setDone(rs.getBoolean("status"));
 /* 78 */       if (this.userDao != null)
 /* 79 */         td.setUser(this.userDao.findUserByID(rs.getLong("uid")));
-/* 80 */       td.setDeadline(rs.getLong("deadline"));
+/* 80 */       td.setDeadline(rs.getTimestamp("deadline"));
 /* 81 */       return td;
 /*    */     }
 /*    */   }

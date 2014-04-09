@@ -17,8 +17,3 @@ public abstract interface TodoDAO
 
   public abstract int doneTodo(Object[] paramArrayOfObject);
 }
-
-/* Location:           E:\2014097ois-Sunorth-1.1.6\WEB-INF\classes\
- * Qualified Name:     org.orcsun.sunspace.dao.TodoDAO
- * JD-Core Version:    0.6.2
- */

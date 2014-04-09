@@ -41,7 +41,7 @@
 /* 43 */           logger.info(req.getParameter("deadline"));
 /* 44 */           SimpleDateFormat formatter = new SimpleDateFormat("yyy-MM-dd");
 /* 45 */           Date date = formatter.parse((String)deadline);
-/* 46 */           todo.setDeadline(date.getTime());
+/* 46 */           todo.setDeadline(date);
 /*    */         }
 /* 48 */         todo.setUser((User)user);
 /* 49 */         this.todoDao.addTodo(todo);

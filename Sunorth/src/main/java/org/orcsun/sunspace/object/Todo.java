@@ -1,10 +1,13 @@
 /*    */ package org.orcsun.sunspace.object;
+
+import java.util.Date;
+
 /*    */ 
 /*    */ public class Todo
 /*    */ {
-/* 16 */   private long tid = 0L; private long ttime = 0L; private long deadline = 0L;
+/* 16 */   private long tid = 0L; private Date ttime; private Date deadline;
 /* 17 */   private String todo = ""; private String note = "";
-/* 18 */   private short ttype = 0; private short status = 0; private short priority = 0;
+/* 18 */   private short ttype = 0; private boolean isDone; private short priority = 0;
 /*    */   private User user;
 /*    */ 
 /*    */   public long getTid()
@@ -14,19 +17,7 @@
 /*    */   public void setTid(long tid) {
 /* 24 */     this.tid = tid;
 /*    */   }
-/*    */   public long getTtime() {
-/* 27 */     return this.ttime;
-/*    */   }
-/*    */   public void setTtime(long ttime) {
-/* 30 */     this.ttime = ttime;
-/*    */   }
-/*    */ 
-/*    */   public long getDeadline() {
-/* 34 */     return this.deadline;
-/*    */   }
-/*    */   public void setDeadline(long deadline) {
-/* 37 */     this.deadline = deadline;
-/*    */   }
+
 /*    */   public String getTodo() {
 /* 40 */     return this.todo;
 /*    */   }
@@ -45,12 +36,7 @@
 /*    */   public void setTtype(short ttype) {
 /* 55 */     this.ttype = ttype;
 /*    */   }
-/*    */   public short getStatus() {
-/* 58 */     return this.status;
-/*    */   }
-/*    */   public void setStatus(short status) {
-/* 61 */     this.status = status;
-/*    */   }
+
 /*    */   public short getPriority() {
 /* 64 */     return this.priority;
 /*    */   }
@@ -58,9 +44,28 @@
 /* 67 */     this.priority = priority;
 /*    */   }
 /*    */ 
+
 /*    */   public User getUser() {
 /* 71 */     return this.user;
 /*    */   }
+public Date getTtime() {
+	return ttime;
+}
+public void setTtime(Date ttime) {
+	this.ttime = ttime;
+}
+public Date getDeadline() {
+	return deadline;
+}
+public void setDeadline(Date deadline) {
+	this.deadline = deadline;
+}
+public boolean isDone() {
+	return isDone;
+}
+public void setDone(boolean isDone) {
+	this.isDone = isDone;
+}
 /*    */   public void setUser(User user) {
 /* 74 */     this.user = user;
 /*    */   }
@@ -68,8 +73,3 @@
 /* 77 */     return this.todo;
 /*    */   }
 /*    */ }
-
-/* Location:           E:\2014097ois-Sunorth-1.1.6\WEB-INF\classes\
- * Qualified Name:     org.orcsun.sunspace.object.Todo
- * JD-Core Version:    0.6.2
- */

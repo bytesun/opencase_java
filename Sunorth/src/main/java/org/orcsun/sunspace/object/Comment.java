@@ -1,9 +1,12 @@
 /*    */ package org.orcsun.sunspace.object;
+
+import java.util.Date;
+
 /*    */ 
 /*    */ public class Comment
 /*    */ {
 /*    */   private long qid;
-/*    */   private long ctime;
+/*    */   private Date ctime;
 /*    */   private String comment;
 /*    */   private User user;
 /*    */ 
@@ -14,12 +17,13 @@
 /*    */   public void setQid(long qid) {
 /* 13 */     this.qid = qid;
 /*    */   }
-/*    */   public long getCtime() {
-/* 16 */     return this.ctime;
-/*    */   }
-/*    */   public void setCtime(long ctime) {
-/* 19 */     this.ctime = ctime;
-/*    */   }
+
+public Date getCtime() {
+	return ctime;
+}
+public void setCtime(Date ctime) {
+	this.ctime = ctime;
+}
 /*    */   public String getComment() {
 /* 22 */     return this.comment;
 /*    */   }

@@ -25,8 +25,8 @@
 /*     */   public int addQuestion(Question q, String lang) {
 /*  38 */     String sql = null;
 /*  39 */     Object[] args = null;
-/*  40 */     sql = "insert into question_" + lang + "(pid,cid,question,tag,answercnt,uid,description,qtime) values(?,?,?,?,?,?,?,?)";
-/*  41 */     args = new Object[] { Long.valueOf(q.getPid()), Long.valueOf(q.getCid()), q.getQuestion(), q.getTag(), Integer.valueOf(q.getAnswercnt()), Long.valueOf(q.getUser().getUid()), q.getDescription(), Long.valueOf(System.currentTimeMillis()) };
+/*  40 */     sql = "insert into question_" + lang + "(pid,cid,question,tag,answercnt,uid,description) values(?,?,?,?,?,?,?)";
+/*  41 */     args = new Object[] { Long.valueOf(q.getPid()), Long.valueOf(q.getCid()), q.getQuestion(), q.getTag(), Integer.valueOf(q.getAnswercnt()), Long.valueOf(q.getUser().getUid()), q.getDescription()};
 /*  42 */     logger.info("Add a new question :" + sql);
 /*  43 */     return getJdbcTemplate().update(sql, args);
 /*     */   }
@@ -35,8 +35,8 @@
 /*     */   {
 /*  48 */     String sql = null;
 /*  49 */     Object[] args = null;
-/*  50 */     sql = "update question_" + lang + " set pid=?,cid=?,question=?,rate=?,tag=?,answercnt=?,uid=?,description=?,qtime=?,status=? where qid=?";
-/*  51 */     args = new Object[] { Long.valueOf(q.getPid()), Long.valueOf(q.getCid()), q.getQuestion(), Integer.valueOf(q.getRate()), q.getTag(), Integer.valueOf(q.getAnswercnt()), Long.valueOf(q.getUser().getUid()), q.getDescription(), Long.valueOf(System.currentTimeMillis()), Integer.valueOf(q.getStatus()), Long.valueOf(q.getQid()) };
+/*  50 */     sql = "update question_" + lang + " set pid=?,cid=?,question=?,rate=?,tag=?,answercnt=?,uid=?,description=?,status=? where qid=?";
+/*  51 */     args = new Object[] { Long.valueOf(q.getPid()), Long.valueOf(q.getCid()), q.getQuestion(), Integer.valueOf(q.getRate()), q.getTag(), Integer.valueOf(q.getAnswercnt()), Long.valueOf(q.getUser().getUid()), q.getDescription(), q.isResolved(), Long.valueOf(q.getQid()) };
 /*  52 */     logger.info("Update node :" + sql);
 /*  53 */     return getJdbcTemplate().update(sql, args);
 /*     */   }
@@ -100,9 +100,9 @@
 /*     */   }
 /*     */ 
 /*     */   public int addComment(Comment c, String lang) {
-/* 141 */     String sql = "insert into comment_" + lang + "(qid,ctime,comment,uid) values(?,?,?,?)";
+/* 141 */     String sql = "insert into comment_" + lang + "(qid,comment,uid) values(?,?,?)";
 /* 142 */     logger.debug(sql);
-/* 143 */     return getJdbcTemplate().update(sql, new Object[] { Long.valueOf(c.getQid()), Long.valueOf(System.currentTimeMillis()), c.getComment(), Long.valueOf(c.getUser().getUid()) });
+/* 143 */     return getJdbcTemplate().update(sql, new Object[] { Long.valueOf(c.getQid()), c.getComment(), Long.valueOf(c.getUser().getUid()) });
 /*     */   }
 /*     */ 
 /*     */   public int vote(long qid, int vote, long uid, String lang)
@@ -132,7 +132,7 @@
 /*     */     {
 /* 172 */       Comment c = new Comment();
 /* 173 */       c.setQid(rs.getLong("qid"));
-/* 174 */       c.setCtime(rs.getLong("ctime"));
+/* 174 */       c.setCtime(rs.getTimestamp("ctime"));
 /* 175 */       c.setComment(rs.getString("comment"));
 /* 176 */       c.setUser(this.userDao.findUserByID(rs.getLong("uid")));
 /*     */ 
@@ -161,15 +161,10 @@
 /*  98 */       q.setRate(rs.getInt("rate"));
 /*  99 */       q.setAnswercnt(rs.getInt("answercnt"));
 /* 100 */       q.setUser(this.userDao.findUserByID(rs.getLong("uid")));
-/* 101 */       q.setQtime(rs.getLong("qtime"));
+/* 101 */       q.setQtime(rs.getTimestamp("qtime"));
 /* 102 */       q.setDescription(rs.getString("description"));
-/* 103 */       q.setStatus(rs.getInt("status"));
+/* 103 */       q.setResolved(rs.getBoolean("status"));
 /* 104 */       return q;
 /*     */     }
 /*     */   }
 /*     */ }
-
-/* Location:           E:\2014097ois-Sunorth-1.1.6\WEB-INF\classes\
- * Qualified Name:     org.orcsun.sunspace.dao.impl.QuestionDaoImpl
- * JD-Core Version:    0.6.2
- */
