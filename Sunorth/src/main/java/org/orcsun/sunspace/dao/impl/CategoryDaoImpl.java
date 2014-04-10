@@ -3,17 +3,17 @@
 /*    */ import java.sql.ResultSet;
 /*    */ import java.sql.SQLException;
 /*    */ import java.util.List;
+
+import org.apache.log4j.Logger;
 /*    */ import org.orcsun.sunspace.dao.CategoryDAO;
 /*    */ import org.orcsun.sunspace.object.Category;
-/*    */ import org.slf4j.Logger;
-/*    */ import org.slf4j.LoggerFactory;
 /*    */ import org.springframework.jdbc.core.JdbcTemplate;
 /*    */ import org.springframework.jdbc.core.RowMapper;
 /*    */ 
 /*    */ public class CategoryDaoImpl extends SunJdbcDaoSupport
 /*    */   implements CategoryDAO
 /*    */ {
-/* 23 */   private static final Logger logger = LoggerFactory.getLogger(CategoryDaoImpl.class);
+/* 23 */   private static final Logger logger = Logger.getLogger(CategoryDaoImpl.class);
 /*    */ 
 /*    */   public int addCategory(Category c, String lang) {
 /* 26 */     String sql = null;

@@ -4,10 +4,10 @@
 /*     */ import java.sql.SQLException;
 /*     */ import java.util.HashMap;
 /*     */ import java.util.Map;
+
+import org.apache.log4j.Logger;
 /*     */ import org.orcsun.sunspace.dao.UserDAO;
 /*     */ import org.orcsun.sunspace.object.User;
-/*     */ import org.slf4j.Logger;
-/*     */ import org.slf4j.LoggerFactory;
 /*     */ import org.springframework.jdbc.core.JdbcTemplate;
 /*     */ import org.springframework.jdbc.core.RowMapper;
 /*     */ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -16,7 +16,7 @@
 /*     */ public class UserDaoImpl extends SunJdbcDaoSupport
 /*     */   implements UserDAO
 /*     */ {
-/*  31 */   private static final Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
+/*  31 */   private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
 /*     */ 
 /*     */   public int addUser(User u)
 /*     */   {

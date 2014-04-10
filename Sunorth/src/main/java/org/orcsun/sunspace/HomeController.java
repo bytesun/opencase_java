@@ -9,18 +9,16 @@ import org.orcsun.sunspace.dao.impl.TodoDaoImpl;
 import org.orcsun.sunspace.dao.impl.UserDaoImpl;
 import org.orcsun.sunspace.object.User;
 import org.orcsun.sunspace.utils.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.apache.log4j.Logger;
 
 @Controller
 public class HomeController {
-	private static final Logger logger = LoggerFactory
-			.getLogger(HomeController.class);
 
+	
 	@Autowired
 	QuestionDaoImpl quesDao;
 
@@ -35,7 +33,8 @@ public class HomeController {
 
 	@Autowired
 	TodoDaoImpl todoDao;
-
+	
+	static Logger logger = Logger.getLogger(HomeController.class);
 	/**
 	 * Home page
 	 * @param locale
@@ -46,6 +45,7 @@ public class HomeController {
 	
 	@RequestMapping(value = { "/" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public String home(Locale locale, HttpServletRequest req, Model model) {
+		logger.info("The locale is " + locale);
 		String lang = "en";
 		Object olang = req.getSession().getAttribute("lang");
 		if (olang != null) {
@@ -60,7 +60,7 @@ public class HomeController {
 		model.addAttribute("newquestions",
 				this.quesDao.findNewQuestions(10, lang));
 
-		logger.info("The locale is " + locale.getLanguage());
+
 		return "home";
 	}
 

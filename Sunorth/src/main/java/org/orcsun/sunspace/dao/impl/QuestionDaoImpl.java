@@ -3,12 +3,12 @@
 /*     */ import java.sql.ResultSet;
 /*     */ import java.sql.SQLException;
 /*     */ import java.util.List;
+
+import org.apache.log4j.Logger;
 /*     */ import org.orcsun.sunspace.dao.QuestionDAO;
 /*     */ import org.orcsun.sunspace.object.Comment;
 /*     */ import org.orcsun.sunspace.object.Question;
 /*     */ import org.orcsun.sunspace.object.User;
-/*     */ import org.slf4j.Logger;
-/*     */ import org.slf4j.LoggerFactory;
 /*     */ import org.springframework.beans.factory.annotation.Autowired;
 /*     */ import org.springframework.dao.EmptyResultDataAccessException;
 /*     */ import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,7 +20,7 @@
 /*     */ 
 /*     */   @Autowired
 /*     */   UserDaoImpl userDao;
-/*  35 */   private static final Logger logger = LoggerFactory.getLogger(QuestionDaoImpl.class);
+/*  35 */   private static final Logger logger = Logger.getLogger(QuestionDaoImpl.class);
 /*     */ 
 /*     */   public int addQuestion(Question q, String lang) {
 /*  38 */     String sql = null;

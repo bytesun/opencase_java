@@ -4,11 +4,10 @@
 /*    */ import java.sql.SQLException;
 /*    */ import java.util.List;
 
+import org.apache.log4j.Logger;
 /*    */ import org.orcsun.sunspace.dao.AnswerDAO;
 /*    */ import org.orcsun.sunspace.object.Answer;
 /*    */ import org.orcsun.sunspace.object.User;
-/*    */ import org.slf4j.Logger;
-/*    */ import org.slf4j.LoggerFactory;
 /*    */ import org.springframework.beans.factory.annotation.Autowired;
 /*    */ import org.springframework.jdbc.core.JdbcTemplate;
 /*    */ import org.springframework.jdbc.core.RowMapper;
@@ -19,7 +18,7 @@
 /*    */ 
 /*    */   @Autowired
 /*    */   UserDaoImpl userDao;
-/* 29 */   private static final Logger logger = LoggerFactory.getLogger(AnswerDaoImpl.class);
+/* 29 */   private static final Logger logger = Logger.getLogger(AnswerDaoImpl.class);
 /*    */ 
 /*    */   public int addAnswer(Answer a, String lang) {
 /* 32 */     String sql = null;

@@ -3,15 +3,17 @@
 /*     */ import java.io.UnsupportedEncodingException;
 /*     */ import java.util.List;
 /*     */ import java.util.Locale;
+
 /*     */ import javax.servlet.http.HttpServletRequest;
 /*     */ import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
 /*     */ import org.orcsun.sunspace.dao.impl.CategoryDaoImpl;
 /*     */ import org.orcsun.sunspace.dao.impl.QuestionDaoImpl;
 /*     */ import org.orcsun.sunspace.object.Category;
 /*     */ import org.orcsun.sunspace.object.User;
 /*     */ import org.orcsun.sunspace.utils.StringUtil;
-/*     */ import org.slf4j.Logger;
-/*     */ import org.slf4j.LoggerFactory;
+
 /*     */ import org.springframework.beans.factory.annotation.Autowired;
 /*     */ import org.springframework.stereotype.Controller;
 /*     */ import org.springframework.ui.Model;
@@ -22,7 +24,7 @@
 /*     */ @RequestMapping({"/cat"})
 /*     */ public class CatController
 /*     */ {
-/*  38 */   private static final Logger logger = LoggerFactory.getLogger(CatController.class);
+/*  38 */   private static final Logger logger = Logger.getLogger(CatController.class);
 /*     */ 
 /*     */   @Autowired
 /*     */   CategoryDaoImpl catDao;
