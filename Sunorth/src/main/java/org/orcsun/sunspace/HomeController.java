@@ -58,7 +58,7 @@ public class HomeController {
 		model.addAttribute("topcats", this.catDao.findSubCategory(0L, lang));
 
 		model.addAttribute("newquestions",
-				this.quesDao.findNewQuestions(10, lang));
+				this.quesDao.findNewQuestions(0,20, lang));
 
 
 		return "home";
@@ -105,9 +105,9 @@ public class HomeController {
 		String qid = req.getParameter("qid");
 		if (islogin) {
 			if ((cid != null) && (!cid.equals("")))
-				return "redirect:/cat/" + cid;
+				return "redirect:/cat/"+req.getSession().getAttribute("lang") +"/"+ cid;
 			if ((qid != null) && (!qid.equals(""))) {
-				return "redirect:/question/" + qid;
+				return "redirect:/question/"+req.getSession().getAttribute("lang") +"/" + qid;
 			}
 			return "redirect:/user/admin";
 		}
@@ -160,9 +160,9 @@ public class HomeController {
 		String qid = req.getParameter("qid");
 		if (islogin) {
 			if ((cid != null) && (!cid.equals("")))
-				return "redirect:/cat/" + cid;
+				return "redirect:/cat/"+req.getSession().getAttribute("lang")+"/" + cid;
 			if ((qid != null) && (!qid.equals(""))) {
-				return "redirect:/question/" + qid;
+				return "redirect:/question/"+req.getSession().getAttribute("lang")+"/"  + qid;
 			}
 			return "user_console";
 		}
@@ -197,9 +197,9 @@ public class HomeController {
 		String cid = req.getParameter("cid");
 		String qid = req.getParameter("qid");
 		if ((cid != null) && (!cid.equals("")))
-			return "redirect:/cat/" + cid;
+			return "redirect:/cat/" +req.getSession().getAttribute("lang")+"/" + cid;
 		if ((qid != null) && (!qid.equals(""))) {
-			return "redirect:/question/" + qid;
+			return "redirect:/question/"+req.getSession().getAttribute("lang")+"/"  + qid;
 		}
 		return "redirect:/";
 	}

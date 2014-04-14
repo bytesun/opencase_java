@@ -2,13 +2,13 @@
 /*     */ 
 /*     */ import java.sql.ResultSet;
 /*     */ import java.sql.SQLException;
+import java.util.Date;
 /*     */ import java.util.HashMap;
 /*     */ import java.util.Map;
 
 import org.apache.log4j.Logger;
 /*     */ import org.orcsun.sunspace.dao.UserDAO;
 /*     */ import org.orcsun.sunspace.object.User;
-/*     */ import org.springframework.jdbc.core.JdbcTemplate;
 /*     */ import org.springframework.jdbc.core.RowMapper;
 /*     */ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 /*     */ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -27,11 +27,11 @@ import org.apache.log4j.Logger;
 /*  40 */     parameters.put("name", u.getName());
 /*  41 */     parameters.put("passwd", u.getPasswd());
 /*  42 */     parameters.put("email", u.getEmail());
-/*  43 */     parameters.put("credit", Integer.valueOf(u.getCredit()));
-/*  44 */     parameters.put("reputation", Integer.valueOf(u.getReputation()));
+/*  43 */     parameters.put("credit", u.getCredit());
+/*  44 */     parameters.put("reputation", u.getReputation());
 /*     */ 
-///*  46 */     parameters.put("regtime", Long.valueOf(System.currentTimeMillis()));
-/*  47 */     parameters.put("status", Integer.valueOf(u.getStatus()));
+/*  46 */     parameters.put("regtime", new Date());
+/*  47 */     parameters.put("status", u.getStatus());
 /*     */ 
 /*  50 */     Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(
 /*  51 */       parameters));

@@ -8,12 +8,13 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
-   <beans:bean id="localeResolver"
+	
+<!-- 
+ 	<beans:bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
-		<!-- beans:property name="defaultLocale" value="en" /-->
-		<beans:property name="defaultLocale" value="zh" />
+		<beans:property name="defaultLocale" value="en" />
 	</beans:bean>
- 
+	
 	<beans:bean id="localeChangeInterceptor"
 		class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
 		<beans:property name="paramName" value="lang" />
@@ -26,8 +27,8 @@
 		   </beans:list>
 		</beans:property>
 	</beans:bean>
- 
- 
+ 	 -->
+
 	<!-- Register the welcome.properties -->
 	<beans:bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 		<beans:property name="basename" value="message" />
@@ -45,8 +46,12 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="org.orcsun.sunspace" />
+	<context:component-scan base-package="org.orcsun.sunspace" />	
 	
+	<beans:bean id="ulogDao" class="org.orcsun.sunspace.dao.impl.UserLogDaoImpl">
+	    <beans:property name="dataSource" ref="dataSource"/>
+	</beans:bean>
+		
 	<beans:bean id="todoDao" class="org.orcsun.sunspace.dao.impl.TodoDaoImpl">
 	    <beans:property name="dataSource" ref="dataSource"/>
 	</beans:bean>
@@ -66,18 +71,7 @@
 	<beans:bean id="answerDao" class="org.orcsun.sunspace.dao.impl.AnswerDaoImpl">
 	    <beans:property name="dataSource" ref="dataSource"/>
 	</beans:bean>
-	<!-- -->
-	 <beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-	    <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-	    <beans:property name="url" value="jdbc:mysql://localhost:3306/sunorth" />
-	    
-	    <beans:property name="username" value="root" />
-	    <beans:property name="password" value="" />
-	</beans:bean>
-	
-	<!-- 
 
-	 
-	-->
-	 
+
+ 
 </beans:beans>

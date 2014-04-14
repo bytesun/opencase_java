@@ -2,14 +2,14 @@
 
 <div class="row">
 	<div class="col-md-8"> <!-- main right panel for question list -->
-	<jsp:useBean id="dateValue" class="java.util.Date" />
+
 	<!-- --------------Question detail -->
 	<ol class="breadcrumb">
-		<li><a href="<%=request.getContextPath()%>/cat/${pcategory.cid}">
+		<li><a href="<%=request.getContextPath()%>/cat/${lang}/${pcategory.cid}">
 			<c:out value="${pcategory.catname}"/>
 		</a></li>
 		<li>
-		<a href="<%=request.getContextPath()%>/question/${pquestion.qid}">
+		<a href="<%=request.getContextPath()%>/question/${lang}/${pquestion.qid}">
 			<c:out value="${pquestion.question}"/>
 		</a></li>
 		<!-- tags list -->
@@ -25,19 +25,47 @@
 		
 	</div>
 
-
 	<div class="panel panel-default">
 	  <div class="panel-heading"><span style="word-break:break-all;">
 	  <h2> <c:out value="${question.question}"/></h2></span></div>
-	  <div class="panel-body">
+	  <div class="panel-body" id="question_desc_area">
+	  		<b>
+	  		<a href="<%=request.getContextPath()%>/user/${question.user.uid}"><c:out value="${question.user.name}"/> </a>
+	  		</b>
 	   		<c:out value="${question.description}"  escapeXml="false"/>
 	  </div>
+  	  	
 	  <div class="panel-foot">
 		<div>
-	  		<c:out value="${question.user.name}"/>
-	  	</div>
+		  	
+		  	
+		  	<c:if test="${user!=null && user.uid==question.user.uid}">
+	  	  		|<a href="#" data-toggle="modal" data-target=".editquestion"><spring:message code="global.action.edit" text="Edit" /></a>
+	  	  	</c:if>	
+			
+	 	</div>
 	  </div>
 	</div>		
+	<!-- edit -->				 	
+	<div class="modal fade editquestion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/question/update" method="POST">
+
+		  		<input type="hidden" name="qid" value="${question.qid}">
+		  		<input type="text" class="form-control input-default" name="question" value="<c:out value="${question.question}"/>">
+		  		<textarea class="form-control richtextarea" name="questiondesc" rows="10">
+		  		<c:out value="${question.description}"  escapeXml="false"/>
+		  		</textarea>
+		  		<input type="text" name="tag" value="<c:out value="${question.tag}"/>">
+			  	<input type="submit" class="btn btn-success" name="submit" value="<spring:message code="global.action.save" text="Save" />">
+					
+		  </form>		
+	    </div>
+	  </div>
+	</div>	<!-- end of edit dialog -->		 	
+				
+	
 	<!-- comments -->
 		<div class="panel-group" id="accordion">
 		  <div class="panel panel-default">
@@ -54,7 +82,7 @@
 
 						<div class="model-body">
 							<input type="hidden" name="qid" value="${question.qid}">
-							<textarea class="form-control" rows="5" name="comment" placeholder=""></textarea>
+							<textarea class="form-control" cols="50" rows="5" name="comment" placeholder=""></textarea>
 							<button type="submit" class="btn btn-success">
 							<spring:message code="question.comment.add" text="Add Comment" /></button>						
 						</div>
@@ -111,7 +139,7 @@
 				 	<button class="btn btn-success" data-toggle="modal" data-target=".proposalVote">
 				 	<c:out value="${answer.rate}"/></button>
 				 	
-				 	<c:out value="${answer.user.name}"/></h3>
+				 	<a href="<%=request.getContextPath()%>/user/${answer.user.uid}"><c:out value="${answer.user.name}"/></a></h3>
 				 	 
 				 	<c:out value="${answer.answer}"  escapeXml="false"/><br>
 			  		
@@ -125,7 +153,7 @@
 			
 							  		<input type="hidden" name="qid" value="${question.qid}">
 							  		<input type="hidden" name="aid" value="${answer.aid}">
-							  		<textarea name="vcomment"  placeholder="<spring:message code="vote.comment.notice" text="Please give a comment about your vote..." />"></textarea>
+							  		<textarea class="form-control" name="vcomment"  placeholder="<spring:message code="vote.comment.notice" text="Please give a comment about your vote..." />"></textarea>
 								  	<input type="submit" class="btn btn-success" name="vup" value="<spring:message code="vote.up" text="Vup" />">
 								  	<input type="submit" class="btn btn-success" name="vdown" value="<spring:message code="vote.down" text="Vdown" />">
 									<c:if test="${user.uid!=answer.user.uid}">
@@ -157,7 +185,7 @@
 					<input type="hidden" name="qid" value="${question.qid}">
 				  
 				  <div class="form-group">
-					 <textarea class="form-control" rows="5" name="answer" placeholder="" ></textarea>
+					 <textarea class="form-control richtextarea" rows="5" name="answer" placeholder="" ></textarea>
 				  </div>
 				   
 				  <div class="form-group">
@@ -182,7 +210,7 @@
 		  		<c:forEach items="${followups}" var="question">
 		  			<tr><td style="word-wrap: break-word">  
 		  				<span class="badge"><c:out value="${question.answercnt}"/></span> 
-					 	<a href="<%=request.getContextPath()%>/question/${question.qid}">
+					 	<a href="<%=request.getContextPath()%>/question/${lang}/${question.qid}">
 		
 					 	<c:out value="${question.question}"/></a>
 					 	
@@ -208,7 +236,7 @@
 				  </div>
 				  
 				  <div class="form-group">
-					 <textarea class="form-control" rows="5" name="question" placeholder="<spring:message code="common.description" text="Description" />"></textarea>
+					 <textarea  class="form-control richtextarea" rows="5" name="question" placeholder="<spring:message code="common.description" text="Description" />"></textarea>
 				  </div>
 				   
 				  <div class="form-group">

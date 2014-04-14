@@ -10,7 +10,7 @@
 			<c:choose>
 				<c:when test="${upcat!=null}">
 					<li>
-						<a href="<%=request.getContextPath()%>/cat/${upcat.cid}"> 
+						<a href="<%=request.getContextPath()%>/cat/${lang}/${upcat.cid}"> 
 							<c:out value="${upcat.catname}"/>
 						</a>
 					</li>
@@ -38,7 +38,7 @@
 			  </button>
 			  <ul class="dropdown-menu" role="menu">
 				  <c:forEach items="${subcats}" var="category">
-				    <li><a href="<%=request.getContextPath()%>/cat/${category.cid}"><c:out value="${category.catname}"/></a></li>
+				    <li><a href="<%=request.getContextPath()%>/cat/${lang}/${category.cid}"><c:out value="${category.catname}"/></a></li>
 				 </c:forEach>
 			  </ul>
 			</div>	
@@ -62,7 +62,7 @@
 						  	
 						  	<input type="text" class="form-control input-default" name="questitle" placeholder="<spring:message code="common.question" text="Issue" /> " required>
 							
-							<textarea class="form-control" rows="5" name="question" placeholder="<spring:message code="common.description" text="Description" /> "></textarea>
+							<textarea class="form-control richtextarea" rows="5" name="question" placeholder="<spring:message code="common.description" text="Description" /> "></textarea>
 							
 							<input type="text" name="tag" placeholder="<spring:message code="common.tag" text="Tag" />"> 
 							<button type="submit" class="btn btn-success">
@@ -82,12 +82,20 @@
 	
 	<table class="table" style="table-layout: fixed; width: 100%">
   		<c:forEach items="${questions}" var="question">
-  			<tr><td style="word-wrap: break-word">  
+  			<tr><td style="word-wrap: break-word" width="80%">  
   				<span class="badge"><c:out value="${question.answercnt}"/></span> 
-			 	<a href="<%=request.getContextPath()%>/question/${question.qid}">
+			 	<a href="<%=request.getContextPath()%>/question/${lang}/${question.qid}">
 
 			 	<c:out value="${question.question}"/></a>
-			 	
+			 	</td>
+			 	<td align="right">
+				<c:if test="${question.tag!=null}">
+					<c:set var="tags" value="${fn:split(question.tag,' ')}"/>
+					<c:forEach items="${tags}" var="tag">
+						<a href="<%=request.getContextPath()%>/question/searchtag?tag=${tag}">
+						<span class="label label-default"><c:out value="${tag}"/></span></a>
+					</c:forEach>
+				</c:if>			 	
     		</td></tr>
   		</c:forEach>
   	</table>
@@ -110,7 +118,7 @@
 			  </div>
 			  
 			  <div class="form-group">
-				 <textarea class="form-control" rows="5" name="question" placeholder=""></textarea>
+				 <textarea class="form-control richtextarea" rows="5" name="question" placeholder=""></textarea>
 			  </div>
 			   
 			  <div class="form-group">

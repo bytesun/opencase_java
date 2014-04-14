@@ -25,7 +25,6 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-
 </head>
  <body>  
 <div class="container">
@@ -40,14 +39,14 @@
 				<input type="hidden" name="qid" value="${qid}">
 				<fieldset>
 					<legend><spring:message code="reg.createAccount" text="Create Account" /></legend>
- 
+
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="form-group"> 
 								<div class="rows">
 									<div class="col-md-12">
 										<div class="col-lg-12">
-											<input class="form-control input-lg" id="name" name=
+											<input class="form-control input-lg" id="p1" name=
 											"name" placeholder="<spring:message code="common.user" text="UserName" />" type="text" required>										
 	
 										</div>

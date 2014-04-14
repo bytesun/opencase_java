@@ -30,14 +30,16 @@
 
 	<script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
 	<script>
-	        tinymce.init({selector:'textarea'});
-	</script>
+	        tinymce.init({selector:'.richtextarea'});
+	</script> 
 </head>
  <body style="padding-top: 70px;">  
 
 
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation" >
-		
+			<div class="navbar-inner">
+				<div class="container">
+					
 		    <!-- Brand and toggle get grouped for better mobile display -->
 		    <div class="navbar-header">
 		      <a class="navbar-brand" href="<%=request.getContextPath()%>/"><b><spring:message code="header.sunspace" text="SunSpace" /></b></a>
@@ -86,9 +88,6 @@
 
     	    </c:if>
     	    
-
-
-    	    
 		    <c:if test="${user!=null}">
 			 <ul class="nav navbar-nav navbar-right">
 		        <li class="dropdown">
@@ -107,19 +106,19 @@
 			</ul>
 		     </c:if>
 		 </div>
-		</nav>
+		
 
-		 	<div>
-
-
-
+			
+			</div> <!-- end of container -->
+		</div>	<!-- end of inner -->
+	</nav> <!-- end of nav -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-    
-    
+   
  <div class="container">
+
 	 		<!-- message -->
 	 	<c:if test="${errormsg!=null}">	
  		<div class="row">

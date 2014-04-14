@@ -1,1 +1,1 @@
-this is a help page
+<%@include file="header.jsp" %>

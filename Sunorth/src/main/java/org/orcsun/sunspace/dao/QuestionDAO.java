@@ -18,7 +18,7 @@ public abstract interface QuestionDAO
 
   public abstract List<Question> findQuestionsByCID(long paramLong, String paramString);
 
-  public abstract List<Question> findNewQuestions(int paramInt, String paramString);
+  public abstract List<Question> findNewQuestions(int start,int end, String paramString);
 
   public abstract List<Question> search(String paramString1, String paramString2);
 

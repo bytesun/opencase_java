@@ -7,9 +7,7 @@
 import org.apache.log4j.Logger;
 /*    */ import org.orcsun.sunspace.dao.AnswerDAO;
 /*    */ import org.orcsun.sunspace.object.Answer;
-/*    */ import org.orcsun.sunspace.object.User;
 /*    */ import org.springframework.beans.factory.annotation.Autowired;
-/*    */ import org.springframework.jdbc.core.JdbcTemplate;
 /*    */ import org.springframework.jdbc.core.RowMapper;
 /*    */ 
 /*    */ public class AnswerDaoImpl extends SunJdbcDaoSupport

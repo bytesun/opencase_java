@@ -1,3 +1,13 @@
+--2014/4/13
+CREATE TABLE userlog(
+	UID BIGINT DEFAULT 0 NOT NULL,
+	LTIME TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	TAG VARCHAR(100),
+	SUBJECT VARCHAR(1000) NOT NULL,
+	ULOG MEDIUMTEXT NOT NULL
+
+)ENGINE=InnoDB CHARACTER SET=utf8;
+
 --2014/4/9
 alter table todo modify column note text;
 alter table comment_en modify column comment text;

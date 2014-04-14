@@ -20,10 +20,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping({ "/question" })
-public class QuestionController {
+public class QuestionController extends SunController{
 
 	@Autowired
 	QuestionDaoImpl quesDao;
@@ -36,21 +37,13 @@ public class QuestionController {
 	private static final Logger logger = Logger
 			.getLogger(QuestionController.class);
 
-	@RequestMapping(value = { "/{qid}" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public String showQuestion(Locale locale, @PathVariable long qid,
+	@RequestMapping(value = { "/{lang}/{qid}" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
+	public String showQuestion(Locale locale, 
+			@PathVariable String lang,
+			@PathVariable long qid,
+			
 			HttpServletRequest req, Model model) {
-		String lang = "en";
-		Object olang = req.getSession().getAttribute("lang");
-		Object plang = req.getParameter("lang");
-		if (olang != null) {
-			lang = (String) olang;
-		} else if ((plang != null) && (!plang.equals(""))) {
-			if (((String) plang).equals("zh"))
-				lang = "zh";
-			req.getSession().setAttribute("lang", lang);
-		} else if (locale.getLanguage().equalsIgnoreCase("zh")) {
-			lang = "zh";
-		}
+
 		Question q = this.quesDao.getQuestion(qid, lang);
 		if (q != null) {
 			long cid = q.getCid();
@@ -75,15 +68,11 @@ public class QuestionController {
 		Object u = req.getSession().getAttribute("user");
 		String cid = req.getParameter("cid");
 		String pid = req.getParameter("pid");
+		String lang = getLanguage(locale,req);
 		if (u != null) {
 			try {
-				String lang = "en";
-				Object olang = req.getSession().getAttribute("lang");
-				if (olang != null) {
-					lang = (String) olang;
-				} else if (locale.getLanguage().equalsIgnoreCase("zh")) {
-					lang = "zh";
-				}
+	
+
 				Question q = new Question();
 				String question = req.getParameter("questitle");
 				q.setQuestion(StringUtil.utf8(question, "iso-8859-1"));
@@ -108,26 +97,45 @@ public class QuestionController {
 				model.addAttribute("errormsg", e.getMessage());
 			}
 			if ((pid != null) && (!pid.equals("")))
-				return "redirect:/question/" + pid;
+				return "redirect:/question/"+lang+"/" + pid;
 			if ((cid != null) && (!cid.equals(""))) {
-				return "redirect:/cat/" + cid;
+				return "redirect:/cat/"+lang+"/" + cid;
 			}
 			return "redirect:/";
 		}
 		return "redirect:/redirectLogin?cid=" + cid + "&pid=" + pid;
 	}
 
+	@RequestMapping(value="/update",method=RequestMethod.POST)
+	public String update(Locale locale,HttpServletRequest req,Model model){
+		Object u = req.getSession().getAttribute("user");
+		String lang = getLanguage(locale,req);
+		if(u != null){
+
+		
+			String qid = req.getParameter("qid");
+			Question q = new Question();
+			q.setQid(Long.parseLong(qid));
+			q.setQuestion(req.getParameter("question"));
+			q.setDescription(req.getParameter("questiondesc"));
+			q.setTag(req.getParameter("tag"));
+			quesDao.updateQuestion(q, lang);
+			
+			return "redirect:/question/"+lang+"/" + qid;
+		}else{
+			String cid = req.getParameter("cid");
+			String pid = req.getParameter("pid");
+			return "redirect:/redirectLogin?cid=" + cid + "&pid=" + pid;
+		}
+	}
+	
 	@RequestMapping(value = { "/comment" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
 	public String addComment(Locale locale, HttpServletRequest req, Model model) {
 		Object u = req.getSession().getAttribute("user");
+		String lang = getLanguage(locale,req);
 		if (u != null) {
-			String lang = "en";
-			Object olang = req.getSession().getAttribute("lang");
-			if (olang != null) {
-				lang = (String) olang;
-			} else if (locale.getLanguage().equalsIgnoreCase("zh")) {
-				lang = "zh";
-			}
+
+
 			String qid = req.getParameter("qid");
 
 			Comment c = new Comment();
@@ -142,7 +150,7 @@ public class QuestionController {
 				model.addAttribute("errormsg", e.getMessage());
 			}
 
-			return "redirect:/question/" + qid;
+			return "redirect:/question/"+lang+"/" + qid;
 		}
 
 		String cid = req.getParameter("cid");
@@ -154,14 +162,9 @@ public class QuestionController {
 	public String answerQuestion(Locale locale, HttpServletRequest req,
 			Model model) {
 		Object u = req.getSession().getAttribute("user");
+		String lang =getLanguage(locale,req);
 		if (u != null) {
-			String lang = "en";
-			Object olang = req.getSession().getAttribute("lang");
-			if (olang != null) {
-				lang = (String) olang;
-			} else if (locale.getLanguage().equalsIgnoreCase("zh")) {
-				lang = "zh";
-			}
+
 
 			String qid = req.getParameter("qid");
 			Answer a = new Answer();
@@ -184,7 +187,7 @@ public class QuestionController {
 				}
 			}
 
-			return "redirect:/question/" + qid;
+			return "redirect:/question/"+lang+"/" + qid;
 		}
 		String cid = req.getParameter("cid");
 		String pid = req.getParameter("pid");
@@ -194,14 +197,9 @@ public class QuestionController {
 	@RequestMapping(value = { "/resolve" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
 	public String resolve(Locale locale, HttpServletRequest req) {
 		Object u = req.getSession().getAttribute("user");
+		String lang = getLanguage(locale,req);
 		if (u != null) {
-			String lang = "en";
-			Object olang = req.getSession().getAttribute("lang");
-			if (olang != null) {
-				lang = (String) olang;
-			} else if (locale.getLanguage().equalsIgnoreCase("zh")) {
-				lang = "zh";
-			}
+
 			String qid = req.getParameter("qid");
 			Question q = this.quesDao.getQuestion(Long.parseLong(qid), lang);
 			if (q.getUser().getUid() == ((User) u).getUid()) {
@@ -213,7 +211,7 @@ public class QuestionController {
 				q.setResolved(true);
 				this.quesDao.updateQuestion(q, lang);
 			}
-			return "redirect:/question/" + qid;
+			return "redirect:/question/"+lang+"/" + qid;
 		}
 		String cid = req.getParameter("cid");
 		String pid = req.getParameter("pid");
@@ -225,13 +223,8 @@ public class QuestionController {
 		String searchKey = req.getParameter("searchkey");
 		if (searchKey != null) {
 			try {
-				String lang = "en";
-				Object olang = req.getSession().getAttribute("lang");
-				if (olang != null) {
-					lang = (String) olang;
-				} else if (locale.getLanguage().equalsIgnoreCase("zh")) {
-					lang = "zh";
-				}
+				String lang = getLanguage(locale,req);
+
 				String ckey = StringUtil.utf8(searchKey, "iso-8859-1");
 				model.addAttribute("searchkey", ckey);
 				model.addAttribute("questions", this.quesDao.search(ckey, lang));
@@ -249,13 +242,8 @@ public class QuestionController {
 
 		if (tag != null) {
 			try {
-				String lang = "en";
-				Object olang = req.getSession().getAttribute("lang");
-				if (olang != null) {
-					lang = (String) olang;
-				} else if (locale.getLanguage().equalsIgnoreCase("zh")) {
-					lang = "zh";
-				}
+				String lang = getLanguage(locale,req);
+
 				String ckey = StringUtil.utf8(tag, "iso-8859-1");
 				model.addAttribute("searchkey", ckey);
 				model.addAttribute("questions", this.quesDao.search(ckey, lang));
@@ -271,15 +259,10 @@ public class QuestionController {
 	public String vote(Locale locale, HttpServletRequest req, Model model) {
 		String qid = req.getParameter("qid");
 		Object u = req.getSession().getAttribute("user");
+		String lang = getLanguage(locale,req);
 		if (u != null) {
 			try {
-				String lang = "en";
-				Object olang = req.getSession().getAttribute("lang");
-				if (olang != null) {
-					lang = (String) olang;
-				} else if (locale.getLanguage().equalsIgnoreCase("zh")) {
-					lang = "zh";
-				}
+
 				int vote = 1;
 				if (req.getParameter("no") != null)
 					vote = -1;
@@ -288,7 +271,7 @@ public class QuestionController {
 			} catch (Exception e) {
 				model.addAttribute("errormsg", e.getMessage());
 			}
-			return "redirect:/question/" + qid;
+			return "redirect:/question/"+lang+"/" + qid;
 		}
 		String cid = req.getParameter("cid");
 		String pid = req.getParameter("pid");
@@ -301,15 +284,10 @@ public class QuestionController {
 		String aid = req.getParameter("aid");
 		logger.info("vote answer :" + aid);
 		Object u = req.getSession().getAttribute("user");
+		String lang = getLanguage(locale,req);
 		if (u != null) {
 			try {
-				String lang = "en";
-				Object olang = req.getSession().getAttribute("lang");
-				if (olang != null) {
-					lang = (String) olang;
-				} else if (locale.getLanguage().equalsIgnoreCase("zh")) {
-					lang = "zh";
-				}
+
 				String vcomment = req.getParameter("vcomment");
 				int vote = 1;
 				if (req.getParameter("vdown") != null)
@@ -329,7 +307,7 @@ public class QuestionController {
 				model.addAttribute("errormsg", e.getMessage());
 
 			}
-			return "redirect:/question/" + qid;
+			return "redirect:/question/"+lang+"/" + qid;
 		}
 		String cid = req.getParameter("cid");
 		String pid = req.getParameter("pid");

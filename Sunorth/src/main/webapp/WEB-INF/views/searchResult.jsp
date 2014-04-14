@@ -7,9 +7,16 @@
 	<table class="table">
   		<c:forEach items="${questions}" var="question">
   			<tr><td>  	
-			 	<span class="badge"><c:out value="${question.rate}"></c:out></span>
 			 	<span class="badge"><c:out value="${question.answercnt}"></c:out></span>
-			 	<a href="<%=request.getContextPath()%>/question/${question.qid}"> <c:out value="${question.question}"/></a>
+			 	<a href="<%=request.getContextPath()%>/question/${lang}/${question.qid}"> <c:out value="${question.question}"/></a>
+				 	<!-- tags -->
+				 			<c:if test="${question.tag!=null && question.tag!=''}">
+								<c:set var="tags" value="${fn:split(question.tag,' ')}"/>
+								<c:forEach items="${tags}" var="tag">
+									<a href="<%=request.getContextPath()%>/question/searchtag?tag=${tag}">
+									<span class="badge label-default pull-right"><c:out value="${tag}"/></span></a>
+								</c:forEach>
+							</c:if>			 	
     		</td>
     		</tr>
   		</c:forEach>
