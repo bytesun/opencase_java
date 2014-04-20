@@ -2,7 +2,8 @@
 	1. order by in home page
 	2. user's blog
 	 
-
+--2014/4/19
+	1. Added google login support.
 
 --2014/4/13
 	1. mark language in URL, than link can be shared external.

@@ -22,8 +22,7 @@ public class HomeController {
 	@Autowired
 	QuestionDaoImpl quesDao;
 
-	@Autowired
-	UserDaoImpl userDao;
+
 
 	@Autowired
 	CategoryDaoImpl catDao;
@@ -66,122 +65,7 @@ public class HomeController {
 
 
 
-	/**
-	 * Redirect to login page
-	 * @param req
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = { "/redirectLogin" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public String redirectLogin(HttpServletRequest req, Model model) {
-		model.addAttribute("cid", req.getParameter("cid"));
-		model.addAttribute("qid", req.getParameter("qid"));
-		return "login";
-	}
 
-	/**
-	 * Do login 
-	 * @param req
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = { "/login" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
-	public String login(HttpServletRequest req, Model model) {
-		String email = req.getParameter("email");
-
-		boolean islogin = false;
-		if ((email != null) && (!email.equals(""))) {
-			User u = this.userDao.findUserByEmail(email);
-			if (u != null) {
-				String passwd = req.getParameter("passwd");
-				if ((passwd != null) && (!passwd.equals(""))
-						&& (u.getPasswd().equals(StringUtil.encodeByMD5(passwd)))) {
-					req.getSession().setAttribute("user", u);
-					islogin = true;
-				}
-			}
-		}
-		String cid = req.getParameter("cid");
-		String qid = req.getParameter("qid");
-		if (islogin) {
-			if ((cid != null) && (!cid.equals("")))
-				return "redirect:/cat/"+req.getSession().getAttribute("lang") +"/"+ cid;
-			if ((qid != null) && (!qid.equals(""))) {
-				return "redirect:/question/"+req.getSession().getAttribute("lang") +"/" + qid;
-			}
-			return "redirect:/user/admin";
-		}
-
-		return "redirect:/redirectLogin?cid=" + cid + "&qid=" + qid;
-	}
-
-	/**
-	 * Do logout
-	 * @param req
-	 * @return
-	 */
-	@RequestMapping(value = { "/logout" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public String logout(HttpServletRequest req) {
-		req.getSession().setAttribute("user", null);
-		return "redirect:/";
-	}
-
-	/**
-	 * Register
-	 * @param req
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = { "/register" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
-	public String register(HttpServletRequest req, Model model) {
-		String name = req.getParameter("name");
-		String pwd = req.getParameter("passwd");
-		String email = req.getParameter("email");
-
-		String cname = name;
-		boolean islogin = false;
-		try {
-			cname = StringUtil.utf8(name, "iso-8859-1");
-
-			User u = new User();
-
-			u.setName(cname);
-			u.setPasswd(StringUtil.encodeByMD5(pwd));
-			u.setEmail(email);
-
-			u.setUid(this.userDao.addUser(u));
-			req.getSession().setAttribute("user", u);
-			islogin = true;
-		} catch (Exception e) {
-			logger.error("Failed to register user:" + e.getMessage());
-			model.addAttribute("errormsg", e.getMessage());
-		}
-		String cid = req.getParameter("cid");
-		String qid = req.getParameter("qid");
-		if (islogin) {
-			if ((cid != null) && (!cid.equals("")))
-				return "redirect:/cat/"+req.getSession().getAttribute("lang")+"/" + cid;
-			if ((qid != null) && (!qid.equals(""))) {
-				return "redirect:/question/"+req.getSession().getAttribute("lang")+"/"  + qid;
-			}
-			return "user_console";
-		}
-
-		return "redirect:/redirectLogin?cid=" + cid + "&qid=" + qid;
-	}
-
-	/**
-	 * Initial register page
-	 * @param req
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = { "/register/new" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public String initRegister(HttpServletRequest req, Model model) {
-		model.addAttribute("cid", req.getParameter("cid"));
-		model.addAttribute("qid", req.getParameter("qid"));
-		return "register";
-	}
 
 	/**
 	 * Change repository language

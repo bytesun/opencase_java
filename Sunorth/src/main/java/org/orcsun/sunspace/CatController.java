@@ -64,8 +64,7 @@ public class CatController extends SunController {
 			String spid = req.getParameter("pid");
 			String catName = "";
 			try {
-				catName = StringUtil.utf8(req.getParameter("catName"),
-						"iso-8859-1");
+				catName = StringUtil.iso2utf8(req.getParameter("catName"));
 			} catch (UnsupportedEncodingException e) {
 				logger.warn("Can't convert the string to utf8:" + catName
 						+ e.getMessage());

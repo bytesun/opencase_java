@@ -41,10 +41,8 @@ public class TodoController {
 		if (user != null) {
 			try {
 				Todo todo = new Todo();
-				todo.setTodo(StringUtil.utf8(req.getParameter("todo"),
-						"iso-8859-1"));
-				todo.setNote(StringUtil.utf8(req.getParameter("note"),
-						"iso-8859-1"));
+				todo.setTodo(StringUtil.iso2utf8(req.getParameter("todo")));
+				todo.setNote(StringUtil.iso2utf8(req.getParameter("note")));
 
 				todo.setPriority(Short.parseShort(req.getParameter("priority")));
 				if ((req.getParameter("ttype") != null)

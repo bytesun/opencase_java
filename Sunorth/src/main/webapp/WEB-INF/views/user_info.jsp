@@ -4,7 +4,9 @@
 		<div class="col-md-8"> <!-- log view -->
 		<h2>
 			<c:out value="${userinfo.name}"/>
+			<small>--<c:out value="${userinfo.title}"/></small>
 		</h2>
+		<c:out value="${userinfo.profile}"/>
 		<table class="table" style="table-layout: fixed; width: 100%">
 	  		<c:forEach items="${ulogs}" var="userlog">
 	  			<tr><td style="word-wrap: break-word">  
@@ -23,7 +25,8 @@
 					</c:if>
 	    		</td></tr>
 	  		</c:forEach>
-			  	</table>
+		</table>
+			  	
 		</div> <!-- end of right main view -->
 		
 		<div class="col-md-4"> <!-- side column -->

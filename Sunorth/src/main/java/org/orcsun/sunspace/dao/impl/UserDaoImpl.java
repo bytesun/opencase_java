@@ -1,88 +1,89 @@
-/*     */ package org.orcsun.sunspace.dao.impl;
-/*     */ 
-/*     */ import java.sql.ResultSet;
-/*     */ import java.sql.SQLException;
+package org.orcsun.sunspace.dao.impl;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
-/*     */ import java.util.HashMap;
-/*     */ import java.util.Map;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
-/*     */ import org.orcsun.sunspace.dao.UserDAO;
-/*     */ import org.orcsun.sunspace.object.User;
-/*     */ import org.springframework.jdbc.core.RowMapper;
-/*     */ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-/*     */ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-/*     */ 
-/*     */ public class UserDaoImpl extends SunJdbcDaoSupport
-/*     */   implements UserDAO
-/*     */ {
-/*  31 */   private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
-/*     */ 
-/*     */   public int addUser(User u)
-/*     */   {
-/*  36 */     SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(getJdbcTemplate());
-/*  37 */     jdbcInsert.withTableName("users").usingGeneratedKeyColumns(new String[] { 
-/*  38 */       "uid" });
-/*  39 */     Map parameters = new HashMap();
-/*  40 */     parameters.put("name", u.getName());
-/*  41 */     parameters.put("passwd", u.getPasswd());
-/*  42 */     parameters.put("email", u.getEmail());
-/*  43 */     parameters.put("credit", u.getCredit());
-/*  44 */     parameters.put("reputation", u.getReputation());
-/*     */ 
-/*  46 */     parameters.put("regtime", new Date());
-/*  47 */     parameters.put("status", u.getStatus());
-/*     */ 
-/*  50 */     Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(
-/*  51 */       parameters));
-/*  52 */     return key.intValue();
-/*     */   }
-/*     */ 
-/*     */   public boolean checkPwd(User u)
-/*     */   {
-/*  63 */     return false;
-/*     */   }
-/*     */ 
-/*     */   public User findUserByID(long uid)
-/*     */   {
-/*  68 */     String sql = "select uid,name,passwd,email,credit,reputation,regtime,status from users where uid='" + uid + "'";
-/*  69 */     logger.info(sql);
-/*  70 */     User u = null;
-/*     */     try {
-/*  72 */       u = (User)getJdbcTemplate().queryForObject(sql, new UserMapper());
-/*     */     } catch (Exception e) {
-/*  74 */       logger.warn("No user found :" + uid + ":" + e.getMessage());
-/*     */     }
-/*  76 */     return u;
-/*     */   }
+import org.orcsun.sunspace.dao.UserDAO;
+import org.orcsun.sunspace.object.User;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
-/*     */   public User findUserByEmail(String email) {
-/*  80 */     String sql = "select uid,name,passwd,email,credit,reputation,regtime,status from users where email='" + email + "'";
-/*  81 */     logger.info(sql);
-/*  82 */     User u = null;
-/*     */     try {
-/*  84 */       u = (User)getJdbcTemplate().queryForObject(sql, new UserMapper());
-/*     */     } catch (Exception e) {
-/*  86 */       logger.warn("No user found :" + email + ":" + e.getMessage());
-/*     */     }
-/*  88 */     return u;
-/*     */   }
-/*     */ 
-/*     */   private static final class UserMapper implements RowMapper<User>
-/*     */   {
-/*     */     public User mapRow(ResultSet rs, int rowNum) throws SQLException
-/*     */     {
-/*  95 */       User u = new User();
-/*  96 */       u.setUid(rs.getLong("uid"));
-/*  97 */       u.setName(rs.getString("name"));
-/*  98 */       u.setPasswd(rs.getString("passwd"));
-/*  99 */       u.setEmail(rs.getString("email"));
-/* 100 */       u.setCredit(rs.getInt("credit"));
-/* 101 */       u.setReputation(rs.getInt("reputation"));
-/* 102 */       u.setRegtime(rs.getTimestamp("regtime"));
-/* 103 */       u.setStatus(rs.getInt("status"));
-/* 104 */       return u;
-/*     */     }
-/*     */   }
-/*     */ }
+public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
+	private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
 
+	public long addUser(User u) {
+		SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(getJdbcTemplate());
+		jdbcInsert.withTableName("users").usingGeneratedKeyColumns(
+				new String[] { "uid" });
+		Map parameters = new HashMap();
+		parameters.put("name", u.getName());
+		parameters.put("passwd", u.getPasswd());
+		parameters.put("email", u.getEmail());
+		parameters.put("credit", u.getCredit());
+		parameters.put("reputation", u.getReputation());
+
+		parameters.put("regtime", new Date());
+		parameters.put("status", u.getStatus());
+
+		Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(
+				parameters));
+		return key.intValue();
+	}
+
+	public int updateUser(User u) {
+		String sql = "update users set name=?,title=?,profile=?,resume=? where uid=?";
+		logger.debug(sql);
+		Object[] args = new Object[] { u.getName(), u.getTitle(),
+				u.getProfile(), u.getResume(), u.getUid() };
+		return this.getJdbcTemplate().update(sql, args);
+	}
+
+	public User findUserByID(long uid) {
+		String sql = "select uid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume from users where uid='"
+				+ uid + "'";
+		logger.info(sql);
+		User u = null;
+		try {
+			u = (User) getJdbcTemplate().queryForObject(sql, new UserMapper());
+		} catch (Exception e) {
+			logger.warn("No user found :" + uid + ":" + e.getMessage());
+		}
+		return u;
+	}
+
+	public User findUserByEmail(String email) {
+		String sql = "select uid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume from users where email='"
+				+ email + "'";
+		logger.info(sql);
+		User u = null;
+		try {
+			u = (User) getJdbcTemplate().queryForObject(sql, new UserMapper());
+		} catch (Exception e) {
+			logger.warn("No user found :" + email + ":" + e.getMessage());
+		}
+		return u;
+	}
+
+	private static final class UserMapper implements RowMapper<User> {
+		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+			User u = new User();
+			u.setUid(rs.getLong("uid"));
+			u.setName(rs.getString("name"));
+			u.setPasswd(rs.getString("passwd"));
+			u.setEmail(rs.getString("email"));
+			u.setCredit(rs.getInt("credit"));
+			u.setReputation(rs.getInt("reputation"));
+			u.setRegtime(rs.getTimestamp("regtime"));
+			u.setStatus(rs.getInt("status"));
+			u.setTitle(rs.getString("title"));
+			u.setProfile(rs.getString("profile"));
+			u.setResume(rs.getString("resume"));
+			return u;
+		}
+	}
+}

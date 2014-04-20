@@ -32,15 +32,13 @@
 	  		<b>
 	  		<a href="<%=request.getContextPath()%>/user/${question.user.uid}"><c:out value="${question.user.name}"/> </a>
 	  		</b>
-	   		<c:out value="${question.description}"  escapeXml="false"/>
+	   		<div class="question"><c:out value="${question.description}"  escapeXml="false"/></div>
 	  </div>
   	  	
 	  <div class="panel-foot">
 		<div>
-		  	
-		  	
 		  	<c:if test="${user!=null && user.uid==question.user.uid}">
-	  	  		|<a href="#" data-toggle="modal" data-target=".editquestion"><spring:message code="global.action.edit" text="Edit" /></a>
+	  	  		<a href="#" data-toggle="modal" data-target=".editquestion"><spring:message code="global.action.edit" text="Edit" /></a>
 	  	  	</c:if>	
 			
 	 	</div>
@@ -143,6 +141,26 @@
 				 	 
 				 	<c:out value="${answer.answer}"  escapeXml="false"/><br>
 			  		
+				  	<c:if test="${user!=null && user.uid==answer.user.uid}">
+		  	  			<div><a href="#" data-toggle="modal" data-target=".editproposal"><spring:message code="global.action.edit" text="Edit" /></a></div>
+		  	  		</c:if>	
+	  	  		
+					<!-- edit -->				 	
+					<div class="modal fade editproposal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+					  <div class="modal-dialog modal-lg">
+					    <div class="modal-content">
+					  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/question/ansupdt" method="POST">
+								<input type="hidden" name="qid" value="${question.qid}">
+						  		<input type="hidden" name="aid" value="${answer.aid}">
+						  		<textarea class="form-control richtextarea" name="answer" rows="10">
+						  		<c:out value="${answer.answer}"  escapeXml="false"/>
+						  		</textarea>
+							  	<input type="submit" class="btn btn-success" name="submit" value="<spring:message code="global.action.save" text="Save" />">
+									
+						  </form>		
+					    </div>
+					  </div>
+					</div>	<!-- end of edit dialog -->		  	  		
 			  		<!-- vote -->
 				 	<c:if test="${user!=null}">
 						<!-- vote comment dialog -->

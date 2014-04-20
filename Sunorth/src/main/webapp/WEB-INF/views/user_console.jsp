@@ -3,7 +3,30 @@
 
 <div class="row">
 	<div class="col-md-8"> <!-- main right panel for question list -->
-	<h2><c:out value="${user.name}"></c:out></h2>
+	<h2>
+	<c:out value="${user.name}"></c:out><small><a href="#" data-toggle="modal" data-target=".edituser"><spring:message code="global.action.edit" text="Edit" /></a></small>
+	</h2>
+	
+<!-- edit user -->				 	
+	<div class="modal fade edituser" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/user/update" method="POST">
+				<input type="text" class="form-control input-default" name="name" placeholder="<spring:message code="user.profile.name" text="Name" />" value="<c:out value="${user.name}"/>">
+				<input type="text" class="form-control input-default" name="title" placeholder="<spring:message code="user.profile.title" text="Title" />" value="<c:out value="${user.title}"  escapeXml="false"/>">
+				<textarea class="form-control" name="profile" rows="10" placeholder="<spring:message code="user.profile.summary" text="Summary" />">
+				<c:out value="${user.profile}"/>
+				</textarea>
+		  		<textarea class="form-control richtextarea" name="resume" rows="10" placeholder="<spring:message code="user.profile.resume" text="Resume" />">
+		  		<c:out value="${user.resume}"  escapeXml="false"/>
+		  		</textarea>
+			  	<input type="submit" class="btn btn-success" name="submit" value="<spring:message code="global.action.save" text="Save" />">
+					
+		  </form>		
+	    </div>
+	  </div>
+	</div>	<!-- end of edit dialog -->		  	 	
+	
 	<!-- questions/answers/faoriates -->
 	<ul class="nav nav-tabs">
 	
@@ -32,7 +55,9 @@
 	  <div class="panel panel-default">
 	  <!-- Default panel contents -->
 	  <div class="panel-heading">
-
+		<a href="<%=request.getContextPath()%>/user/${user.uid}">
+			<spring:message code="global.action.view" text="View" />
+		</a>
 	  
 	  </div>
 		    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/user/ulog/new" method="POST">

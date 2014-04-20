@@ -1,6 +1,7 @@
 package org.orcsun.sunspace;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping({ "/question" })
@@ -63,6 +65,21 @@ public class QuestionController extends SunController{
 		return "question";
 	}
 
+	@RequestMapping(value="/newQuestions",method=RequestMethod.GET)
+	public @ResponseBody List<Question> findNewQuestions(Locale locale,HttpServletRequest req){
+		String start= req.getParameter("start");
+		int istart = 0;
+		if(start != null && !start.equals(""))
+			istart = Integer.parseInt(start);
+		String end = req.getParameter("end");
+		int iend = 20;
+		if(end != null && !end.equals(""))
+			iend = Integer.parseInt(end);
+		
+		return quesDao.findNewQuestions(istart, iend, this.getLanguage(locale, req));
+	}
+	
+	
 	@RequestMapping(value = { "/ask" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
 	public String askQuestion(Locale locale, HttpServletRequest req, Model model) {
 		Object u = req.getSession().getAttribute("user");
@@ -75,7 +92,7 @@ public class QuestionController extends SunController{
 
 				Question q = new Question();
 				String question = req.getParameter("questitle");
-				q.setQuestion(StringUtil.utf8(question, "iso-8859-1"));
+				q.setQuestion(StringUtil.iso2utf8(question));
 
 				if (pid != null)
 					q.setPid(Long.parseLong(pid));
@@ -85,11 +102,11 @@ public class QuestionController extends SunController{
 
 				question = req.getParameter("question");
 				if (question != null)
-					q.setDescription(StringUtil.utf8(question, "iso-8859-1"));
+					q.setDescription(StringUtil.iso2utf8(question));
 
 				String tag = req.getParameter("tag");
 				if (tag != null)
-					q.setTag(StringUtil.utf8(tag, "iso-8859-1"));
+					q.setTag(StringUtil.iso2utf8(tag));
 				q.setUser((User) u);
 				this.quesDao.addQuestion(q, lang);
 			} catch (Exception e) {
@@ -116,9 +133,16 @@ public class QuestionController extends SunController{
 			String qid = req.getParameter("qid");
 			Question q = new Question();
 			q.setQid(Long.parseLong(qid));
-			q.setQuestion(req.getParameter("question"));
-			q.setDescription(req.getParameter("questiondesc"));
-			q.setTag(req.getParameter("tag"));
+			
+			try {
+				q.setQuestion(StringUtil.iso2utf8(req.getParameter("question")));
+				q.setDescription(StringUtil.iso2utf8(req.getParameter("questiondesc")));
+				q.setTag(StringUtil.iso2utf8(req.getParameter("tag")));
+			} catch (UnsupportedEncodingException e) {
+				logger.error(e.getMessage());
+				
+			}
+			
 			quesDao.updateQuestion(q, lang);
 			
 			return "redirect:/question/"+lang+"/" + qid;
@@ -142,8 +166,7 @@ public class QuestionController extends SunController{
 			c.setQid(Long.parseLong(qid));
 			c.setUser((User) u);
 			try {
-				c.setComment(StringUtil.utf8(req.getParameter("comment"),
-						"iso-8859-1"));
+				c.setComment(StringUtil.iso2utf8(req.getParameter("comment")));
 				this.quesDao.addComment(c, lang);
 			} catch (UnsupportedEncodingException e) {
 				logger.error(e.getMessage());
@@ -174,7 +197,7 @@ public class QuestionController extends SunController{
 			String answer = req.getParameter("answer");
 			if ((answer != null) && (!answer.equals(""))) {
 				try {
-					a.setAnswer(StringUtil.utf8(answer, "iso-8859-1"));
+					a.setAnswer(StringUtil.iso2utf8(answer));
 					this.answerDao.addAnswer(a, lang);
 					// increase answer cnt
 					this.quesDao.addAnswerCnt(Long.parseLong(qid), 1, lang);
@@ -194,6 +217,42 @@ public class QuestionController extends SunController{
 		return "redirect:/redirectLogin?cid=" + cid + "&pid=" + pid;
 	}
 
+	@RequestMapping(value="/ansupdt",method=RequestMethod.POST)
+	public String answerUpdate(Locale locale,HttpServletRequest req, Model model){
+		Object u = req.getSession().getAttribute("user");
+		String lang =getLanguage(locale,req);
+		if (u != null) {
+
+
+			String qid = req.getParameter("qid");
+			
+			Answer a = new Answer();
+			a.setAid(Long.parseLong(req.getParameter("aid")));
+			a.setQid(Long.parseLong(qid));
+			
+			a.setUser((User) u);
+
+			String answer = req.getParameter("answer");
+			if ((answer != null) && (!answer.equals(""))) {
+				try {
+					logger.debug("update answer :"+answer);
+					a.setAnswer(StringUtil.iso2utf8(answer));
+					this.answerDao.updateAnswer(a, lang);
+				} catch (Exception e) {
+					logger.error("failed to update answer :"+e.getMessage());
+					model.addAttribute("errormsg", e.getMessage());
+				}
+			}
+
+			return "redirect:/question/"+lang+"/" + qid;
+		}
+		String cid = req.getParameter("cid");
+		String pid = req.getParameter("pid");
+		return "redirect:/redirectLogin?cid=" + cid + "&pid=" + pid;
+	}
+	
+	
+	
 	@RequestMapping(value = { "/resolve" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
 	public String resolve(Locale locale, HttpServletRequest req) {
 		Object u = req.getSession().getAttribute("user");
@@ -225,7 +284,7 @@ public class QuestionController extends SunController{
 			try {
 				String lang = getLanguage(locale,req);
 
-				String ckey = StringUtil.utf8(searchKey, "iso-8859-1");
+				String ckey = StringUtil.iso2utf8(searchKey);
 				model.addAttribute("searchkey", ckey);
 				model.addAttribute("questions", this.quesDao.search(ckey, lang));
 			} catch (Exception e) {
@@ -244,7 +303,7 @@ public class QuestionController extends SunController{
 			try {
 				String lang = getLanguage(locale,req);
 
-				String ckey = StringUtil.utf8(tag, "iso-8859-1");
+				String ckey = StringUtil.iso2utf8(tag);
 				model.addAttribute("searchkey", ckey);
 				model.addAttribute("questions", this.quesDao.search(ckey, lang));
 			} catch (Exception e) {

@@ -3,13 +3,15 @@ package org.orcsun.sunspace.utils;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 
+import org.orcsun.sunspace.SunConstants;
+
 public class StringUtil {
 	private static String[] hexDigits = new String[] { "0", "1", "2", "3", "4",
 			"5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
 
-	public static String utf8(String s, String encode)
+	public static String iso2utf8(String s)
 			throws UnsupportedEncodingException {
-		return new String(s.getBytes(encode), "utf-8");
+		return new String(s.getBytes("iso-8859-1"), "utf-8");
 	}
 
 	public static String byteToHexString(byte b) {

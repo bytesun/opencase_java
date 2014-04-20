@@ -32,6 +32,7 @@
 	<script>
 	        tinymce.init({selector:'.richtextarea'});
 	</script> 
+
 </head>
  <body style="padding-top: 70px;">  
 
@@ -71,11 +72,11 @@
 		            
 		      <c:if test="${user == null}">
 		      <ul class="nav navbar-nav navbar-right ">
-		      	<li><a href="<%=request.getContextPath()%>/register/new?cid=${thecat.cid}&qid=${question.qid}"><spring:message code="common.signup" text="SignUp" /></a></li>
+		      	<li><a href="<%=request.getContextPath()%>/user/redirectLogin"><spring:message code="common.signup" text="SignUp" /></a></li>
 		      </ul>		      
 		      
 		      
-		      <form class="navbar-form navbar-right" role="signin" action="<%=request.getContextPath()%>/login" method="post">
+		      <form class="navbar-form navbar-right" role="signin" action="<%=request.getContextPath()%>/user/login" method="post">
 		      	<input type="hidden" name="cid" value="${thecat.cid}">
 		      	<input type="hidden" name="qid" value="${question.qid}">
 		        <div class="form-group">
@@ -98,7 +99,7 @@
 		            	<spring:message code="user.mypage" text="MyPage" />
 		            </li>
 		          
-		            <li><a href="<%=request.getContextPath()%>/logout">
+		            <li><a href="<%=request.getContextPath()%>/user/logout">
 		            <spring:message code="common.logout" text="Logout" /></a></li>
 	
 		          </ul>		          

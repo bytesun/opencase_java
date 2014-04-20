@@ -1,1 +1,6 @@
-.votebar,.questiondesc{display: block;color: #225599;}
+.votebar,.questiondesc{
+	display: block;color: #225599;
+	}
+.question{
+	word-wrap:break-word;
+	}

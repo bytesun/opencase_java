@@ -1,5 +1,22 @@
 <%@include file="header.jsp" %>
- 
+ <script type="text/javascript">
+   $(document).ready(function() {
+      $("#moreNewQuestion").click(function(event){
+
+          $.ajax( {
+             url:'<%=request.getContextPath()%>/question/newQuestions',
+             dataType: 'json',
+             success:function(data) {
+            	   $.each(data, function(index, question) {
+            		   $('#questionTable').append($('<tr><td style="word-wrap: break-word" width=80%>'+
+            		   		'<span class="badge">'+question.answercnt+'</span>'+ 
+						 	question.question+'</td></tr><td align="right">'));
+                   });
+             }
+          });
+      });
+   });
+   </script>
  	<div class="row">
 	<div class="col-md-8"> <!-- main right panel for question list -->
 
@@ -21,10 +38,11 @@
 		  <li class="active"><a href="#latest" data-toggle="tab">
 				<spring:message code="home.questionlist.ordertype.latest" text="Latest" />
 			</a></li>
-		
+		<!-- 
 		  <li><a href="#hot" data-toggle="tab">   
 		  		<spring:message code="home.questionlist.ordertype.hottest" text="Hottest" />
 			</a></li>
+			 -->
 		</ul>
 		
 		<!-- Tab panes -->
@@ -32,7 +50,9 @@
 		 <!-- -----------------proposals----------------- -->
 			<div class="tab-pane active" id="latest">		
 				<!-- --------------top question List-------------------- -->		
-				<table class="table" style="table-layout: fixed; width: 100%">
+				<table id="questionTable" class="table" style="table-layout: fixed; width: 100%">
+				
+				<!-- 
 			  		<c:forEach items="${newquestions}" var="question">
 			  			<tr><td style="word-wrap: break-word" width=80%>  
 			  				<span class="badge"><c:out value="${question.answercnt}"/></span> 
@@ -40,7 +60,7 @@
 						 	<c:out value="${question.question}"/></a>
 						 	</td>
 						 	<td align="right">
-						 	<!-- tags -->
+
 						 			<c:if test="${question.tag!=null && question.tag!=''}">
 										<c:set var="tags" value="${fn:split(question.tag,' ')}"/>
 										<c:forEach items="${tags}" var="tag">
@@ -51,6 +71,12 @@
 									</c:if>
 			    		</td></tr>
 			  		</c:forEach>
+			  		 -->
+			  		<tr>
+			  			<td>
+			  				<label id="moreNewQuestion">More...</label>
+			  			</td>
+			  		</tr>
 			  	</table>
 			</div>
 		</div>
@@ -59,10 +85,12 @@
 	<!-- - RIGHT -->
 	<div class="col-md-4">  <!-- right side panel -->
 
+
+	
 	</div>
 	</div>
 
-
+	
 	
 
 <%@include file="footer.jsp" %>

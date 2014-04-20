@@ -1,3 +1,8 @@
+--2014/4/15
+alter table users add column title varchar(100);
+alter table users add column profile varchar(1000);
+alter table users add column resume MEDIUMTEXT;
+
 --2014/4/13
 CREATE TABLE userlog(
 	UID BIGINT DEFAULT 0 NOT NULL,

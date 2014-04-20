@@ -85,5 +85,11 @@ public int delAnswer(long paramLong1, long paramLong2, long paramLong3,
 		String paramString) {
 	// TODO Auto-generated method stub
 	return 0;
+}
+@Override
+public int updateAnswer(Answer a, String lang) {
+	String sql ="update answer_"+lang+" set answer='"+a.getAnswer()+"' where aid="+a.getAid();
+	logger.debug(sql);
+	return this.getJdbcTemplate().update(sql);
 } }
 
