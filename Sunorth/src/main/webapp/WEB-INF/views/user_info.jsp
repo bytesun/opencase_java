@@ -1,13 +1,14 @@
 <%@include file="header.jsp" %>
 
  	<div class="row">
-		<div class="col-md-8"> <!-- log view -->
+		<div class="col-md-9"> <!-- log view -->
 		<h2>
 			<c:out value="${userinfo.name}"/>
 			<small>--<c:out value="${userinfo.title}"/></small>
 		</h2>
 		<c:out value="${userinfo.profile}"/>
-		<table class="table" style="table-layout: fixed; width: 100%">
+		<table id="ulogTable" class="table" style="table-layout: fixed; width: 100%">
+			<c:set var="mindex" value="0"/>
 	  		<c:forEach items="${ulogs}" var="userlog">
 	  			<tr><td style="word-wrap: break-word">  
 				 	<h3><a href="#"><c:out value="${userlog.subject}"/></a></h3>
@@ -24,16 +25,65 @@
 						</c:forEach>
 					</c:if>
 	    		</td></tr>
+	    		<c:set var="mindex" value="${mindex+1}"/>
 	  		</c:forEach>
+	  		
 		</table>
-			  	
+		<!-- more button -->
+	  	<div class="btn-group btn-group-justified">
+		  <div class="btn-group">
+		    <button type="button" id="moreUlog" class="btn btn-default">
+		    	<spring:message code="global.action.more" text="More..." />
+		    </button>
+		  </div>
+		</div>
+	  	
 		</div> <!-- end of right main view -->
 		
-		<div class="col-md-4"> <!-- side column -->
+		<div class="col-md-3"> <!-- side column -->
+			<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+			<!-- sunorth-leftside-large -->
+			<ins class="adsbygoogle"
+			     style="display:inline-block;width:300px;height:600px"
+			     data-ad-client="ca-pub-1018407477199873"
+			     data-ad-slot="1749098942"></ins>
+			<script>
+			(adsbygoogle = window.adsbygoogle || []).push({});
+			</script>		
 		</div><!-- end of side -->
 		
 	</div>
+<script type="text/javascript">
+   $(document).ready(function() {
+	   var lindex=${mindex+1};
+	      $("#moreUlog").click(function(event){
 
+	          $.ajax( {
+	             url:'<%=request.getContextPath()%>/user/moreUlog/${userinfo.uid}?start='+lindex,
+	             dataType: 'json',
+	             success:function(data) {
+	            	 var count = 0;
+	            	   $.each(data, function(index, ulog) {
+	               		   var tags = ulog.tag.split(" ");
+	               		   var strtags='';
+	               		   $.each(tags,function(index,tag){
+	               			 strtags=strtags+'<a href="<%=request.getContextPath()%>/question/searchtag?tag='+tag+'"><span class="label label-default ">'+tag+'</span></a>';
+	               		   });
+
+
+	               		   $('#ulogTable').append('<tr><td style="word-wrap: break-word">'+
+	               		   		'<h3><a href="#">'+ulog.subject+'</a></h3>'+ 
+	               		   		'<p><c:out value="'+ulog.ulog+'"  escapeXml="false"/></p>'+
+	        				 	ulog.ltime+strtags+'</td></tr>');
+	               		count = index;
+	                   });
+	            	   lindex = lindex+count+1;
+	             }
+	          });
+	      });        
+
+   });
+   </script>
 
 
 

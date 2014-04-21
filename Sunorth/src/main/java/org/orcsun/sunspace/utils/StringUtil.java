@@ -11,6 +11,7 @@ public class StringUtil {
 
 	public static String iso2utf8(String s)
 			throws UnsupportedEncodingException {
+		if(s == null)return null;
 		return new String(s.getBytes("iso-8859-1"), "utf-8");
 	}
 

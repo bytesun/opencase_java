@@ -50,12 +50,12 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 		return getJdbcTemplate().update(sql);
 	}
 
-	public List<Question> findQuestionsByPID(long pid, String lang) {
+	public List<Question> findQuestionsByPID(long pid, String lang,int start,int end) {
 		String sql = "select qid,pid,cid,question,tag,rate,answercnt,uid,description,qtime,status from question_"
-				+ lang + " where pid=" + pid + " order by rate desc";
-		List ns = getJdbcTemplate()
+				+ lang + " where pid=" + pid + " order by rate desc limit " + start + "," + end;
+
+		return getJdbcTemplate()
 				.query(sql, new QuestionMapper(this.userDao));
-		return ns;
 	}
 
 	public Question getQuestion(long id, String lang) {
@@ -72,9 +72,9 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 		return n;
 	}
 
-	public List<Question> findQuestionsByCID(long cid, String lang) {
+	public List<Question> findQuestionsByCID(long cid, String lang,int start,int end) {
 		String sql = "select qid,pid,cid,question,tag,rate,answercnt,uid,description,qtime,status from question_"
-				+ lang + " where cid=" + cid + " order by rate desc limit 10";
+				+ lang + " where cid=" + cid + " order by rate desc limit " + start + "," + end;
 		logger.info(sql);
 		return getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
 	}
@@ -86,21 +86,21 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 		return getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
 	}
 
-	public List<Question> search(String keys, String lang) {
+	public List<Question> search(String keys, String lang,int start,int end) {
 		String sql = "select qid,pid,cid,question,tag,rate,answercnt,uid,description,qtime,status from question_"
 				+ lang
 				+ " where question like '%"
 				+ keys
 				+ "%' or tag like '%"
-				+ keys + "%'";
+				+ keys + "%' order by rate desc limit "+start+","+end;
 		logger.info(sql);
 
 		return getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
 	}
 
-	public List<Question> findMyQuestions(long uid, String lang) {
+	public List<Question> findMyQuestions(long uid, String lang,int start,int end) {
 		String sql = "select qid,pid,cid,question,tag,rate,answercnt,uid,description,qtime,status from question_"
-				+ lang + " where uid=" + uid + " order by qtime desc";
+				+ lang + " where uid=" + uid + " order by qtime desc limit " + start + "," + end;
 		logger.info(sql);
 
 		return getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
@@ -130,9 +130,9 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 						Long.valueOf(uid) });
 	}
 
-	public List<Comment> findComments(long qid, String lang) {
+	public List<Comment> findComments(long qid, String lang,int start,int end) {
 		String sql = "select qid,ctime,comment,uid from comment_" + lang
-				+ " where qid=" + qid;
+				+ " where qid=" + qid+" limit "+  start + "," + end;
 		logger.debug(sql);
 		return getJdbcTemplate().query(sql, new CommentMapper(this.userDao));
 	}

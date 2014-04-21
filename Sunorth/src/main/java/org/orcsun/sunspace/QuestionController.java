@@ -56,15 +56,24 @@ public class QuestionController extends SunController{
 				model.addAttribute("pquestion",
 						this.quesDao.getQuestion(q.getPid(), lang));
 			}
+			String start = req.getParameter("start");
+			int istart=0;
+			if(start!=null && !start.equals(""))
+				istart = Integer.parseInt(start);
+			int iend = istart+20;
+			String end = req.getParameter("end");
+			if(end !=null && !end.equals(""))
+				iend = Integer.parseInt(end);
 			model.addAttribute("question", q);
 			model.addAttribute("answers", this.answerDao.findAnswers(qid, lang));
-			model.addAttribute("comments", this.quesDao.findComments(qid, lang));
+			model.addAttribute("comments", this.quesDao.findComments(qid, lang,istart,iend));
 			model.addAttribute("followups",
-					this.quesDao.findQuestionsByPID(qid, lang));
+					this.quesDao.findQuestionsByPID(qid, lang,istart,iend));
 		}
 		return "question";
 	}
 
+	
 	@RequestMapping(value="/newQuestions",method=RequestMethod.GET)
 	public @ResponseBody List<Question> findNewQuestions(Locale locale,HttpServletRequest req){
 		String start= req.getParameter("start");
@@ -74,7 +83,7 @@ public class QuestionController extends SunController{
 		String end = req.getParameter("end");
 		int iend = 20;
 		if(end != null && !end.equals(""))
-			iend = Integer.parseInt(end);
+			iend = istart+Integer.parseInt(end);
 		
 		return quesDao.findNewQuestions(istart, iend, this.getLanguage(locale, req));
 	}
@@ -120,7 +129,7 @@ public class QuestionController extends SunController{
 			}
 			return "redirect:/";
 		}
-		return "redirect:/redirectLogin?cid=" + cid + "&pid=" + pid;
+		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
 	}
 
 	@RequestMapping(value="/update",method=RequestMethod.POST)
@@ -149,7 +158,7 @@ public class QuestionController extends SunController{
 		}else{
 			String cid = req.getParameter("cid");
 			String pid = req.getParameter("pid");
-			return "redirect:/redirectLogin?cid=" + cid + "&pid=" + pid;
+			return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
 		}
 	}
 	
@@ -178,7 +187,7 @@ public class QuestionController extends SunController{
 
 		String cid = req.getParameter("cid");
 		String pid = req.getParameter("pid");
-		return "redirect:/redirectLogin?cid=" + cid + "&pid=" + pid;
+		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
 	}
 
 	@RequestMapping(value = { "/answer" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
@@ -214,7 +223,7 @@ public class QuestionController extends SunController{
 		}
 		String cid = req.getParameter("cid");
 		String pid = req.getParameter("pid");
-		return "redirect:/redirectLogin?cid=" + cid + "&pid=" + pid;
+		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
 	}
 
 	@RequestMapping(value="/ansupdt",method=RequestMethod.POST)
@@ -248,7 +257,7 @@ public class QuestionController extends SunController{
 		}
 		String cid = req.getParameter("cid");
 		String pid = req.getParameter("pid");
-		return "redirect:/redirectLogin?cid=" + cid + "&pid=" + pid;
+		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
 	}
 	
 	
@@ -274,19 +283,27 @@ public class QuestionController extends SunController{
 		}
 		String cid = req.getParameter("cid");
 		String pid = req.getParameter("pid");
-		return "redirect:/redirectLogin?cid=" + cid + "&pid=" + pid;
+		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
 	}
 
-	@RequestMapping(value = { "/search" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
+	@RequestMapping(value = { "/search" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public String search(Locale locale, HttpServletRequest req, Model model) {
 		String searchKey = req.getParameter("searchkey");
 		if (searchKey != null) {
 			try {
+				String start = req.getParameter("start");
+				int istart=0;
+				if(start!=null && !start.equals(""))
+					istart = Integer.parseInt(start);
+				int iend = istart+20;
+				String end = req.getParameter("end");
+				if(end !=null && !end.equals(""))
+					iend = Integer.parseInt(end);
 				String lang = getLanguage(locale,req);
 
 				String ckey = StringUtil.iso2utf8(searchKey);
 				model.addAttribute("searchkey", ckey);
-				model.addAttribute("questions", this.quesDao.search(ckey, lang));
+				model.addAttribute("questions", this.quesDao.search(ckey, lang,istart,iend));
 			} catch (Exception e) {
 				model.addAttribute("errormsg", e.getMessage());
 			}
@@ -294,18 +311,87 @@ public class QuestionController extends SunController{
 
 		return "searchResult";
 	}
+	/**
+	 * More search
+	 * @param locale
+	 * @param req
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value="/searchMore",method=RequestMethod.GET)
+	public @ResponseBody List<Question> searchMore(Locale locale, HttpServletRequest req) {
+		String searchKey = req.getParameter("searchkey");
+		if (searchKey != null) {
+			try {
+				String start = req.getParameter("start");
+				int istart=0;
+				if(start!=null && !start.equals(""))
+					istart = Integer.parseInt(start);
+				int iend = istart+20;
+				String end = req.getParameter("end");
+				if(end !=null && !end.equals(""))
+					iend = Integer.parseInt(end);
+				String lang = getLanguage(locale,req);
 
+				String ckey = StringUtil.iso2utf8(searchKey);
+				return  this.quesDao.search(ckey, lang,istart,iend);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+//				model.addAttribute("errormsg", e.getMessage());
+			}
+		}
+
+		return null;
+	}
+
+	@RequestMapping(value="/moreByCID/{cid}",method=RequestMethod.GET)
+	public @ResponseBody List<Question> searchMoreByCID(Locale locale, HttpServletRequest req,@PathVariable long cid) {
+				String start = req.getParameter("start");
+				int istart=0;
+				if(start!=null && !start.equals(""))
+					istart = Integer.parseInt(start);
+				int iend = istart+20;
+				String end = req.getParameter("end");
+				if(end !=null && !end.equals(""))
+					iend = Integer.parseInt(end);
+				String lang = getLanguage(locale,req);
+
+				return  this.quesDao.findQuestionsByCID(cid, lang, istart, iend);
+	}
+	
+	@RequestMapping(value="/moreByPID/{pid}",method=RequestMethod.GET)
+	public @ResponseBody List<Question> searchMoreByPID(Locale locale, HttpServletRequest req,@PathVariable long pid) {
+				String start = req.getParameter("start");
+				int istart=0;
+				if(start!=null && !start.equals(""))
+					istart = Integer.parseInt(start);
+				int iend = istart+20;
+				String end = req.getParameter("end");
+				if(end !=null && !end.equals(""))
+					iend = Integer.parseInt(end);
+				String lang = getLanguage(locale,req);
+
+				return  this.quesDao.findQuestionsByPID(pid, lang, istart, iend);
+	}	
+	
 	@RequestMapping(value = { "/searchtag" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public String searchByTag(Locale locale, HttpServletRequest req, Model model) {
 		String tag = req.getParameter("tag");
 
-		if (tag != null) {
+		if (tag != null && !tag.equals("")) {
 			try {
 				String lang = getLanguage(locale,req);
-
+				String start = req.getParameter("start");
+				int istart=0;
+				if(start!=null && !start.equals(""))
+					istart = Integer.parseInt(start);
+				int iend = istart+20;
+				String end = req.getParameter("end");
+				if(end !=null && !end.equals(""))
+					iend = Integer.parseInt(end);
 				String ckey = StringUtil.iso2utf8(tag);
 				model.addAttribute("searchkey", ckey);
-				model.addAttribute("questions", this.quesDao.search(ckey, lang));
+				model.addAttribute("questions", this.quesDao.search(ckey, lang,istart,iend));
 			} catch (Exception e) {
 				model.addAttribute("errormsg", e.getMessage());
 			}
@@ -314,6 +400,8 @@ public class QuestionController extends SunController{
 		return "searchResult";
 	}
 
+
+	
 	@RequestMapping(value = { "/vote" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
 	public String vote(Locale locale, HttpServletRequest req, Model model) {
 		String qid = req.getParameter("qid");
@@ -334,7 +422,7 @@ public class QuestionController extends SunController{
 		}
 		String cid = req.getParameter("cid");
 		String pid = req.getParameter("pid");
-		return "redirect:/redirectLogin?cid=" + cid + "&pid=" + pid;
+		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
 	}
 
 	@RequestMapping(value = { "/answer/vote" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
@@ -370,7 +458,7 @@ public class QuestionController extends SunController{
 		}
 		String cid = req.getParameter("cid");
 		String pid = req.getParameter("pid");
-		return "redirect:/redirectLogin?cid=" + cid + "&pid=" + pid;
+		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
 	}
 
 }

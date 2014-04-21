@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
 
 <div class="row">
-	<div class="col-md-8"> <!-- main right panel for question list -->
+	<div class="col-md-9"> <!-- main right panel for question list -->
 
 	<!-- --------------Question detail -->
 	<ol class="breadcrumb">
@@ -193,7 +193,7 @@
 			<c:when test="${user==null}">
 				<!-- relogin -->
 				<spring:message code="question.loginnotice" text="Please login to answer the question:" />
-				<a href="<%=request.getContextPath()%>/redirectLogin?qid=${question.qid}">
+				<a href="<%=request.getContextPath()%>/user/redirectLogin?qid=${question.qid}">
 					<spring:message code="common.login" text="Login" />
 				</a>
 			</c:when>
@@ -242,7 +242,7 @@
 			<c:when test="${user==null}">
 				<!-- relogin -->
 				<spring:message code="question.loginnotice" text="Please login first to consult a issue:" />
-				<a href="<%=request.getContextPath()%>/redirectLogin?qid=${question.qid}">
+				<a href="<%=request.getContextPath()%>/user/redirectLogin?qid=${question.qid}">
 					<spring:message code="common.login" text="Login" />
 				</a>
 			</c:when>	
@@ -273,8 +273,16 @@
 	
 	
 	<!-- right column -->
-		<div  class="col-md-4">
-		
+		<div  class="col-md-3">
+			<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+			<!-- sunorth-leftside-large -->
+			<ins class="adsbygoogle"
+			     style="display:inline-block;width:300px;height:600px"
+			     data-ad-client="ca-pub-1018407477199873"
+			     data-ad-slot="1749098942"></ins>
+			<script>
+			(adsbygoogle = window.adsbygoogle || []).push({});
+			</script>
 		</div>
 </div>
 

@@ -4,6 +4,7 @@ package org.orcsun.sunspace;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * All user relative operations
@@ -90,6 +92,19 @@ public class UserController {
 		return "user_info";
 	}
 	
+	@RequestMapping(value="/moreUlog/{uid}",method=RequestMethod.GET)
+	public @ResponseBody List<UserLog> moreUserLog(@PathVariable long uid,HttpServletRequest req){
+		String start = req.getParameter("start");
+		int istart=0;
+		if(start!=null && !start.equals(""))
+			istart = Integer.parseInt(start);
+		int iend = istart+20;
+		String end = req.getParameter("end");
+		if(end !=null && !end.equals(""))
+			iend = Integer.parseInt(end);
+		
+		return ulogDao.findMyLogs(uid, istart, iend);
+	}
 	
 	@RequestMapping(value="/ulog/new",method=RequestMethod.POST)
 	public String addUserLog(HttpServletRequest req,Model model){

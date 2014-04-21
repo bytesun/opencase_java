@@ -14,17 +14,17 @@ public abstract interface QuestionDAO
 
   public abstract Question getQuestion(long paramLong, String paramString);
 
-  public abstract List<Question> findQuestionsByPID(long paramLong, String paramString);
+  public abstract List<Question> findQuestionsByPID(long paramLong, String paramString,int start,int end);
 
-  public abstract List<Question> findQuestionsByCID(long paramLong, String paramString);
+  public abstract List<Question> findQuestionsByCID(long paramLong, String paramString,int start,int end);
 
   public abstract List<Question> findNewQuestions(int start,int end, String paramString);
 
-  public abstract List<Question> search(String paramString1, String paramString2);
+  public abstract List<Question> search(String paramString1, String lang, int start, int end);
 
-  public abstract List<Question> findMyQuestions(long paramLong, String paramString);
+  public abstract List<Question> findMyQuestions(long paramLong, String paramString,int start,int end);
 
-  public abstract List<Comment> findComments(long paramLong, String paramString);
+  public abstract List<Comment> findComments(long paramLong, String paramString,int start,int end);
   
   public abstract int addAnswerCnt(long qid,int cnt,String lang);
   public abstract int resolveQuestion(long qid,String lang);

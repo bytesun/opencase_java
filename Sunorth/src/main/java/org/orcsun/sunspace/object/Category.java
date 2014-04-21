@@ -1,33 +1,53 @@
-/*    */ package org.orcsun.sunspace.object;
-/*    */ 
-/*    */ public class Category
-/*    */ {
-/*    */   private long cid;
-/*    */   private long pid;
-/*    */   private String catname;
-/*    */ 
-/*    */   public long getCid()
-/*    */   {
-/* 15 */     return this.cid;
-/*    */   }
-/*    */   public void setCid(long cid) {
-/* 18 */     this.cid = cid;
-/*    */   }
-/*    */   public long getPid() {
-/* 21 */     return this.pid;
-/*    */   }
-/*    */   public void setPid(long pid) {
-/* 24 */     this.pid = pid;
-/*    */   }
-/*    */   public String getCatname() {
-/* 27 */     return this.catname;
-/*    */   }
-/*    */   public void setCatname(String catname) {
-/* 30 */     this.catname = catname;
-/*    */   }
-/*    */ 
-/*    */   public String toString()
-/*    */   {
-/* 35 */     return this.catname;
-/*    */   }
-/*    */ }
+package org.orcsun.sunspace.object;
+
+public class Category {
+	private long cid;
+	private long pid;
+	private String catname;
+	private String description;
+	private int rate;
+
+	public long getCid() {
+		return this.cid;
+	}
+
+	public void setCid(long cid) {
+		this.cid = cid;
+	}
+
+	public long getPid() {
+		return this.pid;
+	}
+
+	public void setPid(long pid) {
+		this.pid = pid;
+	}
+
+	public String getCatname() {
+		return this.catname;
+	}
+
+	public void setCatname(String catname) {
+		this.catname = catname;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getRate() {
+		return rate;
+	}
+
+	public void setRate(int rate) {
+		this.rate = rate;
+	}
+
+	public String toString() {
+		return this.catname;
+	}
+}

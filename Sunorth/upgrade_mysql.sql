@@ -1,3 +1,12 @@
+--2014/4/20
+
+alter table category_en add column description varchar(1000);
+alter table category_en modify column rate char(10) default 0;
+alter table category_zh add column description varchar(1000);
+alter table category_zh modify column rate char(10)  default 0;
+update category_en set rate=0;
+update category_zh set rate=0;
+
 --2014/4/15
 alter table users add column title varchar(100);
 alter table users add column profile varchar(1000);
