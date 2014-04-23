@@ -118,6 +118,9 @@ public class UserController {
 				ulog.setTag(StringUtil.iso2utf8(req.getParameter("tag")));
 				ulog.setSubject(StringUtil.iso2utf8(req.getParameter("subject")));
 				ulog.setUlog(StringUtil.iso2utf8(req.getParameter("ulog")));
+				String ispub = req.getParameter("ispublic");
+				if(ispub != null && !ispub.equals(""))ulog.setStatus(1);
+				
 			} catch (UnsupportedEncodingException e) {
 				logger.error(e.getMessage());
 			}

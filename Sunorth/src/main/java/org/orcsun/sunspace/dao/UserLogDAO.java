@@ -6,6 +6,7 @@ import org.orcsun.sunspace.object.UserLog;
 
 public interface UserLogDAO {
 	public int newLog(UserLog ulog);
+	public int updateLog(UserLog ulog);
 	public List<UserLog> findMyLogs(long uid,int start,int end);
 		
 }

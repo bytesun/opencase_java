@@ -1,6 +1,15 @@
 --todo
-	1. order by in home page
-	2. user's blog
+
+
+--2014/4/22
+	1.Add social sharing support in question  page.
+		
+--2014/4/21
+	1. Add private user log support.	
+	
+--2014/4/20
+	1. Add a moreSearch button to retrieve more result by ajax : homepage,searchResult,question list,blog page
+	2. Add google ADs
 	 
 --2014/4/19
 	1. Added google login support.

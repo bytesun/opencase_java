@@ -40,7 +40,14 @@
 		  	<c:if test="${user!=null && user.uid==question.user.uid}">
 	  	  		<a href="#" data-toggle="modal" data-target=".editquestion"><spring:message code="global.action.edit" text="Edit" /></a>
 	  	  	</c:if>	
-			
+			<!-- social sharing button -->
+			<span class='st_facebook_large' displayText='Facebook'></span>
+			<span class='st_googleplus_large' displayText='Google +'></span>
+			<span class='st_baidu_large' displayText='Baidu'></span>
+			<span class='st_twitter_large' displayText='Tweet'></span>
+			<span class='st_linkedin_large' displayText='LinkedIn'></span>
+			<span class='st_sina_large' displayText='Sina'></span>
+			<span class='st_blogger_large' displayText='Blogger'></span>			
 	 	</div>
 	  </div>
 	</div>		

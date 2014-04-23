@@ -5,17 +5,22 @@ import java.util.Date;
 /**
  * 
  * @author Sun
+ * 
  *	UID BIGINT DEFAULT 0 NOT NULL,
 	LTIME TIMESTAMP DEFAULT 'CURRENT_TIMESTAMP' NOT NULL,
 	TAG VARCHAR(100),
 	SUBJECT VARCHAR(1000) NOT NULL,
 	ULOG MEDIUMTEXT NOT NULL
+	STATUS CHAR(5)
+	LTYPE CHAR(5)
+	LID PRIMARY KEY 
  */
 public class UserLog {
-	private long uid;
+	private long uid,lid;
 	private Date ltime;
 	private String tag,subject,ulog;
-	private int status;
+	private int status, //0-draft/private,1-publish
+				ltype; //0-user write log, 1-task log
 	
 	public long getUid() {
 		return uid;
@@ -54,7 +59,20 @@ public class UserLog {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+
+	public long getLid() {
+		return lid;
+	}
+	public void setLid(long lid) {
+		this.lid = lid;
+	}
+	public int getLtype() {
+		return ltype;
+	}
+	public void setLtype(int ltype) {
+		this.ltype = ltype;
+	}
 	public String toString(){
-		return subject;
+		return this.subject;
 	}
 }

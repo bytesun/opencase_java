@@ -12,9 +12,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Not only answer, but also solution!">
-	<meta name="keywords" content="filenet,p8,ecm,question,solution,troubleshooting,drill down,analyze,plan,consult">
-	<meta name="author" content="Feng Sun">
+	<meta name="description" content="<spring:message code="header.description" text="Sunorth" />">
+	<meta name="keywords" content="<spring:message code="header.keywords" text="Sunorth" />">
+	<meta name="author" content="Sun">
    
     <title><spring:message code="header.title" text="Sunorth" /></title>
 
@@ -32,7 +32,11 @@
 	<script>
 	        tinymce.init({selector:'.richtextarea'});
 	</script> 
-
+	
+	<!-- social sharing -->
+	<script type="text/javascript">var switchTo5x=true;</script>
+	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+	
 </head>
  <body style="padding-top: 70px;">  
 

@@ -17,11 +17,10 @@
 								<c:set var="tags" value="${fn:split(question.tag,' ')}"/>
 								<c:forEach items="${tags}" var="tag">
 									<a href="<%=request.getContextPath()%>/question/searchtag?tag=${tag}">
-									<span class="badge label-default pull-right"><c:out value="${tag}"/></span></a>
+									<span class="label label-default"><c:out value="${tag}"/></span></a>
 								</c:forEach>
 							</c:if>			 	
-    		</td>
-    		</tr>
+    			</td></tr>
     		<c:set var="qindex" value="${qindex+1}"/>
   		</c:forEach>
   	</table>
@@ -66,7 +65,7 @@
 		               		if(question.tag!=null && question.tag!=undefined){
 		               			var tags = question.tag.split(" ");
 		               		   $.each(tags,function(index,tag){
-		               			 strtags=strtags+'<a href="<%=request.getContextPath()%>/question/searchtag?tag='+tag+'"><span class="label label-default ">'+tag+'</span></a>';
+		               			 strtags=strtags+'<a href="<%=request.getContextPath()%>/question/searchtag?tag='+tag+'"><span class="label label-default">'+tag+'</span></a>';
 		               		   });
 		               		}
 	               			strtags=strtags+'</td></tr>';

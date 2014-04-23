@@ -9,7 +9,10 @@
 		<c:out value="${userinfo.profile}"/>
 		<table id="ulogTable" class="table" style="table-layout: fixed; width: 100%">
 			<c:set var="mindex" value="0"/>
+			<c:set var="currentuid" value="${user.uid}"/>
+			
 	  		<c:forEach items="${ulogs}" var="userlog">
+	  			<c:if test="${userlog.status !=0 || (userlog.status == 0 && currentuid==userlog.uid)}">
 	  			<tr><td style="word-wrap: break-word">  
 				 	<h3><a href="#"><c:out value="${userlog.subject}"/></a></h3>
 				 	<p>
@@ -24,7 +27,10 @@
 							<span class="label label-default "><c:out value="${tag}"/></span></a> 
 						</c:forEach>
 					</c:if>
+					
+					
 	    		</td></tr>
+	    		</c:if>
 	    		<c:set var="mindex" value="${mindex+1}"/>
 	  		</c:forEach>
 	  		
@@ -35,6 +41,7 @@
 		    <button type="button" id="moreUlog" class="btn btn-default">
 		    	<spring:message code="global.action.more" text="More..." />
 		    </button>
+
 		  </div>
 		</div>
 	  	

@@ -1,3 +1,9 @@
+
+
+--2014/4/21
+alter table userlog add column lid BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY;
+alter table userlog add column ltype char(5) default 0;
+update userlog set status=1;
 --2014/4/20
 
 alter table category_en add column description varchar(1000);

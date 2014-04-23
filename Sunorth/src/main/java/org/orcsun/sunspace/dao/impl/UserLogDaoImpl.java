@@ -24,15 +24,23 @@ public class UserLogDaoImpl extends SunJdbcDaoSupport implements UserLogDAO {
 	static Logger logger = Logger.getLogger(UserLogDaoImpl.class);
 	@Override
 	public int newLog(UserLog ulog) {
-		String sql = "insert into userlog(uid,tag,subject,ulog,status) values(?,?,?,?,?)";
+		String sql = "insert into userlog(uid,tag,subject,ulog,status,ltype) values(?,?,?,?,?,?)";
 		logger.debug(sql);
-		Object[] args=new Object[]{ulog.getUid(),ulog.getTag(),ulog.getSubject(),ulog.getUlog(),ulog.getStatus()};
+		Object[] args=new Object[]{ulog.getUid(),ulog.getTag(),ulog.getSubject(),ulog.getUlog(),ulog.getStatus(),ulog.getLtype()};
 		return this.getJdbcTemplate().update(sql, args);
+	}
+	
+	@Override
+	public int updateLog(UserLog ulog) {
+		String sql ="update userlog set subject=?,ulog=?,tag=?,status=?,ltype=? where lid=?";
+		logger.debug(sql);
+		Object[] args = new Object[]{ulog.getSubject(),ulog.getUlog(),ulog.getTag(),ulog.getStatus(),ulog.getLtype(),ulog.getLid()};
+		return this.getJdbcTemplate().update(sql,args);
 	}
 
 	@Override
 	public List<UserLog> findMyLogs(long uid,int start,int end) {
-		String sql ="select uid,ltime,tag,subject,ulog,status from userlog where uid="+uid+" order by ltime desc limit "+start+","+end;
+		String sql ="select lid,uid,ltime,tag,subject,ulog,status,ltype from userlog where uid="+uid+" order by ltime desc limit "+start+","+end;
 		logger.debug(sql);
 		return this.getJdbcTemplate().query(sql, new UserLogMapper());
 	}
@@ -42,14 +50,18 @@ public class UserLogDaoImpl extends SunJdbcDaoSupport implements UserLogDAO {
 		@Override
 		public UserLog mapRow(ResultSet rs, int rowNum) throws SQLException {
 			UserLog ulog = new UserLog();
+			ulog.setLid(rs.getLong("lid"));
 			ulog.setUid(rs.getLong("uid"));
 			ulog.setLtime(rs.getTimestamp("ltime"));
 			ulog.setTag(rs.getString("tag"));
 			ulog.setSubject(rs.getString("subject"));
 			ulog.setUlog(rs.getString("ulog"));
 			ulog.setStatus(rs.getInt("status"));
+			ulog.setLtype(rs.getInt("ltype"));
 			return ulog;
 		}
 		
 	}
+
+
 }

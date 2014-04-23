@@ -12,11 +12,13 @@
 	  <div class="modal-dialog modal-lg">
 	    <div class="modal-content">
 	  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/user/update" method="POST">
-				<input type="text" class="form-control input-default" name="name" placeholder="<spring:message code="user.profile.name" text="Name" />" value="<c:out value="${user.name}"/>">
+				<input type="text" class="input-default" name="name" placeholder="<spring:message code="user.profile.name" text="Name" />" value="<c:out value="${user.name}"/>">
 				<input type="text" class="form-control input-default" name="title" placeholder="<spring:message code="user.profile.title" text="Title" />" value="<c:out value="${user.title}"  escapeXml="false"/>">
-				<textarea class="form-control" name="profile" rows="10" placeholder="<spring:message code="user.profile.summary" text="Summary" />">
+				<spring:message code="user.profile.summary" text="Summary" />
+				<textarea class="form-control" name="profile"  placeholder="<spring:message code="user.profile.summary" text="Summary" />">
 				<c:out value="${user.profile}"/>
 				</textarea>
+				<spring:message code="user.profile.resume" text="Resume" />
 		  		<textarea class="form-control richtextarea" name="resume" rows="10" placeholder="<spring:message code="user.profile.resume" text="Resume" />">
 		  		<c:out value="${user.resume}"  escapeXml="false"/>
 		  		</textarea>
@@ -66,11 +68,13 @@
 				  	
 				  	<input type="text" class="form-control input-default" name="subject" placeholder="<spring:message code="user.ulog.subject" text="subject" /> " required>
 					
-					<textarea class="form-control richtextarea"  name="ulog" placeholder=""></textarea>
-					<input type="text" name="tag" value="<c:out value="${question.tag}"/>">
+					<textarea class="richtextarea"  name="ulog" placeholder="<spring:message code="user.ulog.ulog" text="User input log here.." />"></textarea>
+					<input  type="text" name="tag" value="" placeholder="<spring:message code="user.ulog.tag" text="tags" />">
 
 					<button type="submit" class="btn btn-success">
-					<spring:message code="user.ulog.submit" text="Save" /></button>						
+					<spring:message code="user.ulog.submit" text="Save" /></button>	
+					
+					<input  type="checkbox" name="ispublic">	<spring:message code="user.ulog.publishflag" text="Is Published?" />			
 				</div>
 			</form>		  
 	
