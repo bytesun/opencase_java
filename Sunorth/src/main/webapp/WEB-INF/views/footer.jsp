@@ -14,8 +14,13 @@
 	<hr>
 
     <footer class="row">
-        <small class="col-md-12">&copy; 2014 All Right Reserved. Design by <a href="maileto:orcnsun@gmail.com">Sun </a> |
-        <a href="http://www.sunorth.org/user/1"> <spring:message code="footer.development.status" text="Development Status"/> </a>
+        <small class="col-md-12">
+        <ol class="breadcrumb">
+        	<li>&copy; 2014 All Right Reserved. Design by <a href="maileto:orcnsun@gmail.com">Sun </a> </li>
+        	<li><a href="http://www.sunorth.org/user/1"><span class="label label-info"> <spring:message code="footer.development.status" text="Development Status"/> </span></a>
+        	</li>
+        	<li><a href="http://www.sunorth.org/question/en/9"><span class="label label-info"> <spring:message code="footer.development.suggestion" text="Suggestion"/> </span></a></li>
+        </ol>        
         <br> "Yesterday is history, Tomorrow is mystery, but Today is a gift, that is why it is called the present" 
         </small>
     </footer>	

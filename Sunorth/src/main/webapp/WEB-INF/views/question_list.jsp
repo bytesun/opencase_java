@@ -4,7 +4,7 @@
 <div class="row">	
 		<div class="col-md-9">
 			<div class="row"><!-- menu -->
-				
+
 				<ol class="breadcrumb">
 				<c:choose>
 					<c:when test="${upcat!=null}">
@@ -30,21 +30,10 @@
 				
 				</c:choose>
 				
-				<c:if test="${subcats!=null}">
-				<div class="btn-group">
-				  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-				    SubCategories <span class="caret"></span>
-				  </button>
-				  <ul class="dropdown-menu" role="menu">
-					  <c:forEach items="${subcats}" var="category">
-					    <li><a href="<%=request.getContextPath()%>/cat/${lang}/${category.cid}"><c:out value="${category.catname}"/></a></li>
-					 </c:forEach>
-				  </ul>
-				</div>	
-				</c:if>
+				
 				
 				<!-- new issue -->
-				<li>
+				<li class="pull-right">
 				<c:if test="${user!=null }">
 				<button class="btn btn-success" data-toggle="modal" data-target=".newissue"><spring:message code="question.new" text="New Issue" /> </button>
 				
@@ -115,7 +104,7 @@
 				<c:when test="${user==null}">
 					<!-- relogin -->
 					<spring:message code="question.loginnotice" text="Please login first to ask question:" />
-					<a href="<%=request.getContextPath()%>/redirectLogin?cid=${thecat.cid}">
+					<a href="<%=request.getContextPath()%>/user/redirectLogin?cid=${thecat.cid}">
 						<spring:message code="common.login" text="Login" />
 					</a>
 				</c:when>	
@@ -146,17 +135,16 @@
 
 	<!-- left side -->
 	<div  class="col-md-3">
-			<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-			<!-- sunorth-leftside-large -->
-			<ins class="adsbygoogle"
-			     style="display:inline-block;width:300px;height:600px"
-			     data-ad-client="ca-pub-1018407477199873"
-			     data-ad-slot="1749098942"></ins>
-			<script>
-			(adsbygoogle = window.adsbygoogle || []).push({});
-			</script>
-		
-		
+
+			<div  class="panel panel-default">
+
+				<div id="subcat" class="panel-body">
+					<c:forEach items="${subcats}" var="category">
+					    <a class="btn btn-default" href="<%=request.getContextPath()%>/cat/${lang}/${category.cid}"><c:out value="${category.catname}"/></a>
+					 </c:forEach>
+
+				</div>
+			</div>		
 	</div>
 
 </div><!-- end of top row -->

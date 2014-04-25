@@ -103,7 +103,7 @@ public class CatController extends SunController {
 					this.catDao.findSubCategory(pid, lang));
 			return "admin_category";
 		}
-		return "redirect:/redirectLogin";
+		return "redirect:/user/redirectLogin";
 	}
 	
 	@RequestMapping(value="/top20",method=RequestMethod.GET)

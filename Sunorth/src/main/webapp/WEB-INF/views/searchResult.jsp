@@ -36,15 +36,7 @@
  
 	<!-- left side -->
 	<div  class="col-md-3">
-		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-		<!-- sunorth-leftside-large -->
-		<ins class="adsbygoogle"
-		     style="display:inline-block;width:300px;height:600px"
-		     data-ad-client="ca-pub-1018407477199873"
-		     data-ad-slot="1749098942"></ins>
-		<script>
-		(adsbygoogle = window.adsbygoogle || []).push({});
-		</script>
+
 	</div>
 </div><!-- end of top row --> 
  	
