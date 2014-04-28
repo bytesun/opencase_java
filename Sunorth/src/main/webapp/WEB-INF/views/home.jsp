@@ -5,8 +5,16 @@
 		<div class="row"> <!-- jumbotron row -->
 			<!-- -------------Welcome ------------------- -->
 			<div class="jumbotron">
-			  <h1><spring:message code="home.welcome.ask" text="How can I do that?" /></h1>
-			  <p><spring:message code="home.welcome.notic" text="Let's work together to deal with it!" /></p>
+			  <h2><spring:message code="home.welcome.ask" text="How can I do that?" /></h2>
+			  <p>
+			  	<ul>
+			  		<li><spring:message code="home.welcome.notice1" text="Find your solution." /></li>
+			  		<li><spring:message code="home.welcome.notice2" text="Give others proposals.." /></li>
+			  		<li><spring:message code="home.welcome.notice3" text="Build your knowledge and skills." /></li>
+			  		<li><spring:message code="home.welcome.notice4" text="Build a project with other people. " /></li>
+			  		<li><spring:message code="home.welcome.notice5" text="To be an independent consultant." /></li>
+			  	</ul>
+			  </p>
 			  <p>
 			  	<c:forEach items="${topcats}" var="cat">
 			  	  <a class="btn btn-success btn-lg" role="button" href="<%=request.getContextPath()%>/cat/${lang}/${cat.cid}">
@@ -54,17 +62,20 @@
 	<!-- - RIGHT -->
 	<div class="col-md-3">  <!-- right side panel -->
 		<div class="row">
+			<table class="table">
 			<!-- AD -->
 
 			<!-- top 20 category -->
-			<div  class="panel panel-default">
-			<!--	<div class="panel-heading">
-					 <h4><spring:message code="home.category.hotcats" text="Hotest Categories" /></h4> 
-				</div>-->
-				<div id="top20cat" class="panel-body">
-				</div>
-			</div>
+
+				<tr><td id="top20cat">
+				<h4><spring:message code="home.category.hotcats" text="Hotest Categories" /></h4>
+				</td></tr>
+
+
 			<!-- top 20 tags -->
+				<tr><td>
+				</td></tr>
+
 			<!-- <div id="top20tag" class="panel panel-default">
 				<div class="panel-heading">
 					<h4><spring:message code="home.tag.hot" text="Hotest Tags" /></h4>
@@ -73,6 +84,7 @@
 				</div>
 			</div>
 			 -->
+			 </table>
 		</div>
 	</div><!-- end of left side -->
 	</div><!-- end of the whole row -->

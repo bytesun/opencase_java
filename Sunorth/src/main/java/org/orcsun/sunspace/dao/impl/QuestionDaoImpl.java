@@ -2,6 +2,7 @@ package org.orcsun.sunspace.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -98,12 +99,19 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 		return getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
 	}
 
-	public List<Question> findMyQuestions(long uid, String lang,int start,int end) {
-		String sql = "select qid,pid,cid,question,tag,rate,answercnt,uid,description,qtime,status from question_"
-				+ lang + " where uid=" + uid + " order by qtime desc limit " + start + "," + end;
+	public List<Question> findMyQuestions(long uid) {
+		String sql = "select qid,pid,cid,question,tag,rate,answercnt,uid,description,qtime,status from question_en"
+				+ " where uid=" + uid + " and status<9 order by qtime desc ";
 		logger.info(sql);
 
-		return getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
+		List<Question> allqs = new ArrayList<Question>();
+		List<Question> en_qs= getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
+		if(en_qs != null && en_qs.size()>0)allqs.addAll(en_qs);
+		sql = "select qid,pid,cid,question,tag,rate,answercnt,uid,description,qtime,status from question_zh"
+				+ " where uid=" + uid + " and status<9 order by qtime desc ";
+		List<Question> zh_qs = getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
+		if(zh_qs != null && zh_qs.size()>0)allqs.addAll(zh_qs);
+		return allqs;
 	}
 
 	public int addComment(Comment c, String lang) {

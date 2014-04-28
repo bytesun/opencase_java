@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.orcsun.sunspace.dao.impl.QuestionDaoImpl;
 import org.orcsun.sunspace.dao.impl.TodoDaoImpl;
 import org.orcsun.sunspace.dao.impl.UserDaoImpl;
 import org.orcsun.sunspace.dao.impl.UserLogDaoImpl;
@@ -40,6 +41,8 @@ public class UserController {
 	TodoDaoImpl todoDao;
 	@Autowired
 	UserLogDaoImpl ulogDao;
+	@Autowired
+	QuestionDaoImpl quesDao;
 	
 	private static final Logger logger = Logger.getLogger(UserController.class);
 	/**
@@ -54,10 +57,10 @@ public class UserController {
 		if (u == null) {
 			return "redirect:/user/redirectLogin";
 		}
-
+		User user = (User)u;
 		model.addAttribute("todos",
-				this.todoDao.findTodayTodos(((User) u).getUid()));
-
+				this.todoDao.findTodayTodos(user.getUid()));
+		model.addAttribute("myquestions", quesDao.findMyQuestions(user.getUid()));
 		return "user_console";
 	}
 	

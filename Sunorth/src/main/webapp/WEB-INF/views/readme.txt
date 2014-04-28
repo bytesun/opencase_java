@@ -1,5 +1,8 @@
 --todo
 
+--2014/4/25
+	1. update notice in homepage
+	2. update side column with table.
 
 --2014/4/22
 	1.Add social sharing support in question  page.

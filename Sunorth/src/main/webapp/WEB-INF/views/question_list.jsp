@@ -1,6 +1,5 @@
 <%@include file="header.jsp" %>
 
-
 <div class="row">	
 		<div class="col-md-9">
 			<div class="row"><!-- menu -->
@@ -46,15 +45,50 @@
 							<div class="model-body">
 							
 								<input type="hidden" name="cid" value="${thecat.cid}">
-	
+						  	 	<div class="form-group"> 
+						  	 		<div class="rows">
+										<div class="col-md-12">
+											<div class="col-lg-12">	
+											
+											</div>
+										</div>
+									</div>
+								</div>	
 							  	
-							  	<input type="text" class="form-control input-default" name="questitle" placeholder="<spring:message code="common.question" text="Issue" /> " required>
-								
-								<textarea class="form-control richtextarea" rows="5" name="question" placeholder="<spring:message code="common.description" text="Description" /> "></textarea>
-								
-								<input type="text" name="tag" placeholder="<spring:message code="common.tag" text="Tag" />"> 
-								<button type="submit" class="btn btn-success">
-								<spring:message code="question.consult" text="Consult" /></button>						
+							  	
+						  	 	<div class="form-group"> 
+						  	 		<div class="rows">
+										<div class="col-md-12">
+											<div class="col-lg-12">	
+											<spring:message code="question.new" text="New Issue" />
+											<input type="text" class="form-control input-default" name="questitle" placeholder=" " required>											
+											</div>
+										</div>
+									</div>
+								</div>								
+
+						  	 	<div class="form-group"> 
+						  	 		<div class="rows">
+										<div class="col-md-12">
+											<div class="col-lg-12">	
+											<spring:message code="question.description" text="Description" />
+											<textarea class="form-control richtextarea" rows="5" name="question" placeholder=" "></textarea>											
+											</div>
+										</div>
+									</div>
+								</div>	
+						  	 	<div class="form-group"> 
+						  	 		<div class="rows">
+										<div class="col-md-12">
+											<div class="col-lg-12">	
+												<input type="text" name="tag" placeholder="<spring:message code="common.tag" text="Tag" />"> 
+												<button type="submit" class="btn btn-success">
+												<spring:message code="question.consult" text="Consult" /></button>												
+											</div>
+										</div>
+									</div>
+								</div>																
+					
 							</div>
 						</form>		
 					    </div>
@@ -111,21 +145,53 @@
 				<c:otherwise>
 					<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/ask" method="POST">
 						<input type="hidden" name="cid" value="${thecat.cid}">
-					  <div class="form-group">
-					  	 <input type="text" class="form-control input-default" name="questitle" placeholder="<spring:message code="common.question" text="Issue" />" required>
-					  </div>
+						
+				  	 	<div class="form-group"> 
+				  	 		<div class="rows">
+								<div class="col-md-12">
+									<div class="col-lg-12">	
+									
+									</div>
+								</div>
+							</div>
+						</div>
+						
+				  	 	<div class="form-group"> 
+				  	 		<div class="rows">
+								<div class="col-md-12">
+									<div class="col-lg-12">	
+									<spring:message code="question.new" text="New Issue" />								
+ 									<input type="text" class="form-control input-default" name="questitle" placeholder="" required>									
+									</div>
+								</div>
+							</div>
+						</div>
+						
+				  	 	<div class="form-group"> 
+				  	 		<div class="rows">
+								<div class="col-md-12">
+									<div class="col-lg-12">	
+										<spring:message code="question.description" text="Description" />
+ 										<textarea class="form-control richtextarea" rows="5" name="question" placeholder=""></textarea>									
+									</div>
+								</div>
+							</div>
+						</div>										
+					  	
+				  	 	<div class="form-group"> 
+				  	 		<div class="rows">
+								<div class="col-md-12">
+									<div class="col-lg-12">	
+										<input type="text" name="tag" placeholder="<spring:message code="common.tag" text="Tag" />"> 
+										
+										<button type="submit" class="btn btn-success">
+										<spring:message code="question.consult" text="Consult" /></button>									
+									</div>
+								</div>
+							</div>
+						</div>
 					  
-					  <div class="form-group">
-						 <textarea class="form-control richtextarea" rows="5" name="question" placeholder=""></textarea>
-					  </div>
-					   
-					  <div class="form-group">
-						
-						<input type="text" name="tag" placeholder="<spring:message code="common.tag" text="Tag" />"> 
-						
-						<button type="submit" class="btn btn-success">
-						<spring:message code="question.consult" text="Consult" /></button>
-					  </div>	 
+ 
 					</form>	
 				</c:otherwise>
 			</c:choose>
@@ -135,16 +201,14 @@
 
 	<!-- left side -->
 	<div  class="col-md-3">
-
-			<div  class="panel panel-default">
-
-				<div id="subcat" class="panel-body">
+		<table class="table">
+		
+			<tr><td>
 					<c:forEach items="${subcats}" var="category">
 					    <a class="btn btn-default" href="<%=request.getContextPath()%>/cat/${lang}/${category.cid}"><c:out value="${category.catname}"/></a>
 					 </c:forEach>
-
-				</div>
-			</div>		
+			</td></tr>
+		</table>
 	</div>
 
 </div><!-- end of top row -->

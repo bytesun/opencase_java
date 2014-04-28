@@ -56,15 +56,52 @@
 	  <div class="modal-dialog modal-lg">
 	    <div class="modal-content">
 	  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/question/update" method="POST">
+			<input type="hidden" name="qid" value="${question.qid}">
+		  	 	<div class="form-group"> 
+		  	 		<div class="rows">
+						<div class="col-md-12">
+							<div class="col-lg-12">	
+							
+							</div>
+						</div>
+					</div>
+				</div>	
 
-		  		<input type="hidden" name="qid" value="${question.qid}">
-		  		<input type="text" class="form-control input-default" name="question" value="<c:out value="${question.question}"/>">
-		  		<textarea class="form-control richtextarea" name="questiondesc" rows="10">
-		  		<c:out value="${question.description}"  escapeXml="false"/>
-		  		</textarea>
-		  		<input type="text" name="tag" value="<c:out value="${question.tag}"/>">
-			  	<input type="submit" class="btn btn-success" name="submit" value="<spring:message code="global.action.save" text="Save" />">
-					
+		  	 	<div class="form-group"> 
+		  	 		<div class="rows">
+						<div class="col-md-12">
+							<div class="col-lg-12">	
+							<spring:message code="common.question" text="Issue" />
+							<input type="text" class="form-control input-default" name="question" value="<c:out value="${question.question}"/>">
+							</div>
+						</div>
+					</div>
+				</div>	
+
+		  	 	<div class="form-group"> 
+		  	 		<div class="rows">
+						<div class="col-md-12">
+							<div class="col-lg-12">	
+							<spring:message code="question.description" text="Description" />
+							<textarea class="form-control richtextarea" name="questiondesc" rows="10">
+					  		<c:out value="${question.description}"  escapeXml="false"/>
+					  		</textarea>
+							</div>
+						</div>
+					</div>
+				</div>									
+		  	 	<div class="form-group"> 
+		  	 		<div class="rows">
+						<div class="col-md-12">
+							<div class="col-lg-12">	
+							<spring:message code="common.tag" text="Tag" />
+					  		<input type="text" name="tag" value="<c:out value="${question.tag}"/>">
+						  	<input type="submit" class="btn btn-success" name="submit" value="<spring:message code="global.action.save" text="Save" />">							
+							</div>
+						</div>
+					</div>
+				</div>					
+		  		
 		  </form>		
 	    </div>
 	  </div>
@@ -87,9 +124,39 @@
 
 						<div class="model-body">
 							<input type="hidden" name="qid" value="${question.qid}">
-							<textarea class="form-control" cols="50" rows="5" name="comment" placeholder=""></textarea>
-							<button type="submit" class="btn btn-success">
-							<spring:message code="question.comment.add" text="Add Comment" /></button>						
+					  	 	<div class="form-group"> 
+					  	 		<div class="rows">
+									<div class="col-md-12">
+										<div class="col-lg-12">	
+										
+										</div>
+									</div>
+								</div>
+							</div>		
+								
+					  	 	<div class="form-group"> 
+					  	 		<div class="rows">
+									<div class="col-md-12">
+										<div class="col-lg-12">	
+										<spring:message code="question.comment.add" text="Comment" />
+										<textarea class="form-control" cols="50" rows="5" name="comment" placeholder=""></textarea>
+										</div>
+									</div>
+								</div>
+							</div>	
+							
+					  	 	<div class="form-group"> 
+					  	 		<div class="rows">
+									<div class="col-md-12">
+										<div class="col-lg-12">	
+										<button type="submit" class="btn btn-success">
+										<spring:message code="question.comment.add" text="Add Comment" /></button>			
+										</div>
+									</div>
+								</div>
+							</div>																					
+							
+										
 						</div>
 					</form>		
 				    </div>
@@ -257,10 +324,12 @@
 				<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/ask" method="POST">
 					<input type="hidden" name="pid" value="${question.qid}">
 				  <div class="form-group">
+				  	<spring:message code="question.new" text="New Issue" />
 				  	 <input type="text" class="form-control input-default" name="questitle" placeholder="<spring:message code="question.followup.title" text="FollowUp" />" required>
 				  </div>
 				  
 				  <div class="form-group">
+				  <spring:message code="question.description" text="Description" />
 					 <textarea  class="form-control richtextarea" rows="5" name="question" placeholder="<spring:message code="common.description" text="Description" />"></textarea>
 				  </div>
 				   

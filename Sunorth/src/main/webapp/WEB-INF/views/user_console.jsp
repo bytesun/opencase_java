@@ -4,7 +4,9 @@
 <div class="row">
 	<div class="col-md-8"> <!-- main right panel for question list -->
 	<h2>
-	<c:out value="${user.name}"></c:out><small><a href="#" data-toggle="modal" data-target=".edituser"><spring:message code="global.action.edit" text="Edit" /></a></small>
+	<a href="<%=request.getContextPath()%>/user/${user.uid}"><c:out value="${user.name}"/></a>
+	
+	<small><a href="#" data-toggle="modal" data-target=".edituser"><spring:message code="global.action.edit" text="Edit" /></a></small>
 	</h2>
 	
 <!-- edit user -->				 	
@@ -12,18 +14,59 @@
 	  <div class="modal-dialog modal-lg">
 	    <div class="modal-content">
 	  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/user/update" method="POST">
-				<input type="text" class="input-default" name="name" placeholder="<spring:message code="user.profile.name" text="Name" />" value="<c:out value="${user.name}"/>">
-				<input type="text" class="form-control input-default" name="title" placeholder="<spring:message code="user.profile.title" text="Title" />" value="<c:out value="${user.title}"  escapeXml="false"/>">
-				<spring:message code="user.profile.summary" text="Summary" />
-				<textarea class="form-control" name="profile"  placeholder="<spring:message code="user.profile.summary" text="Summary" />">
-				<c:out value="${user.profile}"/>
-				</textarea>
-				<spring:message code="user.profile.resume" text="Resume" />
-		  		<textarea class="form-control richtextarea" name="resume" rows="10" placeholder="<spring:message code="user.profile.resume" text="Resume" />">
-		  		<c:out value="${user.resume}"  escapeXml="false"/>
-		  		</textarea>
-			  	<input type="submit" class="btn btn-success" name="submit" value="<spring:message code="global.action.save" text="Save" />">
-					
+	  	 	<div class="form-group"> 
+	  	 		<div class="rows">
+					<div class="col-md-12">
+						<div class="col-lg-12">
+						</div>
+					</div>
+				</div>
+			</div>		  	 
+	  	 	<div class="form-group"> 
+	  	 		<div class="rows">
+					<div class="col-md-12">
+						<div class="col-lg-12">
+							<spring:message code="user.profile.name" text="Name" />:
+							<input type="text" class="input-default" name="name" placeholder="<spring:message code="user.profile.name" text="Name" />" value="<c:out value="${user.name}"/>">
+						</div>
+					</div>
+				</div>
+			</div>	
+	  	 	<div class="form-group"> 
+	  	 		<div class="rows">
+					<div class="col-md-12">
+						<div class="col-lg-12">					
+							<spring:message code="user.profile.title" text="Title" />:
+							<input type="text" class="form-control input-default" name="title" placeholder="" value="<c:out value="${user.title}"  escapeXml="false"/>">
+						</div>
+					</div>
+				</div>
+			</div>					
+	  	 	<div class="form-group"> 
+	  	 		<div class="rows">
+					<div class="col-md-12">
+						<div class="col-lg-12">		
+							<spring:message code="user.profile.summary" text="Summary" />:
+							<textarea class="form-control" name="profile"  placeholder="<spring:message code="user.profile.summary" text="Summary" />">
+							<c:out value="${user.profile}"/>
+							</textarea>
+						</div>
+					</div>
+				</div>
+			</div>		
+	  	 	<div class="form-group"> 
+	  	 		<div class="rows">
+					<div class="col-md-12">
+						<div class="col-lg-12">						
+							<spring:message code="user.profile.resume" text="Resume" />:
+					  		<textarea class="form-control richtextarea" name="resume" rows="10" placeholder="<spring:message code="user.profile.resume" text="Resume" />">
+					  		<c:out value="${user.resume}"  escapeXml="false"/>
+					  		</textarea>
+						  	<input type="submit" class="btn btn-success" name="submit" value="<spring:message code="global.action.save" text="Save" />">
+						</div>
+					</div>
+				</div>
+			</div>						
 		  </form>		
 	    </div>
 	  </div>
@@ -31,14 +74,16 @@
 	
 	<!-- questions/answers/faoriates -->
 	<ul class="nav nav-tabs">
-	
-	  <li class="active"><a href="#ulog" data-toggle="tab">
-		<spring:message code="user.ulog" text="UserLog" />
+	  
+	  <li  class="active"><a href="#inbox" data-toggle="tab">
+		<spring:message code="user.inbox" text="Inbox" />
+	  </a></li>	
+	  
+	  <li><a href="#issues" data-toggle="tab">
+		<spring:message code="user.myquestions" text="Issues" />
 	  </a></li>
 		
-	  <li><a href="#inbox" data-toggle="tab">
-		<spring:message code="user.inbox" text="Inbox" />
-	  </a></li>
+
 			<!-- 				
 	  <li><a href="#myquestions" data-toggle="tab">
 		<spring:message code="user.myquestions" text="My Questions" />
@@ -50,105 +95,165 @@
 	   -->
 	</ul>
 	
-<div class="tab-content">
-  <!-- ---------------todo list----------------- -->
-	  <div class="tab-pane active" id="ulog">
-	  
-	  <div class="panel panel-default">
-	  <!-- Default panel contents -->
-	  <div class="panel-heading">
-		<a href="<%=request.getContextPath()%>/user/${user.uid}">
-			<spring:message code="global.action.view" text="View" />
-		</a>
-	  
+	<div class="tab-content">
+	  <!-- ---------------todo list----------------- -->
+		  <div class="tab-pane" id="issues">
+		  <div class="panel panel-default">
+		  	<table class="table" style="table-layout: fixed; width: 100%">
+		  		<c:forEach items="${myquestions}" var="q">
+		  			<tr><td  style="word-wrap: break-word">  	
+					 	<a href="<%=request.getContextPath()%>/question/${lang}/${q.qid}">
+					 	<c:out value="${q.question}"  escapeXml="false"/>
+					 	</a> <label class="badge"><c:out value="${q.answercnt}"></c:out></label>
+		    		</td></tr>
+		  		</c:forEach>
+		  	</table>		  
+		  </div><!-- end of  -->
+	  </div><!-- end of tab panel -->
+	
+	  <!-- ---------------inbox list----------------- -->
+	  <div class="tab-pane" id="inbox">
+	
+	
 	  </div>
-		    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/user/ulog/new" method="POST">
+	    
 
-				<div class="model-body">
-				  	
-				  	<input type="text" class="form-control input-default" name="subject" placeholder="<spring:message code="user.ulog.subject" text="subject" /> " required>
-					
-					<textarea class="richtextarea"  name="ulog" placeholder="<spring:message code="user.ulog.ulog" text="User input log here.." />"></textarea>
-					<input  type="text" name="tag" value="" placeholder="<spring:message code="user.ulog.tag" text="tags" />">
-
-					<button type="submit" class="btn btn-success">
-					<spring:message code="user.ulog.submit" text="Save" /></button>	
-					
-					<input  type="checkbox" name="ispublic">	<spring:message code="user.ulog.publishflag" text="Is Published?" />			
-				</div>
-			</form>		  
+	  
+	  <!-- -----------------answers----------------- -->
+	  <!-- 
+	  <div class="tab-pane" id="myanswers">
 	
-
-	</div>
+		  <table class="table" style="table-layout: fixed; width: 100%">
+	  		<c:forEach items="${myanswers}" var="answer">
+	  			<tr><td  style="word-wrap: break-word">  	
+				 	<c:out value="${answer.answer}" escapeXml="false"/>
+	    		</td></tr>
+	  		</c:forEach>
+	  	</table>
 		
-			
-
-
-
-  </div>
-
-  <!-- ---------------inbox list----------------- -->
-  <div class="tab-pane active" id="inbox">
-
-
-  </div>
-    
-  
-  <!-- -----------------questions----------------- -->
-  <div class="tab-pane" id="myquestions">
-	
-  	<table class="table" style="table-layout: fixed; width: 100%">
-  		<c:forEach items="${myquestions}" var="q">
-  			<tr><td  style="word-wrap: break-word">  	
-			 	<c:out value="${q.question}"  escapeXml="false"/> <label class="badge"><c:out value="${q.answercnt}"></c:out></label>
-    		</td></tr>
-  		</c:forEach>
-  	</table>
-  
-  </div>
-  
-  <!-- -----------------answers----------------- -->
-  <!-- 
-  <div class="tab-pane" id="myanswers">
-
-	  <table class="table" style="table-layout: fixed; width: 100%">
-  		<c:forEach items="${myanswers}" var="answer">
-  			<tr><td  style="word-wrap: break-word">  	
-			 	<c:out value="${answer.answer}" escapeXml="false"/>
-    		</td></tr>
-  		</c:forEach>
-  	</table>
-	
-  </div>
- -->
-</div>	
+	  </div>
+	 -->
+	</div>	
 	</div>
 	<div class="col-md-4"> 
+			<!-- new todo -->
 			<button class="btn btn-success" data-toggle="modal" data-target=".newtodo">
 			<spring:message code="user.todo.button" text="New TODO" />
 			</button>
+			
+			<button class="btn btn-success" data-toggle="modal" data-target=".newlog">
+			<spring:message code="user.ulog.newbtn" text="Write Log" />
+			</button>
+			
+			<!-- new todo diag -->		
 			<div class="modal fade newtodo" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 			  <div class="modal-dialog modal-lg">
 			    <div class="modal-content">
 			    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/todo/add" method="POST">
 	
 					<div class="model-body">
-					  	
-					  	<input type="text" class="form-control input-default" name="todo" placeholder="<spring:message code="user.todo.button" text="New todo item" /> " required>
-						
-						<textarea class="form-control" rows="5" name="note" placeholder=""></textarea>
-						
-						<spring:message code="user.todo.priority" text="Priority" /><input type="number" name="priority" placeholder="" value="10" min="1" max="10"> 
-						<spring:message code="user.todo.deadline" text="Deadline" /><input type="date" name="deadline" placeholder="">
-						
-						<button type="submit" class="btn btn-success">
-						<spring:message code="user.todo.add" text="Add TODO" /></button>						
+				  	 	<div class="form-group"> 
+				  	 		<div class="rows">
+								<div class="col-md-12">
+									<div class="col-lg-12">					  	
+									  	
+									</div>
+								</div>
+							</div>
+						</div>						
+				  	 	<div class="form-group"> 
+				  	 		<div class="rows">
+								<div class="col-md-12">
+									<div class="col-lg-12">		
+										<spring:message code="user.todo.button" text="New todo item" />			  	
+									  	<input type="text" class="form-control input-default" name="todo" placeholder=" " required>
+									</div>
+								</div>
+							</div>
+						</div>	
+			  	 	<div class="form-group"> 
+			  	 		<div class="rows">
+							<div class="col-md-12">
+								<div class="col-lg-12">	
+										<spring:message code="user.todo.note" text="Note" />									
+										<textarea class="form-control" rows="5" name="note" placeholder=""></textarea>
+									</div>
+								</div>
+							</div>
+						</div>											
+			  	 	<div class="form-group"> 
+			  	 		<div class="rows">
+							<div class="col-md-12">
+								<div class="col-lg-12">												
+										<spring:message code="user.todo.priority" text="Priority" /><input type="number" name="priority" placeholder="" value="10" min="1" max="10"> 
+										<spring:message code="user.todo.deadline" text="Deadline" /><input type="date" name="deadline" placeholder="">
+										
+										<button type="submit" class="btn btn-success">
+										<spring:message code="user.todo.add" text="Add TODO" /></button>	
+									</div>
+								</div>
+							</div>
+						</div>																
 					</div>
 				</form>		
 			    </div>
 			  </div>
 			</div>	<!-- end new todo dialog -->	
+			<!-- new log diag -->
 			
+			<div class="modal fade newlog" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-lg">
+			    <div class="modal-content">
+				    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/user/ulog/new" method="POST">
+		
+						<div class="model-body">
+				  	 	<div class="form-group"> 
+				  	 		<div class="rows">
+								<div class="col-md-12">
+									<div class="col-lg-12">	
+									</div>
+								</div>
+							</div>
+						</div>						
+				  	 	<div class="form-group"> 
+				  	 		<div class="rows">
+								<div class="col-md-12">
+									<div class="col-lg-12">	
+										<spring:message code="user.ulog.subject" text="subject" />				  	
+						  				<input type="text" class="form-control input-default" name="subject" placeholder=" " required>									  	
+									</div>
+								</div>
+							</div>
+						</div>	
+				  	 	<div class="form-group"> 
+				  	 		<div class="rows">
+								<div class="col-md-12">
+									<div class="col-lg-12">	
+										<spring:message code="user.ulog.ulog" text="User input log here.." />				  	
+										<textarea class="richtextarea"  name="ulog" placeholder=""></textarea>
+									  	
+									</div>
+								</div>
+							</div>
+						</div>	
+				  	 	<div class="form-group"> 
+				  	 		<div class="rows">
+								<div class="col-md-12">
+									<div class="col-lg-12">					
+										<input  type="text" name="tag" value="" placeholder="<spring:message code="user.ulog.tag" text="tags" />">									  	
+										<button type="submit" class="btn btn-success">
+										<spring:message code="user.ulog.submit" text="Save" /></button>	
+										
+										<input  type="checkbox" name="ispublic">	<spring:message code="user.ulog.publishflag" text="Is Published?" />									  	
+									</div>
+								</div>
+							</div>
+						</div>					
+						</div>
+					</form>		
+					</div>
+				</div>
+			</div>		
 		  <!-- todo list -->
 
 		   <table class="table">
