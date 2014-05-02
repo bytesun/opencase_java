@@ -1,6 +1,7 @@
 <%@include file="header.jsp" %>
  
  	<div class="row">
+
 	<div class="col-md-9"> <!-- main right panel for question list -->
 		<div class="row"> <!-- jumbotron row -->
 			<!-- -------------Welcome ------------------- -->
@@ -44,8 +45,9 @@
 		 <!-- -----------------proposals----------------- -->
 			<div class="tab-pane active" id="latest">		
 				<!-- --------------top question List-------------------- -->		
-				<table id="questionTable" class="table" style="table-layout: fixed; width: 100%">
-			  	</table>
+				<div id="questionlist">
+				</div><!-- list A -->	
+	
 
 			  	<div class="btn-group btn-group-justified">
 				  <div class="btn-group">
@@ -87,6 +89,7 @@
 			 </table>
 		</div>
 	</div><!-- end of left side -->
+
 	</div><!-- end of the whole row -->
 
  <script type="text/javascript">
@@ -121,15 +124,23 @@
             	var count = 0;
            	   $.each(data, function(index, question) {
            		   var tags = question.tag.split(" ");
-           		   var strtags='';
-           		   $.each(tags,function(index,tag){
-           			 strtags=strtags+'<a href="<%=request.getContextPath()%>/question/searchtag?tag='+tag+'"><span class="label label-default ">'+tag+'</span></a>';
-           		   });
-           			strtags=strtags+'</td></tr>';
-
-           		   $('#questionTable').append('<tr><td style="word-wrap: break-word" width="80%">'+
-           		   		'<a href="<%=request.getContextPath()%>/question/${lang}/'+question.qid+'"><span class="badge">'+question.answercnt+'</span>'+ 
-					 	question.question+'</a></td><td align="right">'+strtags);
+           		 var strtags='<div class="tags">';
+           		
+				   if(tags != ''){
+	           		   $.each(tags,function(index,tag){
+	           			 strtags=strtags+'<a class="tag-link-bluemix" href="<%=request.getContextPath()%>/question/searchtag?tag='+tag+'">'+tag+'</a>&nbsp;&nbsp;';
+	           		   });
+				   }
+           			
+				   strtags=strtags+'</div>';
+           		   $('#questionlist').append('<div class="short-summary"><div class="question-summary-wrapper"><h4 class="list-heading">'+
+           		   		'<a href="<%=request.getContextPath()%>/question/${lang}/'+question.qid+'"><strong>'+ 
+					 	question.question+'</strong></a></h4>'+
+					 	'<div class="userinfo"><a href="<%=request.getContextPath()%>/user/'+question.user.uid+'">'+question.user.name+'</a></div> '+
+					 	strtags+
+					 	//'</div><div class="counts"><div  class="status  answered-accepted"><div class="item-count">'+
+					 	//question.answercnt+'</div></div></div>'+
+					 	'</div>');
            		   count = index;
                   });
            	   qindex = qindex+count+1;
@@ -145,15 +156,23 @@
 	            	 var count = 0;
 	            	   $.each(data, function(index, question) {
 	               		   var tags = question.tag.split(" ");
-	               		   var strtags='';
-	               		   $.each(tags,function(index,tag){
-	               			 strtags=strtags+'<a href="<%=request.getContextPath()%>/question/searchtag?tag='+tag+'"><span class="label label-default ">'+tag+'</span></a>';
-	               		   });
-	               			strtags=strtags+'</td></tr>';
-
-	               		   $('#questionTable').append('<tr><td style="word-wrap: break-word" width="80%">'+
-	               		   		'<a href="<%=request.getContextPath()%>/question/${lang}/'+question.qid+'"><span class="badge">'+question.answercnt+'</span>'+ 
-	    					 	question.question+'</a></td><td align="right">'+strtags);
+	            		   var strtags='<div class="tags">';
+	                  		
+	    				   if(tags != ''){
+	    	           		   $.each(tags,function(index,tag){
+	    	           			 strtags=strtags+'<a class="tag-link-bluemix" href="<%=request.getContextPath()%>/question/searchtag?tag='+tag+'">'+tag+'</a>';
+	    	           		   });
+	    				   }
+	               			
+	               			strtags=strtags+'</div>';
+	               		   $('#questionlist').append('<div class="short-summary"><div class="question-summary-wrapper"><h4 class="list-heading">'+
+	               		   		'<a href="<%=request.getContextPath()%>/question/${lang}/'+question.qid+'"><strong>'+ 
+	    					 	question.question+'</strong></a></h4>'+
+	    					 	'<div class="userinfo"><a href="<%=request.getContextPath()%>/user/'+question.user.uid+'">'+question.user.name+'</a></div> '+
+	    					 	strtags+
+	    					 	//'</div><div class="counts"><div  class="status  answered-accepted"><div class="item-count">'+
+	    					 	//question.answercnt+'</div></div></div>'+
+	    					 	'</div>');
 	               		count = index;
 	                   });
 	            	   qindex = qindex+count+1;
@@ -164,5 +183,6 @@
    });
    </script>	
 	
+
 
 <%@include file="footer.jsp" %>

@@ -25,32 +25,31 @@
 		
 	</div>
 
-	<div class="panel panel-default">
-	  <div class="panel-heading"><span style="word-break:break-all;">
-	  <h2> <c:out value="${question.question}"/></h2></span></div>
-	  <div class="panel-body" id="question_desc_area">
-	  		<b>
-	  		<a href="<%=request.getContextPath()%>/user/${question.user.uid}"><c:out value="${question.user.name}"/> </a>
-	  		</b>
-	   		<div class="question"><c:out value="${question.description}"  escapeXml="false"/></div>
-	  </div>
-  	  	
-	  <div class="panel-foot">
+
+	  
+	  <h2> <span style="word-break:break-all;"><c:out value="${question.question}"/></span></h2>
+
+	  	<table class="table">
+
+	  		<tr>
+	  			<td style="width:70px;vertical-align:top"><!-- vote -->
+	  			
+	  			</td>
+	  			<td><!-- question desc -->
+			  		<b><a href="<%=request.getContextPath()%>/user/${question.user.uid}"><c:out value="${question.user.name}"/> </a></b>
+			   		<div class="question"><c:out value="${question.description}"  escapeXml="false"/></div>
+	  			</td>
+	  		</tr>
+
+	  	</table>
+
 		<div>
 		  	<c:if test="${user!=null && user.uid==question.user.uid}">
 	  	  		<a href="#" data-toggle="modal" data-target=".editquestion"><spring:message code="global.action.edit" text="Edit" /></a>
 	  	  	</c:if>	
-			<!-- social sharing button -->
-			<span class='st_facebook_large' displayText='Facebook'></span>
-			<span class='st_googleplus_large' displayText='Google +'></span>
-			<span class='st_baidu_large' displayText='Baidu'></span>
-			<span class='st_twitter_large' displayText='Tweet'></span>
-			<span class='st_linkedin_large' displayText='LinkedIn'></span>
-			<span class='st_sina_large' displayText='Sina'></span>
-			<span class='st_blogger_large' displayText='Blogger'></span>			
+		
 	 	</div>
-	  </div>
-	</div>		
+
 	<!-- edit -->				 	
 	<div class="modal fade editquestion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-lg">
@@ -350,7 +349,14 @@
 	
 	<!-- right column -->
 		<div  class="col-md-3">
-
+			<!-- social sharing button -->
+			<span class='st_facebook_large' displayText='Facebook'></span>
+			<span class='st_googleplus_large' displayText='Google +'></span>
+			<span class='st_baidu_large' displayText='Baidu'></span>
+			<span class='st_twitter_large' displayText='Tweet'></span>
+			<span class='st_linkedin_large' displayText='LinkedIn'></span>
+			<span class='st_sina_large' displayText='Sina'></span>
+			<span class='st_blogger_large' displayText='Blogger'></span>	
 		</div>
 </div>
 
