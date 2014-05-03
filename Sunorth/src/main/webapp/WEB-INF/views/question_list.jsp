@@ -28,74 +28,7 @@
 					</c:otherwise>
 				
 				</c:choose>
-				
-				
-				
-				<!-- new issue -->
-				<li class="pull-right">
-				<c:if test="${user!=null }">
-				<button class="btn btn-success" data-toggle="modal" data-target=".newissue"><spring:message code="question.new" text="New Issue" /> </button>
-				
-	
-					<div class="modal fade newissue" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-					  <div class="modal-dialog modal-lg">
-					    <div class="modal-content">
-					    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/ask" method="POST">
-	
-							<div class="model-body">
-							
-								<input type="hidden" name="cid" value="${thecat.cid}">
-						  	 	<div class="form-group"> 
-						  	 		<div class="rows">
-										<div class="col-md-12">
-											<div class="col-lg-12">	
-											
-											</div>
-										</div>
-									</div>
-								</div>	
-							  	
-							  	
-						  	 	<div class="form-group"> 
-						  	 		<div class="rows">
-										<div class="col-md-12">
-											<div class="col-lg-12">	
-											<spring:message code="question.new" text="New Issue" />
-											<input type="text" class="form-control input-default" name="questitle" placeholder=" " required>											
-											</div>
-										</div>
-									</div>
-								</div>								
 
-						  	 	<div class="form-group"> 
-						  	 		<div class="rows">
-										<div class="col-md-12">
-											<div class="col-lg-12">	
-											<spring:message code="question.description" text="Description" />
-											<textarea class="form-control richtextarea" rows="5" name="question" placeholder=" "></textarea>											
-											</div>
-										</div>
-									</div>
-								</div>	
-						  	 	<div class="form-group"> 
-						  	 		<div class="rows">
-										<div class="col-md-12">
-											<div class="col-lg-12">	
-												<input type="text" name="tag" placeholder="<spring:message code="common.tag" text="Tag" />"> 
-												<button type="submit" class="btn btn-success">
-												<spring:message code="question.consult" text="Consult" /></button>												
-											</div>
-										</div>
-									</div>
-								</div>																
-					
-							</div>
-						</form>		
-					    </div>
-					  </div>
-					</div>	<!-- end vote dialog -->	
-				</c:if>
-				</li>
 				</ol>	
 				
 		</div>

@@ -80,9 +80,9 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 		return getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
 	}
 
-	public List<Question> findNewQuestions(int start, int end, String lang) {
+	public List<Question> findLatestQuestions(int start, int end, String lang) {
 		String sql = "select qid,pid,cid,question,tag,rate,answercnt,uid,description,qtime,status from question_"
-				+ lang + " order by qtime desc limit " + start + "," + end;
+				+ lang + " where status<9 order by qtime desc limit " + start + "," + end;
 		logger.info(sql);
 		return getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
 	}

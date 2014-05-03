@@ -15,13 +15,7 @@
 		<!-- tags list -->
 	</ol>
 	<div>
-		<c:if test="${question.tag!=null}">
-			<c:set var="tags" value="${fn:split(question.tag,' ')}"/>
-			<c:forEach items="${tags}" var="tag">
-				<a href="<%=request.getContextPath()%>/question/searchtag?tag=${tag}">
-				<span class="label label-success"><c:out value="${tag}"/></span></a>
-			</c:forEach>
-		</c:if>
+
 		
 	</div>
 
@@ -30,32 +24,44 @@
 	  <h2> <span style="word-break:break-all;"><c:out value="${question.question}"/></span></h2>
 
 	  	<table class="table">
-
+			<!-- question desc -->
 	  		<tr>
-	  			<td style="width:70px;vertical-align:top"><!-- vote -->
-	  			
-	  			</td>
 	  			<td><!-- question desc -->
 			  		<b><a href="<%=request.getContextPath()%>/user/${question.user.uid}"><c:out value="${question.user.name}"/> </a></b>
 			   		<div class="question"><c:out value="${question.description}"  escapeXml="false"/></div>
+			   		
+			   		
+   					<!-- operations : edit -->
+					<div>				
+			
+						<c:if test="${user!=null && user.uid==question.user.uid}">
+				  	  		<a href="#" data-toggle="modal" data-target=".editquestion"><spring:message code="global.action.edit" text="Edit" /></a>&nbsp;|
+				  	  	</c:if>	
+						<c:if test="${question.tag!=null}">
+							<c:set var="tags" value="${fn:split(question.tag,' ')}"/>
+							<c:forEach items="${tags}" var="tag">
+								&nbsp;
+								<a href="<%=request.getContextPath()%>/question/searchtag?tag=${tag}">
+								<span class="label label-success"><c:out value="${tag}"/></span></a>
+							</c:forEach>
+						</c:if>					  	  	
+					</div>
+					
+
 	  			</td>
 	  		</tr>
-
+			
 	  	</table>
 
 		<div>
-		  	<c:if test="${user!=null && user.uid==question.user.uid}">
-	  	  		<a href="#" data-toggle="modal" data-target=".editquestion"><spring:message code="global.action.edit" text="Edit" /></a>
-	  	  	</c:if>	
-		
 	 	</div>
 
 	<!-- edit -->				 	
 	<div class="modal fade editquestion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-lg">
 	    <div class="modal-content">
-	  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/question/update" method="POST">
-			<input type="hidden" name="qid" value="${question.qid}">
+	  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/question/${question.qid}/edit" method="POST">
+
 		  	 	<div class="form-group"> 
 		  	 		<div class="rows">
 						<div class="col-md-12">
@@ -105,115 +111,62 @@
 	    </div>
 	  </div>
 	</div>	<!-- end of edit dialog -->		 	
-				
-	
-	<!-- comments -->
-		<div class="panel-group" id="accordion">
-		  <div class="panel panel-default">
-		    <div class="panel-heading">
-		      <h4 class="panel-title">
 
-  				<!-- add comment -->
-  				<c:if test="${user!=null}">
-		         <button class="btn btn-default" data-toggle="modal" data-target=".addcomment"><spring:message code="question.comment.add" text="Add Comment" /> </button>
-		         <div class="modal fade addcomment" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-				  <div class="modal-dialog modal-lg">
-				    <div class="modal-content">
-				    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/comment" method="POST">
+			<!-- add comment diag -->
+       <div class="modal fade addcomment" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/${question.qid}/comment/new" method="POST">
 
-						<div class="model-body">
-							<input type="hidden" name="qid" value="${question.qid}">
-					  	 	<div class="form-group"> 
-					  	 		<div class="rows">
-									<div class="col-md-12">
-										<div class="col-lg-12">	
-										
-										</div>
-									</div>
-								</div>
-							</div>		
-								
-					  	 	<div class="form-group"> 
-					  	 		<div class="rows">
-									<div class="col-md-12">
-										<div class="col-lg-12">	
-										<spring:message code="question.comment.add" text="Comment" />
-										<textarea class="form-control" cols="50" rows="5" name="comment" placeholder=""></textarea>
-										</div>
-									</div>
-								</div>
-							</div>	
+			<div class="model-body">
+
+		  	 	<div class="form-group"> 
+		  	 		<div class="rows">
+						<div class="col-md-12">
+							<div class="col-lg-12">	
 							
-					  	 	<div class="form-group"> 
-					  	 		<div class="rows">
-									<div class="col-md-12">
-										<div class="col-lg-12">	
-										<button type="submit" class="btn btn-success">
-										<spring:message code="question.comment.add" text="Add Comment" /></button>			
-										</div>
-									</div>
-								</div>
-							</div>																					
-							
-										
+							</div>
 						</div>
-					</form>		
-				    </div>
-				  </div>
-				</div>	<!-- end add comment-->	
-				</c:if> <!-- make sure user sessiion -->	
-				<a data-toggle="collapse" data-parent="#accordion" href="#comments">
-		         <spring:message code="question.comment.title" text="Comments" />
-		        </a>
-		      </h4>
-				      
-		    </div>
-		    <div id="comments" class="panel-collapse collapse">
-		      <div class="panel-body">
-		       <table class="table" style="table-layout: fixed; width: 100%">
-			  		<c:forEach items="${comments}" var="comment">
-			  			<tr><td  style="word-wrap: break-word">  	
-						 	<c:out value="${comment.comment}"  escapeXml="false"/><br>
-						 	<!-- time -->
-					  		<c:out value="${comment.user.name}"/>
-			    		</td></tr>
-			  		</c:forEach>
-			  	</table>
-		      </div>
-		    </div>
-		  </div>
+					</div>
+				</div>		
+					
+		  	 	<div class="form-group"> 
+		  	 		<div class="rows">
+						<div class="col-md-12">
+							<div class="col-lg-12">	
+							<spring:message code="question.comment.add" text="Comment" />
+							<textarea class="form-control" cols="50" rows="5" name="comment" placeholder=""></textarea>
+							</div>
+						</div>
+					</div>
+				</div>	
+				
+		  	 	<div class="form-group"> 
+		  	 		<div class="rows">
+						<div class="col-md-12">
+							<div class="col-lg-12">	
+							<button type="submit" class="btn btn-success">
+							<spring:message code="question.comment.add" text="Add Comment" /></button>			
+							</div>
+						</div>
+					</div>
+				</div>																					
+				
+							
+			</div>
+		</form>		
+	    </div>
+	  </div>
+	</div>	<!-- end add comment-->	
 
-		</div>	
-
-	<!-- -------------Add more question or comments  -->
-<ul class="nav nav-tabs">
-
-  <li class="active"><a href="#proposals" data-toggle="tab">
-  	<c:out value="${question.answercnt}"/>
-	<spring:message code="question.proposal.title" text="Proposals" />
-	</a></li>
-
-  <li><a href="#followup" data-toggle="tab">   
-  <spring:message code="question.followup.title" text="FollowUp" /></a></li>
-</ul>
-
-<!-- Tab panes -->
-<div class="tab-content">
- <!-- -----------------proposals----------------- -->
-	<div class="tab-pane active" id="proposals">
-		
+	<!-- ------------proposals------------------ -->
+	<div><h4><c:out value="${question.answercnt}"/> &nbsp;<spring:message code="question.proposal.title" text="Proposals" /></h4></div>
 		<table class="table" style="table-layout: fixed; width: 100%">
 	  		<c:forEach items="${answers}" var="answer">
-	  			<tr><td  style="word-wrap: break-word">  	
-				 	 
-				 	<h3>
-				 	<button class="btn btn-success" data-toggle="modal" data-target=".proposalVote">
-				 	<c:out value="${answer.rate}"/></button>
-				 	
-				 	<a href="<%=request.getContextPath()%>/user/${answer.user.uid}"><c:out value="${answer.user.name}"/></a></h3>
-				 	 
-				 	<c:out value="${answer.answer}"  escapeXml="false"/><br>
-			  		
+	  			<tr>
+				 	<td>
+				 	<a href="<%=request.getContextPath()%>/user/${answer.user.uid}"><c:out value="${answer.user.name}"/></a>				 	 
+				 	<p><c:out value="${answer.answer}"  escapeXml="false"/></p>			  		
 				  	<c:if test="${user!=null && user.uid==answer.user.uid}">
 		  	  			<div><a href="#" data-toggle="modal" data-target=".editproposal"><spring:message code="global.action.edit" text="Edit" /></a></div>
 		  	  		</c:if>	
@@ -222,9 +175,8 @@
 					<div class="modal fade editproposal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 					  <div class="modal-dialog modal-lg">
 					    <div class="modal-content">
-					  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/question/ansupdt" method="POST">
-								<input type="hidden" name="qid" value="${question.qid}">
-						  		<input type="hidden" name="aid" value="${answer.aid}">
+					  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/question/${question.qid}/answer/${answer.aid}/edit" method="POST">
+
 						  		<textarea class="form-control richtextarea" name="answer" rows="10">
 						  		<c:out value="${answer.answer}"  escapeXml="false"/>
 						  		</textarea>
@@ -234,29 +186,6 @@
 					    </div>
 					  </div>
 					</div>	<!-- end of edit dialog -->		  	  		
-			  		<!-- vote -->
-				 	<c:if test="${user!=null}">
-						<!-- vote comment dialog -->
-						<div class="modal fade proposalVote" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-						  <div class="modal-dialog modal-lg">
-						    <div class="modal-content">
-						  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/question/answer/vote" method="POST">
-			
-							  		<input type="hidden" name="qid" value="${question.qid}">
-							  		<input type="hidden" name="aid" value="${answer.aid}">
-							  		<textarea class="form-control" name="vcomment"  placeholder="<spring:message code="vote.comment.notice" text="Please give a comment about your vote..." />"></textarea>
-								  	<input type="submit" class="btn btn-success" name="vup" value="<spring:message code="vote.up" text="Vup" />">
-								  	<input type="submit" class="btn btn-success" name="vdown" value="<spring:message code="vote.down" text="Vdown" />">
-									<c:if test="${user.uid!=answer.user.uid}">
-										<input type="checkbox" name="isanswer" value="1"><spring:message code="question.proposal.accept" text="Accept the proposal" />
-									</c:if>
-										
-							  </form>		
-						    </div>
-						  </div>
-						</div>	<!-- end vote dialog -->		 	
-					</c:if>
-
 
 	    		</td></tr>
 	  		</c:forEach>
@@ -272,9 +201,7 @@
 			</c:when>
 	
 			<c:when	 test="${user!=null && !question.resolved}">
-				<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/answer" method="POST">
-					<input type="hidden" name="qid" value="${question.qid}">
-				  
+				<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/${question.qid}/answer/new" method="POST">
 				  <div class="form-group">
 					 <textarea class="form-control richtextarea" rows="5" name="answer" placeholder="" ></textarea>
 				  </div>
@@ -283,20 +210,56 @@
 					
 					<button type="submit" class="btn btn-success">
 					<spring:message code="question.proposal.submit" text="My Proposal" /></button>
-					<c:if test="${user.uid==question.user.uid}">
-						<input type="checkbox" value="IsResolved" name="isresolved">
-						<spring:message code="common.itsresolved" text="IsResolved"/>
-					</c:if>
+
 				  </div>	 
 				</form>	
 			</c:when>
 			
 		</c:choose>	
-	  </div>
+	</div>
 
-   
-  <!-- ---------------followup list----------------- -->
-      <div class="tab-pane" id="followup">  	
+   	
+	<!-- right column -->
+		<div  class="col-md-3">
+			<div class="row">
+				<!-- social sharing button -->
+				<span class='st_facebook_large' displayText='Facebook'></span>
+				<span class='st_googleplus_large' displayText='Google +'></span>
+				<span class='st_baidu_large' displayText='Baidu'></span>
+				<span class='st_twitter_large' displayText='Tweet'></span>
+				<span class='st_linkedin_large' displayText='LinkedIn'></span>
+				<span class='st_sina_large' displayText='Sina'></span>
+				<span class='st_blogger_large' displayText='Blogger'></span>
+			</div>
+			<div class="row">
+			<c:if test="${user!=null}">
+				<button class="btn btn-success" data-toggle="modal" data-target=".addcomment"><spring:message code="question.comment.add" text="Add Comment" /> </button>
+				<button class="btn btn-success" data-toggle="modal" data-target=".newissue"><spring:message code="question.followup.new" text="New Issue" /> </button>
+			</c:if>
+			</div>
+
+			<!-- comments -->
+			<div class="row">
+
+				<table class="table">
+				<c:forEach items="${comments}" var="comment">
+						<tr>
+						<td>
+
+				  			<p style="word-wrap: break-word">  	
+							 	<c:out value="${comment.comment}"  escapeXml="false"/>
+							 	&nbsp;-&nbsp;<a href="<%=request.getContextPath()%>/user/${question.user.uid}"><c:out value="${comment.user.name}"/></a>
+				    		</p>
+			    		</td>
+			    		</tr>
+
+			  	</c:forEach>
+			  	
+		   		</table>
+	   		</div><!-- end of comments -->	
+	   		
+	   								<!-- sub issue -->
+			<div class="row">
 			<table class="table" style="table-layout: fixed; width: 100%">
 		  		<c:forEach items="${followups}" var="question">
 		  			<tr><td style="word-wrap: break-word">  
@@ -307,58 +270,85 @@
 					 	
 		    		</td></tr>
 		  		</c:forEach>
-		  	</table> 
-	  	
-	
-		<!-- follow up with a question -->
-		<c:choose>
-			<c:when test="${user==null}">
-				<!-- relogin -->
-				<spring:message code="question.loginnotice" text="Please login first to consult a issue:" />
-				<a href="<%=request.getContextPath()%>/user/redirectLogin?qid=${question.qid}">
-					<spring:message code="common.login" text="Login" />
-				</a>
-			</c:when>	
-			<c:otherwise>
-				<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/ask" method="POST">
-					<input type="hidden" name="pid" value="${question.qid}">
-				  <div class="form-group">
-				  	<spring:message code="question.new" text="New Issue" />
-				  	 <input type="text" class="form-control input-default" name="questitle" placeholder="<spring:message code="question.followup.title" text="FollowUp" />" required>
-				  </div>
-				  
-				  <div class="form-group">
-				  <spring:message code="question.description" text="Description" />
-					 <textarea  class="form-control richtextarea" rows="5" name="question" placeholder="<spring:message code="common.description" text="Description" />"></textarea>
-				  </div>
-				   
-				  <div class="form-group">
+		  	</table>			
+			
 					
-					<input type="text" name="tag" placeholder="<spring:message code="common.tag" text="Tag" />"> 
+			<div class="modal fade newissue" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+					  <div class="modal-dialog modal-lg">
+					    <div class="modal-content">
+					    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/${question.qid}/ask" method="POST">
+
+							<div class="model-body">
+						  	 	<div class="form-group"> 
+						  	 		<div class="rows">
+										<div class="col-md-12">
+											<div class="col-lg-12">	
+											
+											</div>
+										</div>
+									</div>
+								</div>	
+							  	
+							  	
+						  	 	<div class="form-group"> 
+						  	 		<div class="rows">
+										<div class="col-md-12">
+											<div class="col-lg-12">	
+											<spring:message code="question.new" text="New Issue" />
+											<input type="text" class="form-control input-default" name="questitle" placeholder=" " required>											
+											</div>
+										</div>
+									</div>
+								</div>								
+
+						  	 	<div class="form-group"> 
+						  	 		<div class="rows">
+										<div class="col-md-12">
+											<div class="col-lg-12">	
+											<spring:message code="question.description" text="Description" />
+											<textarea class="form-control richtextarea" rows="5" name="question" placeholder=" "></textarea>											
+											</div>
+										</div>
+									</div>
+								</div>	
+						  	 	<div class="form-group"> 
+						  	 		<div class="rows">
+										<div class="col-md-12">
+											<div class="col-lg-12">	
+												<input type="text" name="tag" placeholder="<spring:message code="common.tag" text="Tag" />"> 
+												<button type="submit" class="btn btn-success">
+												<spring:message code="question.consult" text="Consult" /></button>												
+											</div>
+										</div>
+									</div>
+								</div>																
 					
-					<button type="submit" class="btn btn-success">
-					<spring:message code="question.consult" text="Consult" /></button>
-				  </div>	 
-				</form>	
-			</c:otherwise>
-		</c:choose>	
-		</div><!-- end of follow tab	 -->	
-	</div><!-- END tab panel -->
-	</div><!-- end of left column -->
-	
-	
-	<!-- right column -->
-		<div  class="col-md-3">
-			<!-- social sharing button -->
-			<span class='st_facebook_large' displayText='Facebook'></span>
-			<span class='st_googleplus_large' displayText='Google +'></span>
-			<span class='st_baidu_large' displayText='Baidu'></span>
-			<span class='st_twitter_large' displayText='Tweet'></span>
-			<span class='st_linkedin_large' displayText='LinkedIn'></span>
-			<span class='st_sina_large' displayText='Sina'></span>
-			<span class='st_blogger_large' displayText='Blogger'></span>	
+							</div>
+						</form>		
+					    </div>
+					  </div>
+					</div>	<!-- end issue dialog -->		
+			
+			</div>
+	   					
 		</div>
+		
 </div>
+
+<script type="text/javascript">
+   $(document).ready(function() {
+      $("#answer_vote").click(function(event){
+	          $.ajax({
+	             url:$(this).attr('href'),
+	             success:function(data) {
+					var rtn=data;
+					
+	             }
+	          });
+	      });        
+
+   });
+   </script>
 
 <%@include file="footer.jsp" %>
 

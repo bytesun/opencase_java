@@ -9,5 +9,9 @@ public class SunConstants
   public static final String LANG_ZH = "zh";
   public static final int QUESTION_STATUS_FOLLOWUP = 1;
   public static final int QUESTION_STATUS_RESOLVED = 9;
+  
+  public static final int TYPE_QUESTION=1;
+  public static final int TYPE_ANSWER=2;
+  public static final int TYPE_COMMENT=3;
 }
 

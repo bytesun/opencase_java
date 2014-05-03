@@ -57,7 +57,7 @@ public class HomeController {
 		model.addAttribute("topcats", this.catDao.findSubCategory(0L, lang));
 
 		model.addAttribute("newquestions",
-				this.quesDao.findNewQuestions(0,20, lang));
+				this.quesDao.findLatestQuestions(0,20, lang));
 
 
 		return "home";

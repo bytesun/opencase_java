@@ -74,8 +74,8 @@ public class QuestionController extends SunController{
 	}
 
 	
-	@RequestMapping(value="/newQuestions",method=RequestMethod.GET)
-	public @ResponseBody List<Question> findNewQuestions(Locale locale,HttpServletRequest req){
+	@RequestMapping(value="/latestQuestions",method=RequestMethod.GET)
+	public @ResponseBody List<Question> findLatestQuestions(Locale locale,HttpServletRequest req){
 		String start= req.getParameter("start");
 		int istart = 0;
 		if(start != null && !start.equals(""))
@@ -85,31 +85,33 @@ public class QuestionController extends SunController{
 		if(end != null && !end.equals(""))
 			iend = istart+Integer.parseInt(end);
 		
-		return quesDao.findNewQuestions(istart, iend, this.getLanguage(locale, req));
+		return quesDao.findLatestQuestions(istart, iend, this.getLanguage(locale, req));
 	}
 	
-	
-	@RequestMapping(value = { "/ask" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
-	public String askQuestion(Locale locale, HttpServletRequest req, Model model) {
+	/**
+	 * qid is parent question id, if it's zero, then set 0 to category id
+	 * @param locale
+	 * @param req
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = { "/{qid}/ask" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
+	public String askQuestion(Locale locale, @PathVariable long qid,HttpServletRequest req, Model model) {
 		Object u = req.getSession().getAttribute("user");
-		String cid = req.getParameter("cid");
-		String pid = req.getParameter("pid");
 		String lang = getLanguage(locale,req);
 		if (u != null) {
 			try {
 	
-
 				Question q = new Question();
-				String question = req.getParameter("questitle");
-				q.setQuestion(StringUtil.iso2utf8(question));
+				String qtitle = req.getParameter("questitle");
+				q.setQuestion(StringUtil.iso2utf8(qtitle));
 
-				if (pid != null)
-					q.setPid(Long.parseLong(pid));
-				else if (cid != null) {
-					q.setCid(Long.parseLong(cid));
+				if (qid != 0){
+					q.setPid(qid);
+				}else{
+					q.setCid(0);
 				}
-
-				question = req.getParameter("question");
+				String question = req.getParameter("question");
 				if (question != null)
 					q.setDescription(StringUtil.iso2utf8(question));
 
@@ -122,26 +124,20 @@ public class QuestionController extends SunController{
 				logger.error(e.getMessage());
 				model.addAttribute("errormsg", e.getMessage());
 			}
-			if ((pid != null) && (!pid.equals("")))
-				return "redirect:/question/"+lang+"/" + pid;
-			if ((cid != null) && (!cid.equals(""))) {
-				return "redirect:/cat/"+lang+"/" + cid;
-			}
-			return "redirect:/";
 		}
-		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
+		if(qid==0)return "redirect:/";
+		else
+		return "redirect:/question/"+lang+"/"+qid;
 	}
 
-	@RequestMapping(value="/update",method=RequestMethod.POST)
-	public String update(Locale locale,HttpServletRequest req,Model model){
+	@RequestMapping(value="/{qid}/edit",method=RequestMethod.POST)
+	public String update(Locale locale,@PathVariable long qid,HttpServletRequest req,Model model){
 		Object u = req.getSession().getAttribute("user");
 		String lang = getLanguage(locale,req);
 		if(u != null){
 
-		
-			String qid = req.getParameter("qid");
 			Question q = new Question();
-			q.setQid(Long.parseLong(qid));
+			q.setQid(qid);
 			
 			try {
 				q.setQuestion(StringUtil.iso2utf8(req.getParameter("question")));
@@ -153,54 +149,37 @@ public class QuestionController extends SunController{
 			}
 			
 			quesDao.updateQuestion(q, lang);
-			
-			return "redirect:/question/"+lang+"/" + qid;
-		}else{
-			String cid = req.getParameter("cid");
-			String pid = req.getParameter("pid");
-			return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
-		}
+		}return "redirect:/question/"+lang+"/"+qid;
 	}
 	
-	@RequestMapping(value = { "/comment" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
-	public String addComment(Locale locale, HttpServletRequest req, Model model) {
+	@RequestMapping(value = { "/{qid}/comment/new" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
+	public String addComment(Locale locale,@PathVariable long qid, HttpServletRequest req, Model model) {
 		Object u = req.getSession().getAttribute("user");
 		String lang = getLanguage(locale,req);
 		if (u != null) {
-
-
-			String qid = req.getParameter("qid");
-
 			Comment c = new Comment();
-			c.setQid(Long.parseLong(qid));
+			c.setQid(qid);
 			c.setUser((User) u);
 			try {
 				c.setComment(StringUtil.iso2utf8(req.getParameter("comment")));
-				this.quesDao.addComment(c, lang);
+				 this.quesDao.addComment(c, lang);
 			} catch (UnsupportedEncodingException e) {
 				logger.error(e.getMessage());
 				model.addAttribute("errormsg", e.getMessage());
 			}
-
-			return "redirect:/question/"+lang+"/" + qid;
 		}
-
-		String cid = req.getParameter("cid");
-		String pid = req.getParameter("pid");
-		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
+		return "redirect:/question/"+lang+"/"+qid;
 	}
 
-	@RequestMapping(value = { "/answer" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
-	public String answerQuestion(Locale locale, HttpServletRequest req,
+	@RequestMapping(value = { "/{qid}/answer/new" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
+	public String answerQuestion(Locale locale,@PathVariable long qid, HttpServletRequest req,
 			Model model) {
 		Object u = req.getSession().getAttribute("user");
 		String lang =getLanguage(locale,req);
 		if (u != null) {
 
-
-			String qid = req.getParameter("qid");
 			Answer a = new Answer();
-			a.setQid(Long.parseLong(qid));
+			a.setQid(qid);
 			a.setUser((User) u);
 
 			String answer = req.getParameter("answer");
@@ -209,35 +188,26 @@ public class QuestionController extends SunController{
 					a.setAnswer(StringUtil.iso2utf8(answer));
 					this.answerDao.addAnswer(a, lang);
 					// increase answer cnt
-					this.quesDao.addAnswerCnt(Long.parseLong(qid), 1, lang);
-					// mark the question is resolved
-					Object isresolved = req.getParameter("isresolved");
-					if (isresolved != null)
-						this.quesDao.resolveQuestion(Long.parseLong(qid), lang);
+					this.quesDao.addAnswerCnt(qid, 1, lang);
 				} catch (Exception e) {
 					model.addAttribute("errormsg", e.getMessage());
 				}
 			}
 
-			return "redirect:/question/"+lang+"/" + qid;
+			
 		}
-		String cid = req.getParameter("cid");
-		String pid = req.getParameter("pid");
-		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
+		return "redirect:/question/"+lang+"/"+qid;
 	}
 
-	@RequestMapping(value="/ansupdt",method=RequestMethod.POST)
-	public String answerUpdate(Locale locale,HttpServletRequest req, Model model){
+	@RequestMapping(value="/{qid}/answer/{aid}/edit",method=RequestMethod.POST)
+	public String  answerUpdate(Locale locale,@PathVariable long qid,@PathVariable long aid,HttpServletRequest req, Model model){
 		Object u = req.getSession().getAttribute("user");
 		String lang =getLanguage(locale,req);
 		if (u != null) {
-
-
-			String qid = req.getParameter("qid");
-			
+		
 			Answer a = new Answer();
-			a.setAid(Long.parseLong(req.getParameter("aid")));
-			a.setQid(Long.parseLong(qid));
+			a.setAid(aid);
+			a.setQid(qid);
 			
 			a.setUser((User) u);
 
@@ -246,44 +216,37 @@ public class QuestionController extends SunController{
 				try {
 					logger.debug("update answer :"+answer);
 					a.setAnswer(StringUtil.iso2utf8(answer));
-					this.answerDao.updateAnswer(a, lang);
+					 this.answerDao.updateAnswer(a, lang);
 				} catch (Exception e) {
 					logger.error("failed to update answer :"+e.getMessage());
 					model.addAttribute("errormsg", e.getMessage());
 				}
 			}
-
-			return "redirect:/question/"+lang+"/" + qid;
 		}
-		String cid = req.getParameter("cid");
-		String pid = req.getParameter("pid");
-		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
+		return "redirect:/question/"+lang+"/"+qid;
+		
+
 	}
 	
 	
 	
-	@RequestMapping(value = { "/resolve" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
-	public String resolve(Locale locale, HttpServletRequest req) {
+	@RequestMapping(value = { "/{qid}/resolve" }, method = { RequestMethod.GET })
+	public @ResponseBody int resolve(Locale locale,@PathVariable long qid, HttpServletRequest req) {
 		Object u = req.getSession().getAttribute("user");
 		String lang = getLanguage(locale,req);
 		if (u != null) {
-
-			String qid = req.getParameter("qid");
-			Question q = this.quesDao.getQuestion(Long.parseLong(qid), lang);
+			Question q = this.quesDao.getQuestion(qid, lang);
 			if (q.getUser().getUid() == ((User) u).getUid()) {
 				Answer a = new Answer();
-				a.setQid(Long.parseLong(qid));
+				a.setQid(qid);
 				a.setUser((User) u);
 				a.setAnswer(req.getParameter("answer"));
 				this.answerDao.addAnswer(a, lang);
 				q.setResolved(true);
-				this.quesDao.updateQuestion(q, lang);
+				return this.quesDao.updateQuestion(q, lang);
 			}
-			return "redirect:/question/"+lang+"/" + qid;
 		}
-		String cid = req.getParameter("cid");
-		String pid = req.getParameter("pid");
-		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
+		return 0;
 	}
 
 	@RequestMapping(value = { "/search" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
@@ -402,63 +365,6 @@ public class QuestionController extends SunController{
 
 
 	
-	@RequestMapping(value = { "/vote" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
-	public String vote(Locale locale, HttpServletRequest req, Model model) {
-		String qid = req.getParameter("qid");
-		Object u = req.getSession().getAttribute("user");
-		String lang = getLanguage(locale,req);
-		if (u != null) {
-			try {
 
-				int vote = 1;
-				if (req.getParameter("no") != null)
-					vote = -1;
-				this.quesDao.vote(Long.parseLong(qid), vote,
-						((User) u).getUid(), lang);
-			} catch (Exception e) {
-				model.addAttribute("errormsg", e.getMessage());
-			}
-			return "redirect:/question/"+lang+"/" + qid;
-		}
-		String cid = req.getParameter("cid");
-		String pid = req.getParameter("pid");
-		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
-	}
-
-	@RequestMapping(value = { "/answer/vote" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
-	public String voteAnswer(Locale locale, HttpServletRequest req, Model model) {
-		String qid = req.getParameter("qid");
-		String aid = req.getParameter("aid");
-		logger.info("vote answer :" + aid);
-		Object u = req.getSession().getAttribute("user");
-		String lang = getLanguage(locale,req);
-		if (u != null) {
-			try {
-
-				String vcomment = req.getParameter("vcomment");
-				int vote = 1;
-				if (req.getParameter("vdown") != null)
-					vote = -1;
-				if (aid != null) {
-					if (req.getParameter("isanswer") != null) {
-						this.answerDao.voteAnswer(Long.parseLong(aid), vote, 1,
-								vcomment, ((User) u).getUid(), lang);
-					} else {
-						this.answerDao.voteAnswer(Long.parseLong(aid), vote, 0,
-								vcomment, ((User) u).getUid(), lang);
-
-					}
-				}
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-				model.addAttribute("errormsg", e.getMessage());
-
-			}
-			return "redirect:/question/"+lang+"/" + qid;
-		}
-		String cid = req.getParameter("cid");
-		String pid = req.getParameter("pid");
-		return "redirect:/user/redirectLogin?cid=" + cid + "&pid=" + pid;
-	}
 
 }

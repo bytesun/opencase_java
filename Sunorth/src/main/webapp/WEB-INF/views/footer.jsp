@@ -1,9 +1,4 @@
 
-
-
-
-	
-
     <footer class="row">
     	<div class="col-md-1"></div>
         <small class="col-md-9">
