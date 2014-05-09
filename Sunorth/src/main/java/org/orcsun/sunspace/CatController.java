@@ -106,10 +106,10 @@ public class CatController extends SunController {
 		return "redirect:/user/redirectLogin";
 	}
 	
-	@RequestMapping(value="/top20",method=RequestMethod.GET)
-	public @ResponseBody List<Category> top20Category(Locale locale,
+	@RequestMapping(value="/top50",method=RequestMethod.GET)
+	public @ResponseBody List<Category> top50Category(Locale locale,
 			HttpServletRequest req){
 		
-		return catDao.top20(this.getLanguage(locale, req));
+		return catDao.top50(this.getLanguage(locale, req));
 	}
 }

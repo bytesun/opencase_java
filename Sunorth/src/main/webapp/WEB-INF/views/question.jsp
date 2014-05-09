@@ -160,11 +160,15 @@
 	</div>	<!-- end add comment-->	
 
 	<!-- ------------proposals------------------ -->
+	<c:set var="hasAnswered" value="false"/> <!-- check the current user if answered it or not -->
 	<div><h4><c:out value="${question.answercnt}"/> &nbsp;<spring:message code="question.proposal.title" text="Proposals" /></h4></div>
 		<table class="table" style="table-layout: fixed; width: 100%">
 	  		<c:forEach items="${answers}" var="answer">
 	  			<tr>
 				 	<td>
+				 	<c:if test="${answer.user.uid==user.uid}">
+				 		<c:set var="hasAnswered" value="true"/>
+				 	</c:if>
 				 	<a href="<%=request.getContextPath()%>/user/${answer.user.uid}"><c:out value="${answer.user.name}"/></a>				 	 
 				 	<p><c:out value="${answer.answer}"  escapeXml="false"/></p>			  		
 				  	<c:if test="${user!=null && user.uid==answer.user.uid}">
@@ -200,7 +204,7 @@
 				</a>
 			</c:when>
 	
-			<c:when	 test="${user!=null && !question.resolved}">
+			<c:when	 test="${user!=null && user.uid!=question.user.uid && !hasAnswered && !question.resolved}">
 				<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/${question.qid}/answer/new" method="POST">
 				  <div class="form-group">
 					 <textarea class="form-control richtextarea" rows="5" name="answer" placeholder="" ></textarea>
@@ -221,32 +225,23 @@
    	
 	<!-- right column -->
 		<div  class="col-md-3">
-			<div class="row">
-				<!-- social sharing button -->
-				<span class='st_facebook_large' displayText='Facebook'></span>
-				<span class='st_googleplus_large' displayText='Google +'></span>
-				<span class='st_baidu_large' displayText='Baidu'></span>
-				<span class='st_twitter_large' displayText='Tweet'></span>
-				<span class='st_linkedin_large' displayText='LinkedIn'></span>
-				<span class='st_sina_large' displayText='Sina'></span>
-				<span class='st_blogger_large' displayText='Blogger'></span>
-			</div>
+
 			<div class="row">
 			<c:if test="${user!=null}">
-				<button class="btn btn-success" data-toggle="modal" data-target=".addcomment"><spring:message code="question.comment.add" text="Add Comment" /> </button>
-				<button class="btn btn-success" data-toggle="modal" data-target=".newissue"><spring:message code="question.followup.new" text="New Issue" /> </button>
+				<button class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target=".addcomment"><spring:message code="question.comment.add" text="Add Comment" /> </button>
+
 			</c:if>
 			</div>
 
 			<!-- comments -->
 			<div class="row">
 
-				<table class="table">
+				<table class="table"  style="table-layout: fixed; width: 100%">
 				<c:forEach items="${comments}" var="comment">
 						<tr>
-						<td>
+						<td style="word-wrap: break-word">
 
-				  			<p style="word-wrap: break-word">  	
+				  			<p >  	
 							 	<c:out value="${comment.comment}"  escapeXml="false"/>
 							 	&nbsp;-&nbsp;<a href="<%=request.getContextPath()%>/user/${question.user.uid}"><c:out value="${comment.user.name}"/></a>
 				    		</p>
@@ -258,12 +253,18 @@
 		   		</table>
 	   		</div><!-- end of comments -->	
 	   		
-	   								<!-- sub issue -->
+			<!-- sub issue -->
+			<div class="row">
+			<c:if test="${user!=null}">
+
+				<button class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target=".newissue"><spring:message code="question.followup.new" text="New Issue" /> </button>
+			</c:if>
+			</div>	   								
 			<div class="row">
 			<table class="table" style="table-layout: fixed; width: 100%">
 		  		<c:forEach items="${followups}" var="question">
 		  			<tr><td style="word-wrap: break-word">  
-		  				<span class="badge"><c:out value="${question.answercnt}"/></span> 
+		  				<span class="label label-default"><c:out value="${question.answercnt}"/></span> 
 					 	<a href="<%=request.getContextPath()%>/question/${lang}/${question.qid}">
 		
 					 	<c:out value="${question.question}"/></a>
@@ -330,7 +331,16 @@
 					</div>	<!-- end issue dialog -->		
 			
 			</div>
-	   					
+			<div class="row">
+				<!-- social sharing button -->
+				<span class='st_facebook_large' displayText='Facebook'></span>
+				<span class='st_googleplus_large' displayText='Google +'></span>
+				<span class='st_baidu_large' displayText='Baidu'></span>
+				<span class='st_twitter_large' displayText='Tweet'></span>
+				<span class='st_linkedin_large' displayText='LinkedIn'></span>
+				<span class='st_sina_large' displayText='Sina'></span>
+				<span class='st_blogger_large' displayText='Blogger'></span>
+			</div>	   					
 		</div>
 		
 </div>

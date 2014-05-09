@@ -38,7 +38,7 @@
 			<c:set var="qindex" value="0"/>
 	  		<c:forEach items="${questions}" var="question">
 	  			<tr><td style="word-wrap: break-word" width="80%">  
-	  				<span class="badge"><c:out value="${question.answercnt}"/></span> 
+	  				<span class="label label-default"><c:out value="${question.answercnt}"/></span> 
 				 	<a href="<%=request.getContextPath()%>/question/${lang}/${question.qid}">
 	
 				 	<c:out value="${question.question}"/></a>

@@ -45,6 +45,13 @@ public class UserLogDaoImpl extends SunJdbcDaoSupport implements UserLogDAO {
 		return this.getJdbcTemplate().query(sql, new UserLogMapper());
 	}
 
+
+	@Override
+	public List<UserLog> lastestLogs() {
+		String sql ="select lid,uid,ltime,tag,subject,ulog,status,ltype from userlog where status>0 order by ltime desc limit 5";
+		logger.debug(sql);
+		return this.getJdbcTemplate().query(sql, new UserLogMapper());
+	}	
 	private static final class UserLogMapper implements RowMapper<UserLog>{
 
 		@Override
@@ -62,6 +69,8 @@ public class UserLogDaoImpl extends SunJdbcDaoSupport implements UserLogDAO {
 		}
 		
 	}
+
+
 
 
 }

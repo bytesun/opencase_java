@@ -2,7 +2,7 @@
  
  	<div class="row">
 
-	<div class="col-md-9"> <!-- main right panel for question list -->
+	<div class="col-md-8"> <!-- main right panel for question list -->
 		<div class="row"> <!-- jumbotron row -->
 			<!-- -------------Welcome ------------------- -->
 			<!-- 
@@ -65,15 +65,11 @@
 	</div> end of row of jumbotron -->
 	
 	<!-- - RIGHT -->
-	<div class="col-md-3">  <!-- right side panel -->
+	<div class="col-md-4">  <!-- right side panel -->
 		<div class="row">
-			<table class="table">
-
-			 
 			 <!-- NEW ISSUE -->
 			
 				<c:if test="${user!=null}">
-				 <tr><td>
 				<button class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target=".newissue"><spring:message code="question.new" text="New Issue" /> </button>
 				
 	
@@ -134,38 +130,47 @@
 					    </div>
 					  </div>
 					</div>	<!-- end vote dialog -->
-				</td></tr>		
+	
 				</c:if>			
-			<!--desc -->
-			<tr><td>
-			  	<ul>
-			  		<li><spring:message code="home.welcome.notice1" text="Find your solution." /></li>
-			  		<li><spring:message code="home.welcome.notice2" text="Give others proposals.." /></li>
-			  		<li><spring:message code="home.welcome.notice3" text="Build your knowledge and skills." /></li>
-			  		<li><spring:message code="home.welcome.notice4" text="Build a project with other people. " /></li>
-			  		<li><spring:message code="home.welcome.notice5" text="To be an independent consultant." /></li>
-			  	</ul>
-			 </td></tr>				 
-			<!-- top 20 category
+			<!-- top 20 category -->
 
-				<tr><td id="top20cat">
-				<h4><spring:message code="home.category.hotcats" text="Hotest Categories" /></h4>
-				</td></tr>
-			 -->
 
-			<!-- top 20 tags 
-				<tr><td>
-				</td></tr>
-			-->
-			<!-- <div id="top20tag" class="panel panel-default">
-				<div class="panel-heading">
-					<h4><spring:message code="home.tag.hot" text="Hotest Tags" /></h4>
-				</div>
-				<div id="top20tag" class="panel-body">
-				</div>
+			<div  class="panel panel-default">
+			  <div class="panel-heading">
+			  	<spring:message code="home.tag.hot" text="Hottest Tags"></spring:message>
+			  </div>
+			  <div class="panel-body">
+			    <div id="top50cat"></div>
+			  </div>
 			</div>
-			 -->
-			 </table>
+
+
+			<div  class="panel panel-default">
+			  <div class="panel-heading">
+			  	<spring:message code="home.msg.latest" text="The Latest Message"></spring:message>
+			  </div>
+			  <div class="panel-body">
+			    <table id="latestMsg" class="table" style="table-layout: fixed; width: 100%"></table>
+			  </div>
+			</div>
+
+			<!--desc -->
+
+			  	<ul>
+			  		<li><h4><spring:message code="home.welcome.notice1" text="Find your solution." /></h4></li>
+			  		<li><h4><spring:message code="home.welcome.notice2" text="Give others proposals.." /></h4></li>
+			  		<li><h4><spring:message code="home.welcome.notice3" text="Build your knowledge and skills." /></h4></li>
+			  		<li><h4><spring:message code="home.welcome.notice4" text="Build a project with other people. " /></h4></li>
+			  		<li><h4><spring:message code="home.welcome.notice5" text="To be an independent consultant." /></h4></li>
+			  	</ul>
+				<!-- social sharing button -->
+				<span class='st_facebook_large' displayText='Facebook'></span>
+				<span class='st_googleplus_large' displayText='Google +'></span>
+				<span class='st_baidu_large' displayText='Baidu'></span>
+				<span class='st_twitter_large' displayText='Tweet'></span>
+				<span class='st_linkedin_large' displayText='LinkedIn'></span>
+				<span class='st_sina_large' displayText='Sina'></span>
+				<span class='st_blogger_large' displayText='Blogger'></span>
 		</div>
 	</div><!-- end of left side -->
 
@@ -176,25 +181,24 @@
 	   var qindex=0;
        //top 20 categories 
 	   $.ajax( {
-           url:'<%=request.getContextPath()%>/cat/top20',
+           url:'<%=request.getContextPath()%>/cat/top50',
            dataType: 'json',
            success:function(data) {
           	   $.each(data, function(index, category) {
-          		   $('#top20cat').append('<a class="btn btn-default" role="button" href="<%=request.getContextPath()%>/cat/${lang}/'+category.cid+'">'+category.catname+'</a>');
+          		   $('#top50cat').append('<a class="btn btn-lg btn-default" role="button" href="<%=request.getContextPath()%>/question/searchtag?tag='+category.catname+'">'+category.catname+'</a>&nbsp;');
                  });
            }
         });
         
-        //top tags
-	   $.ajax( {
-           url:'<%=request.getContextPath()%>/tag/top20',
-           dataType: 'json',
-           success:function(data) {
-          	   $.each(data, function(index, tag) {
-          		   $('#top20tag').append('<a class="btn btn-success" role="button" href="<%=request.getContextPath()%>/tag/${lang}/'+category.cid+'">'+tag.name+'</a>');
-                 });
-           }
-        });
+		$.ajax({
+			url:'<%=request.getContextPath()%>/user/latest',
+			dataType:'json',
+			success:function(data){
+				$.each(data, function(index, userlog){
+					$('#latestMsg').append('<tr><td  style="word-wrap: break-word" width="100%"><a href="<%=request.getContextPath()%>/user/'+userlog.uid+'">'+userlog.subject+'</a><br>'+userlog.ulog+'</td></tr>');
+				});
+			}
+		});
         //latest questions
          $.ajax( {
             url:'<%=request.getContextPath()%>/question/latestQuestions',
@@ -207,7 +211,7 @@
            		
 				   if(tags != ''){
 	           		   $.each(tags,function(index,tag){
-	           			 strtags=strtags+'<a class="tag-link-bluemix" href="<%=request.getContextPath()%>/question/searchtag?tag='+tag+'">'+tag+'</a>&nbsp;&nbsp;';
+	           			 strtags=strtags+'<a  href="<%=request.getContextPath()%>/question/searchtag?tag='+tag+'">'+tag+'</a>&nbsp;&nbsp;';
 	           		   });
 				   }
            			
@@ -229,7 +233,7 @@
 	      $("#moreNewQuestion").click(function(event){
 
 	          $.ajax( {
-	             url:'<%=request.getContextPath()%>/question/newQuestions?start='+qindex,
+	             url:'<%=request.getContextPath()%>/question/latestQuestions?start='+qindex,
 	             dataType: 'json',
 	             success:function(data) {
 	            	 var count = 0;
@@ -239,7 +243,7 @@
 	                  		
 	    				   if(tags != ''){
 	    	           		   $.each(tags,function(index,tag){
-	    	           			 strtags=strtags+'<a class="tag-link-bluemix" href="<%=request.getContextPath()%>/question/searchtag?tag='+tag+'">'+tag+'</a>';
+	    	           			 strtags=strtags+'<a  href="<%=request.getContextPath()%>/question/searchtag?tag='+tag+'">'+tag+'</a>';
 	    	           		   });
 	    				   }
 	               			

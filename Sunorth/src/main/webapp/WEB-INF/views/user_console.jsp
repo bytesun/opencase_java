@@ -7,6 +7,7 @@
 	<a href="<%=request.getContextPath()%>/user/${user.uid}"><c:out value="${user.name}"/></a>
 	
 	<small><a href="#" data-toggle="modal" data-target=".edituser"><spring:message code="global.action.edit" text="Edit" /></a></small>
+	
 	</h2>
 	
 <!-- edit user -->				 	

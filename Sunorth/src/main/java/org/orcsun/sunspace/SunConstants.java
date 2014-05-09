@@ -13,5 +13,7 @@ public class SunConstants
   public static final int TYPE_QUESTION=1;
   public static final int TYPE_ANSWER=2;
   public static final int TYPE_COMMENT=3;
+  
+  public static final int USER_STATUS_UNVERIFIED=0;
 }
 

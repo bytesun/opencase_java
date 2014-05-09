@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +16,7 @@ import org.orcsun.sunspace.dao.impl.UserDaoImpl;
 import org.orcsun.sunspace.dao.impl.UserLogDaoImpl;
 import org.orcsun.sunspace.object.User;
 import org.orcsun.sunspace.object.UserLog;
+import org.orcsun.sunspace.utils.EMailUtil;
 import org.orcsun.sunspace.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class UserController  extends SunController{
 
 	@Autowired
 	UserDaoImpl userDao;
@@ -93,6 +95,11 @@ public class UserController {
 		model.addAttribute("userinfo", userDao.findUserByID(uid));
 		model.addAttribute("ulogs", ulogDao.findMyLogs(uid,0,20));
 		return "user_info";
+	}
+	
+	@RequestMapping(value="/latest",method=RequestMethod.GET)
+	public @ResponseBody List<UserLog>  latestMessage(Model model){
+		return ulogDao.lastestLogs();
 	}
 	
 	@RequestMapping(value="/moreUlog/{uid}",method=RequestMethod.GET)
@@ -257,4 +264,23 @@ public class UserController {
 		model.addAttribute("qid", req.getParameter("qid"));
 		return "register";
 	}	
+	
+	@RequestMapping(value="/sendEmail",method=RequestMethod.GET)
+	public @ResponseBody int sendVerifyEmail(Locale locale, HttpServletRequest req){
+		String lang = getLanguage(locale,req);
+		Object u = req.getSession().getAttribute("user");
+		if (u != null) {
+			User user = (User)u;
+			String subject = "Verify Email From Sunorth";
+			String text = "Hello! "+user.getName()+",  This is from Sunorth. Thank you for registering Sunorth, please click the link to verify your account or copy it to url address of your browser. http://www.sunorth.org/user/verify --Sunorth";
+			if(lang.equals("zh")){
+				subject = "邮箱验证来自Sunorth";
+				text = "你好！"+user.getName()+", 请点击这个链接完成邮箱验证，或者拷贝这个链接到您的浏览器地址栏: http://www.sunorth.org/user/verify";
+			}
+			return EMailUtil.sendVerifyEmail(user.getEmail(), subject, text);
+		}else{
+			return -1;
+		}
+		
+	}
 }

@@ -1,4 +1,6 @@
 --todo
+--2014/5/8
+	1. 
 
 --2014/4/25
 	1. update notice in homepage

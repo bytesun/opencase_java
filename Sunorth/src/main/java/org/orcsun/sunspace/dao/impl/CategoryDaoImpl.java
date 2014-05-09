@@ -36,8 +36,8 @@ public class CategoryDaoImpl extends SunJdbcDaoSupport implements CategoryDAO {
 	 * @param language
 	 * @return
 	 */
-	public List<Category> top20(String lang) {
-		String sql = "select cid,pid,catname,description,rate from category_" + lang+" order by rate desc limit 20";
+	public List<Category> top50(String lang) {
+		String sql = "select cid,pid,catname,description,rate from category_" + lang+" order by rate desc limit 50";
 		logger.info(sql);
 		return getJdbcTemplate().query(sql, new CategoryMapper());
 	}
