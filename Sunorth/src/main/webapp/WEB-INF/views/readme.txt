@@ -1,6 +1,7 @@
 --todo
 --2014/5/8
-	1. 
+	1. homepage : tags, latest msg
+	2. Don't allow give proposal byself, and don't allow give two proposals by one person.
 
 --2014/4/25
 	1. update notice in homepage

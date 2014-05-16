@@ -54,7 +54,8 @@ public class UserController  extends SunController{
 	 * @return
 	 */
 	@RequestMapping(value = { "/admin" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
-	public String userAdmin(HttpServletRequest req, Model model) {
+	public String userAdmin(Locale locale, HttpServletRequest req, Model model) {
+		
 		Object u = req.getSession().getAttribute("user");
 		if (u == null) {
 			return "redirect:/user/redirectLogin";
@@ -62,7 +63,7 @@ public class UserController  extends SunController{
 		User user = (User)u;
 		model.addAttribute("todos",
 				this.todoDao.findTodayTodos(user.getUid()));
-		model.addAttribute("myquestions", quesDao.findMyQuestions(user.getUid()));
+		model.addAttribute("myquestions", quesDao.findMyQuestions(this.getLanguage(locale, req),user.getUid()));
 		return "user_console";
 	}
 	

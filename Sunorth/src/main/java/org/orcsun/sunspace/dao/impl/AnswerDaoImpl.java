@@ -71,6 +71,12 @@ public class AnswerDaoImpl extends SunJdbcDaoSupport implements AnswerDAO {
 			return a;
 		}
 	}
+	@Override
+	public int accetpAnswer(long aid, String lang) {
+		String sql = "update answer_"+lang+" set isanswer=1 where aid="+aid;
+		logger.debug(sql);
+		return this.getJdbcTemplate().update(sql);
+	}
 
 
 }

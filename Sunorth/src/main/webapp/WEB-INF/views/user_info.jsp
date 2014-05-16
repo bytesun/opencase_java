@@ -2,11 +2,15 @@
 
  	<div class="row">
 		<div class="col-md-9"> <!-- log view -->
-		<h2>
-			<c:out value="${userinfo.name}"/>
-			<small>--<c:out value="${userinfo.title}"/></small>
-		</h2>
-		<c:out value="${userinfo.profile}"/>
+		<div class="jumbotron">
+			  <h1><c:out value="${userinfo.name}"/><small>--<c:out value="${userinfo.title}"/></small></h1>
+			  <p>
+			  	<c:out value="${userinfo.profile}"/>
+			  </p>
+			  
+			</div>		
+
+		
 		<table id="ulogTable" class="table" style="table-layout: fixed; width: 100%">
 			<c:set var="mindex" value="0"/>
 			<c:set var="currentuid" value="${user.uid}"/>
@@ -48,7 +52,15 @@
 		</div> <!-- end of right main view -->
 		
 		<div class="col-md-3"> <!-- side column -->
-	
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- sunorth_left -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-1018407477199873"
+     data-ad-slot="3799301345"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>	
 		</div><!-- end of side -->
 		
 	</div>

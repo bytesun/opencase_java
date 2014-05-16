@@ -228,7 +228,16 @@ public class QuestionController extends SunController{
 
 	}
 	
-	
+	@RequestMapping(value="/{qid}/answer/{aid}/accept",method=RequestMethod.GET)
+	public @ResponseBody int  acceptAnswer(Locale locale,@PathVariable long qid,@PathVariable long aid,HttpServletRequest req, Model model){
+		Object u = req.getSession().getAttribute("user");
+		String lang =getLanguage(locale,req);
+		if (u != null) {
+			this.answerDao.accetpAnswer(aid, lang);
+			
+		}
+		return 0;
+	}	
 	
 	@RequestMapping(value = { "/{qid}/resolve" }, method = { RequestMethod.GET })
 	public @ResponseBody int resolve(Locale locale,@PathVariable long qid, HttpServletRequest req) {
@@ -237,13 +246,8 @@ public class QuestionController extends SunController{
 		if (u != null) {
 			Question q = this.quesDao.getQuestion(qid, lang);
 			if (q.getUser().getUid() == ((User) u).getUid()) {
-				Answer a = new Answer();
-				a.setQid(qid);
-				a.setUser((User) u);
-				a.setAnswer(req.getParameter("answer"));
-				this.answerDao.addAnswer(a, lang);
 				q.setResolved(true);
-				return this.quesDao.updateQuestion(q, lang);
+				return this.quesDao.updateIssueStatus(qid, lang, SunConstants.QUESTION_STATUS_RESOLVED);
 			}
 		}
 		return 0;

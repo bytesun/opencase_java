@@ -76,70 +76,56 @@
 	<!-- questions/answers/faoriates -->
 	<ul class="nav nav-tabs">
 	  
-	  <li  class="active"><a href="#inbox" data-toggle="tab">
-		<spring:message code="user.inbox" text="Inbox" />
+	  <li  class="active"><a href="#home" data-toggle="tab">
+		<spring:message code="user.console.home" text="Home" />
 	  </a></li>	
 	  
 	  <li><a href="#issues" data-toggle="tab">
 		<spring:message code="user.myquestions" text="Issues" />
 	  </a></li>
-		
 
-			<!-- 				
-	  <li><a href="#myquestions" data-toggle="tab">
-		<spring:message code="user.myquestions" text="My Questions" />
-		</a></li>
-	
-	  <li><a href="#myanswers" data-toggle="tab">
-	  <c:out value="${question.answercnt}"/> 
-	  <spring:message code="user.myanswers" text="My Answers" /></a></li>
-	   -->
+	  <li><a href="#projects" data-toggle="tab">
+		<spring:message code="user.myprojects" text="Projects" />
+	  </a></li>
 	</ul>
 	
 	<div class="tab-content">
-	  <!-- ---------------todo list----------------- -->
+	  <!-- ---------------Home: message/todo----------------- -->
+	  <div class="tab-pane active" id="home">
+		  <!-- todo list -->
+
+		   <table class="table">
+			    <c:forEach items="${todos}" var="todo">
+			    	<tr><td>
+			    		<c:out value="${todo.todo}"/></td>
+			    	</tr>
+			    </c:forEach>
+		    </table>	
+	
+	  </div>	
+	  <!-- ---------------Issue list----------------- -->
 		  <div class="tab-pane" id="issues">
-		  <div class="panel panel-default">
+		  
 		  	<table class="table" style="table-layout: fixed; width: 100%">
 		  		<c:forEach items="${myquestions}" var="q">
 		  			<tr><td  style="word-wrap: break-word">  	
+		  				<label class="badge"><c:out value="${q.answercnt}"></c:out></label>
 					 	<a href="<%=request.getContextPath()%>/question/${lang}/${q.qid}">
 					 	<c:out value="${q.question}"  escapeXml="false"/>
-					 	</a> <label class="badge"><c:out value="${q.answercnt}"></c:out></label>
+					 	</a> 
 		    		</td></tr>
 		  		</c:forEach>
 		  	</table>		  
-		  </div><!-- end of  -->
+		  
 	  </div><!-- end of tab panel -->
 	
-	  <!-- ---------------inbox list----------------- -->
-	  <div class="tab-pane" id="inbox">
+	</div>	<!-- end of tab-content -->
 	
-	
-	  </div>
-	    
-
-	  
-	  <!-- -----------------answers----------------- -->
-	  <!-- 
-	  <div class="tab-pane" id="myanswers">
-	
-		  <table class="table" style="table-layout: fixed; width: 100%">
-	  		<c:forEach items="${myanswers}" var="answer">
-	  			<tr><td  style="word-wrap: break-word">  	
-				 	<c:out value="${answer.answer}" escapeXml="false"/>
-	    		</td></tr>
-	  		</c:forEach>
-	  	</table>
-		
-	  </div>
-	 -->
-	</div>	
-	</div>
+	</div><!-- end of left side -->
 	<div class="col-md-4"> 
 			<!-- new todo -->
 			<button class="btn btn-success" data-toggle="modal" data-target=".newtodo">
-			<spring:message code="user.todo.button" text="New TODO" />
+				<spring:message code="user.todo.button" text="New TODO" />
 			</button>
 			
 			<button class="btn btn-success" data-toggle="modal" data-target=".newlog">
@@ -255,23 +241,37 @@
 					</div>
 				</div>
 			</div>		
-		  <!-- todo list -->
 
-		   <table class="table">
-		   <form action="<%=request.getContextPath()%>/todo/done" method="post">
-		    <c:forEach items="${todos}" var="todo">
-		    	<tr><td>
-		    		<input type="checkbox" name="tid" value="<c:out value="${todo.tid}"/>">
-		    		<c:out value="${todo.todo}"/></td>
-		    	</tr>
-		    </c:forEach>
-				<tr><td>
-		    	<button class="btn btn-default" type="submit" value="Done">
-					<spring:message code="user.todo.done" text="Done" />
-				</button></td></tr>
-		    </form>
-		    </table>
-		</ol>
+		
+		<!-- my consultants -->
+		<div  class="panel panel-default">
+		  <div class="panel-heading">
+		  	<spring:message code="user.console.events" text="Events"></spring:message>
+		  </div>
+		  <div class="panel-body">
+		    Comming sooooon!
+		  </div>
+		</div>		
+		<div  class="panel panel-default">
+		  <div class="panel-heading">
+		  	<spring:message code="user.console.consultants" text="My Consultants"></spring:message>
+		  </div>
+		  <div class="panel-body">
+		    Comming sooooon!
+		  </div>
+		</div>
+		
+		<!-- my favoriates -->
+		<div  class="panel panel-default">
+		  <div class="panel-heading">
+		  	<spring:message code="user.console.favoriates" text="My Favoriates"></spring:message>
+		  </div>
+		  <div class="panel-body">
+		    Comming sooooon!
+		  </div>
+		</div>		
+		
+		
 	</div>
 </div>
 

@@ -98,20 +98,16 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 
 		return getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
 	}
-
-	public List<Question> findMyQuestions(long uid) {
-		String sql = "select qid,pid,cid,question,tag,rate,answercnt,uid,description,qtime,status from question_en"
-				+ " where uid=" + uid + " and status<9 order by qtime desc ";
+	
+	/**
+	 * My unsolved issues
+	 */
+	public List<Question> findMyQuestions(String lang,long uid) {
+		String sql = "select qid,pid,cid,question,tag,rate,answercnt,uid,description,qtime,status from question_"+lang
+				+ " where uid=" + uid + " and status=0 order by qtime desc ";
 		logger.info(sql);
 
-		List<Question> allqs = new ArrayList<Question>();
-		List<Question> en_qs= getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
-		if(en_qs != null && en_qs.size()>0)allqs.addAll(en_qs);
-		sql = "select qid,pid,cid,question,tag,rate,answercnt,uid,description,qtime,status from question_zh"
-				+ " where uid=" + uid + " and status<9 order by qtime desc ";
-		List<Question> zh_qs = getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
-		if(zh_qs != null && zh_qs.size()>0)allqs.addAll(zh_qs);
-		return allqs;
+		return  getJdbcTemplate().query(sql, new QuestionMapper(this.userDao));
 	}
 
 	public int addComment(Comment c, String lang) {
@@ -197,8 +193,8 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 	}
 
 	@Override
-	public int resolveQuestion(long qid, String lang) {
-		String sql = "update question_" + lang + " set status=1 where qid="
+	public int updateIssueStatus(long qid, String lang,int status) {
+		String sql = "update question_" + lang + " set status="+status+" where qid="
 				+ qid;
 		logger.info(sql);
 		return this.getJdbcTemplate().update(sql);

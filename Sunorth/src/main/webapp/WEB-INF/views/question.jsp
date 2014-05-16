@@ -22,6 +22,11 @@
 
 	  
 	  <h2> <span style="word-break:break-all;"><c:out value="${question.question}"/></span></h2>
+	  <div id="issueStatusMark">
+	  	<c:if test="${question.resolved}">
+	  		This is resolved!
+	  	</c:if>
+	  </div>
 
 	  	<table class="table">
 			<!-- question desc -->
@@ -36,6 +41,9 @@
 			
 						<c:if test="${user!=null && user.uid==question.user.uid}">
 				  	  		<a href="#" data-toggle="modal" data-target=".editquestion"><spring:message code="global.action.edit" text="Edit" /></a>&nbsp;|
+				  	  		<c:if test="${!question.resolved}">
+			  	  				<a id="issueBeResolved" href="<%=request.getContextPath()%>/question/${question.qid}/resolve">Resolved</a>
+			  	  			</c:if>
 				  	  	</c:if>	
 						<c:if test="${question.tag!=null}">
 							<c:set var="tags" value="${fn:split(question.tag,' ')}"/>
@@ -159,69 +167,89 @@
 	  </div>
 	</div>	<!-- end add comment-->	
 
-	<!-- ------------proposals------------------ -->
-	<c:set var="hasAnswered" value="false"/> <!-- check the current user if answered it or not -->
-	<div><h4><c:out value="${question.answercnt}"/> &nbsp;<spring:message code="question.proposal.title" text="Proposals" /></h4></div>
-		<table class="table" style="table-layout: fixed; width: 100%">
-	  		<c:forEach items="${answers}" var="answer">
-	  			<tr>
-				 	<td>
-				 	<c:if test="${answer.user.uid==user.uid}">
-				 		<c:set var="hasAnswered" value="true"/>
-				 	</c:if>
-				 	<a href="<%=request.getContextPath()%>/user/${answer.user.uid}"><c:out value="${answer.user.name}"/></a>				 	 
-				 	<p><c:out value="${answer.answer}"  escapeXml="false"/></p>			  		
-				  	<c:if test="${user!=null && user.uid==answer.user.uid}">
-		  	  			<div><a href="#" data-toggle="modal" data-target=".editproposal"><spring:message code="global.action.edit" text="Edit" /></a></div>
-		  	  		</c:if>	
-	  	  		
-					<!-- edit -->				 	
-					<div class="modal fade editproposal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-					  <div class="modal-dialog modal-lg">
-					    <div class="modal-content">
-					  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/question/${question.qid}/answer/${answer.aid}/edit" method="POST">
-
-						  		<textarea class="form-control richtextarea" name="answer" rows="10">
-						  		<c:out value="${answer.answer}"  escapeXml="false"/>
-						  		</textarea>
-							  	<input type="submit" class="btn btn-success" name="submit" value="<spring:message code="global.action.save" text="Save" />">
-									
-						  </form>		
-					    </div>
-					  </div>
-					</div>	<!-- end of edit dialog -->		  	  		
-
-	    		</td></tr>
-	  		</c:forEach>
-	  	</table>
-		
-		<c:choose>
-			<c:when test="${user==null}">
-				<!-- relogin -->
-				<spring:message code="question.loginnotice" text="Please login to answer the question:" />
-				<a href="<%=request.getContextPath()%>/user/redirectLogin?qid=${question.qid}">
-					<spring:message code="common.login" text="Login" />
-				</a>
-			</c:when>
+	<ul class="nav nav-tabs">
+	  
+	  <li  class="active"><a href="#proposals" data-toggle="tab">
+		<c:out value="${question.answercnt}"/> &nbsp;<spring:message code="question.proposal.title" text="Proposals" /></a>
+	  </li>	
+	</ul>
 	
-			<c:when	 test="${user!=null && user.uid!=question.user.uid && !hasAnswered && !question.resolved}">
-				<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/${question.qid}/answer/new" method="POST">
-				  <div class="form-group">
-					 <textarea class="form-control richtextarea" rows="5" name="answer" placeholder="" ></textarea>
-				  </div>
-				   
-				  <div class="form-group">
-					
-					<button type="submit" class="btn btn-success">
-					<spring:message code="question.proposal.submit" text="My Proposal" /></button>
-
-				  </div>	 
-				</form>	
-			</c:when>
+	<div class="tab-content">
+	  <div class="tab-pane active" id="proposals">
+			<!-- ------------proposals------------------ -->
+			<c:set var="hasAnswered" value="false"/> <!-- check the current user if answered it or not -->
+				<table class="table" style="table-layout: fixed; width: 100%">
+			  		<c:forEach items="${answers}" var="answer">
+			  			<tr>
+						 	<td>
+						 	<c:if test="${answer.user.uid==user.uid}">
+						 		<c:set var="hasAnswered" value="true"/>
+						 	</c:if>
+						 	<div id="proposalStatusMark">
+						 		<c:if test="${answer.answered}">
+						 			It has been accpted.
+						 		</c:if>	
+						 	</div>
+						 	
+						 	<a href="<%=request.getContextPath()%>/user/${answer.user.uid}"><c:out value="${answer.user.name}"/></a>				 	 
+						 	<p><c:out value="${answer.answer}"  escapeXml="false"/></p>			  		
+						  	<c:if test="${user!=null && user.uid==answer.user.uid}">
+				  	  			<a href="#" data-toggle="modal" data-target=".editproposal"><spring:message code="global.action.edit" text="Edit" /></a>&nbsp;
+				  	  		</c:if>	
+			  	  			<c:if test="${question.user.uid==user.uid && !answer.answered}">
+			  	  				<a id="aAcceptProposal" href="<%=request.getContextPath()%>/question/${question.qid}/answer/${answer.aid}/accept">Accept</a> 
+			  	  			</c:if>
+			  	  			
+							<!-- edit -->				 	
+							<div class="modal fade editproposal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+							  <div class="modal-dialog modal-lg">
+							    <div class="modal-content">
+							  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/question/${question.qid}/answer/${answer.aid}/edit" method="POST">
+		
+								  		<textarea class="form-control richtextarea" name="answer" rows="10">
+								  		<c:out value="${answer.answer}"  escapeXml="false"/>
+								  		</textarea>
+									  	<input type="submit" class="btn btn-success" name="submit" value="<spring:message code="global.action.save" text="Save" />">
+											
+								  </form>		
+							    </div>
+							  </div>
+							</div>	<!-- end of edit dialog -->		  	  		
+		
+			    		</td></tr>
+			  		</c:forEach>
+			  	</table>
+				
+				<c:choose>
+					<c:when test="${user==null}">
+						<!-- relogin -->
+						<spring:message code="question.loginnotice" text="Please login to answer the question:" />
+						<a href="<%=request.getContextPath()%>/user/redirectLogin?qid=${question.qid}">
+							<spring:message code="common.login" text="Login" />
+						</a>
+					</c:when>
 			
-		</c:choose>	
-	</div>
+					<c:when	 test="${user!=null && user.uid!=question.user.uid && !hasAnswered && !question.resolved}">
+						<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/${question.qid}/answer/new" method="POST">
+						  <div class="form-group">
+							 <textarea class="form-control richtextarea" rows="5" name="answer" placeholder="" ></textarea>
+						  </div>
+						   
+						  <div class="form-group">
+							
+							<button type="submit" class="btn btn-success">
+							<spring:message code="question.proposal.submit" text="My Proposal" /></button>
+		
+						  </div>	 
+						</form>	
+					</c:when>
+					
+				</c:choose>	
 
+	  </div><!-- end of tab panel -->	
+	</div>	<!-- end of tab-content -->
+	
+	</div><!-- end of left side -->	
    	
 	<!-- right column -->
 		<div  class="col-md-3">
@@ -340,23 +368,54 @@
 				<span class='st_linkedin_large' displayText='LinkedIn'></span>
 				<span class='st_sina_large' displayText='Sina'></span>
 				<span class='st_blogger_large' displayText='Blogger'></span>
-			</div>	   					
+			</div>	
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- sunorth_left -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-1018407477199873"
+     data-ad-slot="3799301345"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>			   					
 		</div>
 		
 </div>
 
 <script type="text/javascript">
    $(document).ready(function() {
-      $("#answer_vote").click(function(event){
+	   
+	   //update a issue status to resolved
+      $("#issueBeResolved").click(function(event){
+    	  	  event.preventDefault();
+    	  	  var resolveLink = $(this).attr('href');
+    	  	  console.log(resolveLink);
 	          $.ajax({
-	             url:$(this).attr('href'),
+	             url:resolveLink,
 	             success:function(data) {
-					var rtn=data;
-					
+					console.log('The issue has been changed status 1');
+					$("#issueStatusMark").html('<b>It has been resolved</b>');
+					$("#issueBeResolved").hide();
 	             }
 	          });
 	      });        
 
+	   //accept a answer
+      $("#aAcceptProposal").click(function(event){
+	  	  event.preventDefault();
+	  	  var acceptLink = $(this).attr('href');
+	  	  console.log(acceptLink);
+          $.ajax({
+             url:acceptLink,
+             success:function(data) {
+				console.log('The proposal has been changed status 1');
+				$("#proposalStatusMark").html('<b>It has been accpeted</b>');
+				$("#aAcceptProposal").hide();
+             }
+          });
+      });  
+	   
+      
    });
    </script>
 

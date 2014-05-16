@@ -22,10 +22,10 @@ public abstract interface QuestionDAO
 
   public abstract List<Question> search(String paramString1, String lang, int start, int end);
 
-  public abstract List<Question> findMyQuestions(long uid);
+  public abstract List<Question> findMyQuestions(String lang,long uid);
 
   public abstract List<Comment> findComments(long paramLong, String paramString,int start,int end);
   
   public abstract int addAnswerCnt(long qid,int cnt,String lang);
-  public abstract int resolveQuestion(long qid,String lang);
+  public abstract int updateIssueStatus(long qid,String lang,int status);
 }

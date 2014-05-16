@@ -9,6 +9,8 @@ public abstract interface AnswerDAO
 
   public abstract int updateAnswer(Answer a,String lang);
 
+  public abstract int accetpAnswer(long aid,String lang);
+  
   public abstract List<Answer> findAnswers(long paramLong, String paramString);
 
   public abstract List<Answer> findMyAnswers(long paramLong, String paramString);

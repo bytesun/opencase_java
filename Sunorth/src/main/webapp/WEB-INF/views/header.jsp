@@ -42,11 +42,11 @@
 </head>
  <body style="padding-top: 70px;">  
 
-
+		
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation" >
 			<div class="navbar-inner">
-				<div class="container">
-					
+				
+			<div class="container">		
 		    <!-- Brand and toggle get grouped for better mobile display -->
 		    <div class="navbar-header">
 		      <a class="navbar-brand" href="<%=request.getContextPath()%>/"><b><spring:message code="header.sunspace" text="SunSpace" /></b></a>
@@ -116,21 +116,11 @@
 		
 
 			
-			</div> <!-- end of container -->
+			</div>
 		</div>	<!-- end of inner -->
 	</nav> <!-- end of nav -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-   
- <div class="container">
-
-	 		<!-- message -->
-	 	<c:if test="${errormsg!=null}">	
- 		<div class="row">
-			<div class="col-md-12"> <!-- main right panel for question list -->
- 			<button type="button" class="close" data-dismiss="alert" aria-hidden="true"><c:out value="${errormsg}"/>  &times;</button>
- 			</div>
- 		</div>	
-		</c:if>
+<div class="container">
