@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.orcsun.sunspace.SunConstants;
 import org.orcsun.sunspace.dao.QuestionDAO;
 import org.orcsun.sunspace.object.Comment;
 import org.orcsun.sunspace.object.Question;
@@ -120,19 +121,19 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 						Long.valueOf(c.getUser().getUid()) });
 	}
 
-	public int vote(long qid, int vote, long uid, String lang) {
-		String sql = "update question_" + lang + " set rate=(rate+" + vote
-				+ ") where qid=" + qid
-				+ " and qid not in (select qaid from vote where uid=" + uid
-				+ " and vtype=1)";
-		logger.debug(sql);
-		getJdbcTemplate().update(sql);
-		sql = "insert into vote(qaid,vtype,uid) values (?,?,?)";
-		return getJdbcTemplate().update(
-				sql,
-				new Object[] { Long.valueOf(qid), Integer.valueOf(1),
-						Long.valueOf(uid) });
-	}
+//	public int vote(long qid, int vote, long uid, String lang) {
+//		String sql = "update question_" + lang + " set rate=(rate+" + vote
+//				+ ") where qid=" + qid
+//				+ " and qid not in (select qaid from vote where uid=" + uid
+//				+ " and vtype=1)";
+//		logger.debug(sql);
+//		getJdbcTemplate().update(sql);
+//		sql = "insert into vote(qaid,vtype,uid) values (?,?,?)";
+//		return getJdbcTemplate().update(
+//				sql,
+//				new Object[] { Long.valueOf(qid), Integer.valueOf(1),
+//						Long.valueOf(uid) });
+//	}
 
 	public List<Comment> findComments(long qid, String lang,int start,int end) {
 		String sql = "select qid,ctime,comment,uid from comment_" + lang
@@ -197,6 +198,24 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 		String sql = "update question_" + lang + " set status="+status+" where qid="
 				+ qid;
 		logger.info(sql);
+		return this.getJdbcTemplate().update(sql);
+	}
+
+	@Override
+	public int vote(long uid,long qid, String lang, int vote) {
+		String svote = "+1";
+		if(vote==-1)svote="-1";
+		
+		String sql = "insert into vote(uid,nvote,vtype,vid) values(?,?,?,?)"; 
+		Object[] args = new Object[]{uid,svote,SunConstants.TYPE_QUESTION,qid};		
+		try{
+			this.getJdbcTemplate().update(sql, args);
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			return -1;
+		}
+		sql = "update question_"+lang+" set rate=(rate"+svote+") where qid="+qid;
+		
 		return this.getJdbcTemplate().update(sql);
 	}
 }

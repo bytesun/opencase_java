@@ -14,5 +14,7 @@ public abstract interface AnswerDAO
   public abstract List<Answer> findAnswers(long paramLong, String paramString);
 
   public abstract List<Answer> findMyAnswers(long paramLong, String paramString);
+  
+  public abstract int vote(long uid,long aid,String lang,int vote);
 }
 

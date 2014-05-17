@@ -152,6 +152,17 @@ public class QuestionController extends SunController{
 		}return "redirect:/question/"+lang+"/"+qid;
 	}
 	
+	@RequestMapping(value="/{qid}/vote/{vote}", method=RequestMethod.GET)
+	public @ResponseBody int voteup(Locale locale,@PathVariable long qid,@PathVariable int vote,HttpServletRequest req){
+		Object u = req.getSession().getAttribute("user");
+		String lang = getLanguage(locale,req);
+		if (u != null) {
+			User user = (User)u;
+			return quesDao.vote(user.getUid(), qid, lang, vote);
+		}else{
+			return SunConstants.RESPONSE_CODE_NOLOGIN;
+		}
+	}
 	@RequestMapping(value = { "/{qid}/comment/new" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
 	public String addComment(Locale locale,@PathVariable long qid, HttpServletRequest req, Model model) {
 		Object u = req.getSession().getAttribute("user");
@@ -237,6 +248,25 @@ public class QuestionController extends SunController{
 			
 		}
 		return 0;
+	}	
+	
+	@RequestMapping(value="/{qid}/answer/{aid}/vote/{vote}",method=RequestMethod.GET)
+	public @ResponseBody int  acceptAnswer(Locale locale,@PathVariable long qid,@PathVariable long aid,@PathVariable int vote,HttpServletRequest req, Model model){
+		Object u = req.getSession().getAttribute("user");
+		String lang =getLanguage(locale,req);
+		if (u != null) {
+			try{
+			User user = (User)u;
+				return this.answerDao.vote(user.getUid(), aid, lang, vote);
+			}catch(Exception e){
+				logger.error(e.getMessage());
+				return SunConstants.RESPONSE_CODE_FAILED;
+			}
+			
+		}else{
+			return SunConstants.RESPONSE_CODE_NOLOGIN;
+		}
+		
 	}	
 	
 	@RequestMapping(value = { "/{qid}/resolve" }, method = { RequestMethod.GET })

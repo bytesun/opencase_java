@@ -30,7 +30,7 @@ public class AnswerDaoImpl extends SunJdbcDaoSupport implements AnswerDAO {
 
 	public List<Answer> findAnswers(long qid, String lang) {
 		String sql = "select aid,qid,answer,atime,rate,uid,isanswer from answer_"
-				+ lang + " where qid=" + qid + " order by isanswer,rate desc";
+				+ lang + " where qid=" + qid + " order by isanswer desc,rate desc";
 		logger.info(sql);
 
 		return getJdbcTemplate().query(sql, new AnswerMapper(this.userDao));
@@ -75,6 +75,25 @@ public class AnswerDaoImpl extends SunJdbcDaoSupport implements AnswerDAO {
 	public int accetpAnswer(long aid, String lang) {
 		String sql = "update answer_"+lang+" set isanswer=1 where aid="+aid;
 		logger.debug(sql);
+		return this.getJdbcTemplate().update(sql);
+	}
+
+
+	@Override
+	public int vote(long uid, long aid, String lang,int vote) {
+		String svote = "+1";
+		if(vote==-1)svote="-1";
+		
+		String sql = "insert into vote(uid,nvote,vtype,vid) values(?,?,?,?)"; 
+		Object[] args = new Object[]{uid,svote,SunConstants.TYPE_ANSWER,aid};		
+		try{
+			this.getJdbcTemplate().update(sql, args);
+		}catch(Exception e){
+			logger.error(e.getMessage());
+			return -1;
+		}
+		sql = "update answer_"+lang+" set rate=(rate"+svote+") where aid="+aid;
+		
 		return this.getJdbcTemplate().update(sql);
 	}
 

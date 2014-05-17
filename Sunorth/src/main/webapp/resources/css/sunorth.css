@@ -1,3 +1,6 @@
+.home-notice {
+	color: #27AF56;
+}
 .votebar,.questiondesc{
 	display: block;color: #225599;
 	}
@@ -20,4 +23,178 @@
 .votedown {
 	background-position: 0 -232px;
 	margin: 0;
+}
+
+.post-score, .comments-char-left-count {
+    color: #777777;
+    display: inline !important;
+    font-family: sans-serif;
+    font-size: 165%;
+    font-weight: bold;
+}
+.vote-buttons {
+    float: left;
+    margin-left: 3px;
+    text-align: center;
+}
+.post-vote.up {
+    background-position: 0 -508px;
+    margin-bottom: 10px;
+}
+.post-vote.down {
+    background-position: 0 -156px;
+    margin-top: 10px;
+}
+.vote-buttons .post-vote, .vote-buttons .accept-answer {
+    margin-left: auto;
+    margin-right: auto;
+}
+.post-vote, .accept-answer {
+    background: url("../img/sprites-1.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    display: block;
+    height: 26px;
+    width: 26px;
+}
+.accept-answer {
+    background-position: 0 -78px;
+    margin-top: 15px;
+}
+.accept-answer.on, .accept-answer:hover, .accept-answer:focus {
+    background-position: 0 0;
+}
+.accept-block .accept-answer {
+    background-position: 0 -40px;
+    background-size: 100% auto;
+    margin-top: 2px;
+    width: 16px;
+}
+.accept-block .accept-answer.on, .accept-block .accept-answer:hover, .accept-block .accept-answer:focus {
+    background-position: 0 0;
+}
+.accept-text, .convert-text {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 24px;
+}
+
+.short-summary {
+    border-bottom: 1px dotted #CCCCCE;
+    overflow: hidden;
+    padding: 10px 0;
+    position: relative;
+}
+.short-summary:first-of-type {
+    border-top: 0 none;
+}
+.userContent {
+    border-top: 1px dotted #CCCCCC;
+    padding-top: 40px;
+}
+.votesBlock .user-stats-table, .tagsBlock .user-stats-table, .badgesBlock .user-stats-table {
+    margin: 10px 0 0 10px;
+}
+.votesBlock .user-stats-table .post-vote.up {
+    background-position: 0 -432px;
+    margin: 0;
+}
+.votesBlock .user-stats-table .post-vote.down {
+    background-position: 0 -232px;
+    margin: 0;
+}
+.short-summary .accept-answer {
+    background-position: 0 0;
+    background-size: 100% auto;
+    margin-top: 2px;
+    width: 16px;
+}
+.short-summary h2 a {
+    color: #00649D;
+    font-weight: bold;
+}
+.short-summary .tags {
+    margin-top: 8px;
+}
+.short-summary .userinfo {
+    color: #666666;
+    float: right;
+    font-family: Georgia,"Times New Roman",Times,serif;
+    font-size: 0.825rem;
+    font-style: italic;
+    margin-top: 8px;
+}
+.userinfo a, a.userinfo {
+    color: #3060A8;
+}
+.short-summary .counts {
+    float: left;
+    width: 24%;
+}
+.short-summary .short-counts {
+    float: left;
+    margin: 0;
+    min-width: 62px;
+}
+.short-summary .counts .item-count, .short-summary .short-counts .item-count {
+    font-size: 2.5em;
+    font-weight: 200;
+    line-height: 1;
+}
+.short-summary .counts .item-count-small, .short-summary .short-counts .item-count-small {
+    font-size: 1.875em;
+    font-weight: 200;
+}
+.short-summary .question-summary-wrapper {
+    float: right;
+    padding-top: 4px;
+    width: 100%;
+}
+.short-summary .short-question-summary-wrapper, .short-summary .short-answer-summary-wrapper {
+    float: left;
+    line-height: 20px;
+    width: 70%;
+}
+.short-summary .short-answer-summary-wrapper img {
+    vertical-align: middle;
+}
+.short-summary .votes, .short-summary .status, .short-summary .views {
+    float: left;
+    font-size: 11px;
+    height: 45px;
+    padding: 10px 2px;
+    text-align: center;
+    width: 30%;
+}
+.short-summary .short-status {
+    float: left;
+    font-size: 11px;
+    padding: 8px 14px;
+    text-align: center;
+}
+.short-summary .votes {
+    color: #333333;
+}
+.short-summary .views {
+    color: #666666;
+}
+.short-summary .favorites {
+    float: left;
+    text-align: center;
+    width: 24px;
+}
+.tags a, .tag {
+    background-color: #EFEFEF;
+    border: 1px solid #CECECE;
+    border-radius: 3px;
+    color: #444444;
+    display: inline-block;
+    font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial;
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    line-height: 1.6;
+    max-width: 180px;
+    padding: 1px 8px;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: normal;
 }

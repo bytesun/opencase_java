@@ -18,12 +18,12 @@
 	  		<c:forEach items="${ulogs}" var="userlog">
 	  			<c:if test="${userlog.status !=0 || (userlog.status == 0 && currentuid==userlog.uid)}">
 	  			<tr><td style="word-wrap: break-word">  
-				 	<h3><a href="#"><c:out value="${userlog.subject}"/></a></h3>
+				 	<h3><c:out value="${userlog.subject}"/></h3>
 				 	<p>
 				 	<c:out value="${userlog.ulog}"  escapeXml="false"/>
 				 	</p>
 				 	<c:out value="${userlog.ltime}"/>
-				 	<!-- tags -->
+				 	<!-- tags
 		 			<c:if test="${userlog.tag!=null && userlog.tag!=''}">
 						<c:set var="tags" value="${fn:split(userlog.tag,' ')}"/>
 						<c:forEach items="${tags}" var="tag">
@@ -31,7 +31,7 @@
 							<span class="label label-default "><c:out value="${tag}"/></span></a> 
 						</c:forEach>
 					</c:if>
-					
+					 -->
 					
 	    		</td></tr>
 	    		</c:if>

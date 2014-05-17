@@ -23,5 +23,10 @@ public class SunConstants
   public static final int USER_STATUS_UNVERIFIED=0;
   public static final int USER_STATUS_NORMAL=1;
   public static final int USER_STATUS_BLOCKED=-1;
+  
+  public static final int RESPONSE_CODE_SUCCESS=1;
+  public static final int RESPONSE_CODE_FAILED=-1;
+  public static final int RESPONSE_CODE_HAVEDONE=0;
+  public static final int RESPONSE_CODE_NOLOGIN=99;
 }
 

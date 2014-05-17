@@ -28,4 +28,6 @@ public abstract interface QuestionDAO
   
   public abstract int addAnswerCnt(long qid,int cnt,String lang);
   public abstract int updateIssueStatus(long qid,String lang,int status);
+  
+  public abstract int vote(long uid,long qid,String lang,int vote);
 }

@@ -206,8 +206,8 @@
 				  	 		<div class="rows">
 								<div class="col-md-12">
 									<div class="col-lg-12">	
-										<spring:message code="user.ulog.subject" text="subject" />				  	
-						  				<input type="text" class="form-control input-default" name="subject" placeholder=" " required>									  	
+										<spring:message code="user.ulog.subject" text="subject" />		
+						  				<input type="text" class="form-control input-default" name="subject" placeholder="" value="<%=new java.util.Date()%>" required>									  	
 									</div>
 								</div>
 							</div>

@@ -3,7 +3,7 @@
  	<div class="row">
 	<div class="col-md-7"> <!-- main right panel for question list -->
 	
-	<div class="jumbotron">
+	<div class="jumbotron home-notice">
 	  <h1><spring:message code="home.welcome.ask" text="Find your solution." /></h1>
 
 	 <ul>
@@ -15,7 +15,12 @@
   	</ul>
 	  
 	</div>
-	
+	<ul class="nav nav-tabs">
+	  
+	  <li  class="active"><a href="#issues" data-toggle="tab">
+		<b><spring:message code="home.questionlist.ordertype.unsolved" text="Unsolved" /></b></a>
+	  </li>	
+	</ul>	
 		<div id="questionlist">
 			<c:set var="qindex" value="0"/>				
 			<c:forEach items="${newquestions}" var="question">
@@ -141,14 +146,7 @@
 			  </div>
 			  <div class="panel-body">
 
-				<!-- social sharing button -->
-				<span class='st_facebook_large' displayText='Facebook'></span>
-				<span class='st_googleplus_large' displayText='Google +'></span>
-				<span class='st_baidu_large' displayText='Baidu'></span>
-				<span class='st_twitter_large' displayText='Tweet'></span>
-				<span class='st_linkedin_large' displayText='LinkedIn'></span>
-				<span class='st_sina_large' displayText='Sina'></span>
-				<span class='st_blogger_large' displayText='Blogger'></span>
+
 			  </div>
 			</div>
 			<!--desc -->
