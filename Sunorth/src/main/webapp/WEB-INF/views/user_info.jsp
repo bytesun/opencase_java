@@ -3,42 +3,59 @@
  	<div class="row">
 		<div class="col-md-9"> <!-- log view -->
 		<div class="jumbotron">
-			  <h1><c:out value="${userinfo.name}"/><small>--<c:out value="${userinfo.title}"/></small></h1>
+			  <img alt="" src="${userinfo.photo1}">
+			  <h1><c:out value="${userinfo.name}"/>
+			  <small>--<c:out value="${userinfo.title}"/></small></h1>
 			  <p>
 			  	<c:out value="${userinfo.profile}"/>
 			  </p>
 			  
-			</div>		
+		</div>		
 
-		
-		<table id="ulogTable" class="table" style="table-layout: fixed; width: 100%">
-			<c:set var="mindex" value="0"/>
-			<c:set var="currentuid" value="${user.uid}"/>
+		<!-- user tab -->
+		<ul class="nav nav-tabs">
+		  
+		  <li  class="active"><a href="#message" data-toggle="tab">
+			<spring:message code="user.info.message" text="Message" />
+		  </a></li>	
+		  
+		  <li><a href="#resume" data-toggle="tab">
+			<spring:message code="user.info.resume" text="Resume" />
+		  </a></li>
+		  
+		</ul>
 			
-	  		<c:forEach items="${ulogs}" var="userlog">
-	  			<c:if test="${userlog.status !=0 || (userlog.status == 0 && currentuid==userlog.uid)}">
-	  			<tr><td style="word-wrap: break-word">  
-				 	<h3><c:out value="${userlog.subject}"/></h3>
-				 	<p>
-				 	<c:out value="${userlog.ulog}"  escapeXml="false"/>
-				 	</p>
-				 	<c:out value="${userlog.ltime}"/>
-				 	<!-- tags
-		 			<c:if test="${userlog.tag!=null && userlog.tag!=''}">
-						<c:set var="tags" value="${fn:split(userlog.tag,' ')}"/>
-						<c:forEach items="${tags}" var="tag">
-							<a href="<%=request.getContextPath()%>/question/searchtag?tag=${tag}">
-							<span class="label label-default "><c:out value="${tag}"/></span></a> 
-						</c:forEach>
-					</c:if>
-					 -->
-					
-	    		</td></tr>
-	    		</c:if>
-	    		<c:set var="mindex" value="${mindex+1}"/>
-	  		</c:forEach>
-	  		
-		</table>
+		<!-- tab detail -->
+		<div class="tab-content">
+		  <div class="tab-pane active" id="message">
+			<table id="ulogTable" class="table" style="table-layout: fixed; width: 100%">
+				<c:set var="mindex" value="0"/>
+				<c:set var="currentuid" value="${user.uid}"/>
+				
+		  		<c:forEach items="${ulogs}" var="userlog">
+		  			<c:if test="${userlog.status !=0 || (userlog.status == 0 && currentuid==userlog.uid)}">
+		  			<tr><td style="word-wrap: break-word">  
+					 	<h3><c:out value="${userlog.subject}"/></h3>
+					 	<p>
+					 	<c:out value="${userlog.ulog}"  escapeXml="false"/>
+					 	</p>
+					 	<c:out value="${userlog.ltime}"/>
+					 	<!-- tags
+			 			<c:if test="${userlog.tag!=null && userlog.tag!=''}">
+							<c:set var="tags" value="${fn:split(userlog.tag,' ')}"/>
+							<c:forEach items="${tags}" var="tag">
+								<a href="<%=request.getContextPath()%>/question/searchtag?tag=${tag}">
+								<span class="label label-default "><c:out value="${tag}"/></span></a> 
+							</c:forEach>
+						</c:if>
+						 -->
+						
+		    		</td></tr>
+		    		</c:if>
+		    		<c:set var="mindex" value="${mindex+1}"/>
+		  		</c:forEach>
+		  		
+			</table>
 		<!-- more button -->
 	  	<div class="btn-group btn-group-justified">
 		  <div class="btn-group">
@@ -47,7 +64,17 @@
 		    </button>
 
 		  </div>
+		</div>			
 		</div>
+		<!-- resume -->
+		 <div class="tab-pane" id="resume">
+		 	<c:out value="${userinfo.resume}" escapeXml="false"></c:out>
+		 </div>
+		</div>
+		
+		
+			
+
 	  	
 		</div> <!-- end of right main view -->
 		

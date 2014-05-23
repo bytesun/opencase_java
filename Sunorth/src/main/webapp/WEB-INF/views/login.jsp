@@ -26,8 +26,9 @@
     <![endif]-->
 
   <!-- BEGIN Pre-requisites -->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">  
   </script>
+
   <script type="text/javascript">
     (function () {
       var po = document.createElement('script');
@@ -183,7 +184,7 @@
 														<div id="signinButton">
 														  <span class="g-signin"
 														    data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read"
-														    data-clientid="${clientid}"
+														    data-clientid="902137185992-74tltkpbsqjose7e98o6mqjvuhb1beq6.apps.googleusercontent.com"
 														    data-redirecturi="postmessage"
 														    data-accesstype="offline"
 														    data-cookiepolicy="single_host_origin"
@@ -193,8 +194,13 @@
 														</div>
 														<div id="loginresult"></div>
 														</div>
-														<!-- facebook -->
-														
+														<!-- qq -->
+														<span id="qqLoginBtn"></span>
+														<script type="text/javascript">
+														    QC.Login({
+														       btnId:"qqLoginBtn"    //插入按钮的节点id
+														});
+														</script>
 
 													</div>
 												</div>
@@ -229,7 +235,8 @@
 		      url: '<%=request.getContextPath()%>/google/storeToken?state=${state}&token='+authResult['access_token'],
 		      contentType: 'application/octet-stream; charset=utf-8',
 		      success: function(result) {
-		    	  window.location.href = '<%=request.getContextPath()%>/';
+		    	  console.log('userid is :'+result);
+		    	  window.location.href = '<%=request.getContextPath()%>/user/admin';
 		      },
 		      error: function(){
 		    	  $('#loginresult').html('Failed to login with your google account!');
@@ -257,7 +264,8 @@
 		});
 		</script> 
 
-
+		<script type="text/javascript"
+		src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8" data-callback="true"></script>
 
 	</body>
 	</html>

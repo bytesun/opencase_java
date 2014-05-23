@@ -154,11 +154,16 @@ public class UserController  extends SunController{
 	public String redirectLogin(HttpServletRequest req, Model model) {
 		model.addAttribute("cid", req.getParameter("cid"));
 		model.addAttribute("qid", req.getParameter("qid"));
-		
+		String openVendor=req.getParameter("openVendor");
 		String state = new BigInteger(130, new SecureRandom()).toString(32);
 		req.getSession().setAttribute("state", state);
-		model.addAttribute("state",  state);
-		model.addAttribute("clientid", SunConstants.GOOGLE_API_CLIENT_ID);
+		if(openVendor != null){
+			if(openVendor.equals(SunConstants.OPEN_VENDOR_GOOGLE)){
+				return "redirect:https://accounts.google.com/o/oauth2/auth?response_type=code&client_id="+SunConstants.GOOGLE_API_CLIENT_ID+"&redirect_uri="+SunConstants.AUTH_REDIRECT_URL_GOOGLE+"&state="+state;
+			}else if(openVendor.equals(SunConstants.OPEN_VENDOR_QQ)){
+				return "redirect:https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id="+SunConstants.QQ_API_CLIENT_ID+"&redirect_uri="+SunConstants.AUTH_REDIRECT_URL_QQ+"&state="+state;
+			}
+		}
 		return "login";
 	}
 

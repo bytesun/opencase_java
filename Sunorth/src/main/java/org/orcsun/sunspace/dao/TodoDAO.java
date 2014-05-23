@@ -11,9 +11,9 @@ public abstract interface TodoDAO
 
   public abstract int updateTodo(Todo paramTodo);
 
-  public abstract Todo getTodo(long paramLong);
+  public abstract Todo getTodo(long tid);
 
-  public abstract List<Todo> findTodayTodos(long paramLong);
+  public abstract List<Todo> findTodayTodos(long uid);
 
-  public abstract int doneTodo(Object[] paramArrayOfObject);
+  public abstract int doneTodo(long tid);
 }

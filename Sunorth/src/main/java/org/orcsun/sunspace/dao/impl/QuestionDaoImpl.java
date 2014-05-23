@@ -32,9 +32,34 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 				Integer.valueOf(q.getAnswercnt()),
 				Long.valueOf(q.getUser().getUid()), q.getDescription() };
 		logger.info("Add a new question :" + sql);
-		return getJdbcTemplate().update(sql, args);
+		int retn= getJdbcTemplate().update(sql, args);
+		String[] tags = q.getTag().split(" ");
+		if(tags!=null && tags.length>0){
+			int iupdate = this.addTags(tags, lang);
+			logger.debug("insert/update "+iupdate+" tags");
+		}
+		return retn;
 	}
 
+	private int addTags(String[] tags,String lang){
+		String[] sqls=new String[tags.length];
+		for(int i=0;i<tags.length;i++){
+			String tag = tags[i];
+			int cnt = this.getJdbcTemplate().queryForInt("select count(*) from tag_"+lang+" where name='"+tag+"'");
+			if(cnt == 0){
+				sqls[i] = "insert into tag_"+lang+ "(name,cnt_use) values('"+tag+"',1)";
+			}else{
+				sqls[i]="update tag_"+lang+" set cnt_use=(cnt_use+1) where name='"+tag+"'";
+			}
+			
+		}
+		return this.getJdbcTemplate().batchUpdate(sqls).length;
+	}
+	
+//	private int updateTags(String[] tags,String lang){
+//		
+//	}
+	
 	public int updateQuestion(Question q, String lang) {
 		String sql = null;
 		Object[] args = null;
@@ -42,6 +67,11 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 				+ " set question=?,tag=?,description=? where qid=?";
 		args = new Object[] { q.getQuestion(), q.getTag(), q.getDescription(),
 				Long.valueOf(q.getQid()) };
+		String[] tags = q.getTag().split(" ");
+		if(tags!=null && tags.length>0){
+			int iupdate = this.addTags(tags, lang);
+			logger.debug("insert/update "+iupdate+" tags");
+		}
 		logger.info("Update node :" + sql);
 		return getJdbcTemplate().update(sql, args);
 	}

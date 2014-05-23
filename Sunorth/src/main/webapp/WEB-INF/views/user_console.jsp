@@ -4,10 +4,9 @@
 <div class="row">
 	<div class="col-md-8"> <!-- main right panel for question list -->
 	<h2>
-	<a href="<%=request.getContextPath()%>/user/${user.uid}"><c:out value="${user.name}"/></a>
-	
+	<img alt="" src="${user.photo1}">
+	<a id="userProfile" href="<%=request.getContextPath()%>/user/${user.uid}"><c:out value="${user.name}"/></a>
 	<small><a href="#" data-toggle="modal" data-target=".edituser"><spring:message code="global.action.edit" text="Edit" /></a></small>
-	
 	</h2>
 	
 <!-- edit user -->				 	
@@ -73,7 +72,7 @@
 	  </div>
 	</div>	<!-- end of edit dialog -->		  	 	
 	
-	<!-- questions/answers/faoriates -->
+
 	<ul class="nav nav-tabs">
 	  
 	  <li  class="active"><a href="#home" data-toggle="tab">
@@ -83,10 +82,11 @@
 	  <li><a href="#issues" data-toggle="tab">
 		<spring:message code="user.myquestions" text="Issues" />
 	  </a></li>
-
+<!-- 
 	  <li><a href="#projects" data-toggle="tab">
 		<spring:message code="user.myprojects" text="Projects" />
 	  </a></li>
+	   -->
 	</ul>
 	
 	<div class="tab-content">
@@ -97,9 +97,17 @@
 		   <table class="table">
 			    <c:forEach items="${todos}" var="todo">
 			    	<tr><td>
-			    		<c:out value="${todo.todo}"/></td>
+						<input type="checkbox" id="todo-id-${todo.tid}"/>
+				    	<span id="todo-item-${todo.tid}" title="${todo.note}-${todo.deadline}">	<c:out value="${todo.todo}"/>
+			    		</span>
+			    		</td>
 			    	</tr>
 			    </c:forEach>
+		  		<tr><td>		  			<!-- new todo -->
+					<button class="btn btn-success" data-toggle="modal" data-target=".newtodo">
+						<spring:message code="user.todo.button" text="New TODO" />
+					</button>
+				</td></tr>			    
 		    </table>	
 	
 	  </div>	
@@ -115,18 +123,22 @@
 					 	</a> 
 		    		</td></tr>
 		  		</c:forEach>
+
 		  	</table>		  
-		  
+
 	  </div><!-- end of tab panel -->
 	
+	  <!-- ---------------Project list----------------- -->
+	  <div class="tab-pane" id="projects">
+		  
+		  
+
+	  </div><!-- end of tab panel -->	
 	</div>	<!-- end of tab-content -->
 	
 	</div><!-- end of left side -->
 	<div class="col-md-4"> 
-			<!-- new todo -->
-			<button class="btn btn-success" data-toggle="modal" data-target=".newtodo">
-				<spring:message code="user.todo.button" text="New TODO" />
-			</button>
+
 			
 			<button class="btn btn-success" data-toggle="modal" data-target=".newlog">
 			<spring:message code="user.ulog.newbtn" text="Write Log" />
@@ -275,5 +287,32 @@
 	</div>
 </div>
 
-
+<script type="text/javascript">
+$(document).ready(function() {
+  
+	//DONE A TODO
+	    $("input[id|='todo-id']").each(function() {
+            $(this).click(function(e) {
+	       	 var svid = $(this).attr('id');
+	       	 var vid = svid.substring(svid.lastIndexOf('-')+1);
+	       	  console.log(vid);
+		   	  	  
+	          $.ajax({
+	             url:'<%=request.getContextPath()%>/todo/'+vid+'/done',
+	             success:function(data) {
+	            	if(data==1){
+	            		console.log('Mark the todo done successfully!');
+						var stodo = $('#todo-item-'+vid).text();
+						$('#todo-id-'+vid).html('<input id="todo-id-'+vid+'" type="checkbox" checked>');
+						$('#todo-item-'+vid).html('<span id="todo-item-'+vid+'" class="todo-markeddone">'+stodo+'</span>');
+	            	}else{
+	            		console.log('Failed to mark the todo done!');
+	            	}
+	             }
+	          });					
+         });
+	});   
+  
+});
+</script>
 <%@include file="footer.jsp" %>

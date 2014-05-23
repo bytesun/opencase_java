@@ -1,6 +1,9 @@
 .home-notice {
 	color: #27AF56;
 }
+.todo-markeddone{
+	text-decoration: line-through;
+}
 .votebar,.questiondesc{
 	display: block;color: #225599;
 	}

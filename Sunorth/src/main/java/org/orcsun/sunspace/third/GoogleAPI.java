@@ -28,6 +28,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.PeopleFeed;
+import com.google.api.services.plus.model.Person;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -49,11 +50,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
 @RequestMapping("/google")
-public class GoogleAPI{
+public class GoogleAPI extends CommonAPI{
 	/*
 	 * Default HTTP transport to use to make HTTP requests.
 	 */
@@ -84,9 +86,9 @@ public class GoogleAPI{
 	 * @throws Exception 
 	 */
 		@RequestMapping(value="/storeToken",method=RequestMethod.POST)
-		protected String validateToken(HttpServletRequest request,HttpServletRequest response,
+		protected @ResponseBody String validateToken(HttpServletRequest request,HttpServletRequest response,
 				Model model) throws Exception {
-			String returnpage = "redirect:/user/redirectLogin";
+			String returnpage = "-1";
 			// Only connect a user that is not already connected.
 			String tokenData = (String) request.getParameter("token");
 			logger.info("token:"+tokenData);
@@ -122,28 +124,49 @@ public class GoogleAPI{
 					User user = userDao.findUserByEmail(email);
 					if(user == null){
 						user = new User();
-						user.setName(gplusId);
+						user.setName("GoogleUser");
+						user.setOpenid(gplusId);
 						user.setEmail(email);
+						user.setPasswd(tokenData);
 						long uid = userDao.addUser(user);
 						user.setUid(uid);
 					}
+
+					// Store the token in the session for later use.
+					request.getSession().setAttribute("token",
+							tokenResponse.toString());
+					
+					//get user profile
+					GoogleCredential credential = new GoogleCredential.Builder()
+					.setJsonFactory(JSON_FACTORY)
+					.setTransport(TRANSPORT)
+					.setClientSecrets(SunConstants.GOOGLE_API_CLIENT_ID, SunConstants.GOOGLE_API_CLIENT_SECRET)
+					.build()
+					.setFromTokenResponse(
+							JSON_FACTORY.fromString(tokenResponse.toString(),
+									GoogleTokenResponse.class));
+					// Create a new authorized API client.
+					Plus service = new Plus.Builder(TRANSPORT, JSON_FACTORY,
+							credential).setApplicationName(APPLICATION_NAME)
+							.build();
+					// Get a list of people that this user has shared with this app.
+					Person person = service.people().get("me").execute();	
+					user.setPhoto1(person.getImage().getUrl());
+					user.setName(person.getDisplayName());
+					user.setPhoto2(person.getCover().getCoverPhoto().getUrl());
+					
+					
 					request.getSession().setAttribute("user", user);
-					
-					
 				}
-	
-				// Store the token in the session for later use.
-				request.getSession().setAttribute("token",
-						tokenResponse.toString());
-				return "redirect:/user/admin";
+				
+				return gplusId;
 
 			} catch (TokenResponseException e) {
 //						return GSON.toJson("Failed to upgrade the authorization code.");
 						return returnpage;
 			} catch (IOException e) {
-//						return GSON.toJson("Failed to read token data from Google. "
-//								+ e.getMessage());
-						return returnpage;
+				e.printStackTrace();
+				return returnpage;
 			}
 
 		}
@@ -268,4 +291,45 @@ public class GoogleAPI{
 			}
 		}
 
+		@RequestMapping(value="/person",method=RequestMethod.GET)
+		protected void getPerson(HttpServletRequest request,
+				HttpServletResponse response) throws ServletException,
+				IOException {
+			response.setContentType("application/json");
+
+			// Only fetch a list of people for connected users.
+			String tokenData = (String) request.getSession().getAttribute(
+					"token");
+			if (tokenData == null) {
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.getWriter().print(
+						GSON.toJson("Current user not connected."));
+				return;
+			}
+			try {
+				// Build credential from stored token data.
+				GoogleCredential credential = new GoogleCredential.Builder()
+						.setJsonFactory(JSON_FACTORY)
+						.setTransport(TRANSPORT)
+						.setClientSecrets(SunConstants.GOOGLE_API_CLIENT_ID, SunConstants.GOOGLE_API_CLIENT_SECRET)
+						.build()
+						.setFromTokenResponse(
+								JSON_FACTORY.fromString(tokenData,
+										GoogleTokenResponse.class));
+				// Create a new authorized API client.
+				Plus service = new Plus.Builder(TRANSPORT, JSON_FACTORY,
+						credential).setApplicationName(APPLICATION_NAME)
+						.build();
+				// Get a list of people that this user has shared with this app.
+				Person person = service.people().get("me").execute();
+				User u = (User)request.getSession().getAttribute("user");
+				response.setStatus(HttpServletResponse.SC_OK);
+				response.getWriter().print(GSON.toJson(person));
+			} catch (IOException e) {
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.getWriter().print(
+						GSON.toJson("Failed to read data from Google. "
+								+ e.getMessage()));
+			}
+		}
 }

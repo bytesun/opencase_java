@@ -42,7 +42,7 @@ public class TodoDaoImpl extends SunJdbcDaoSupport implements TodoDAO {
 		String sql = "select tid,todo,note,ttime,ttype,uid,priority,deadline,status from todo where tid="
 				+ tid;
 		return (Todo) getJdbcTemplate().queryForObject(sql,
-				new TodoMapper(null));
+				new TodoMapper(userDao));
 	}
 
 	public List<Todo> findTodayTodos(long uid) {
@@ -53,15 +53,11 @@ public class TodoDaoImpl extends SunJdbcDaoSupport implements TodoDAO {
 		return getJdbcTemplate().query(sql, new TodoMapper(null));
 	}
 
-	public int doneTodo(Object[] tids) {
-		StringBuffer sb = new StringBuffer();
-		for (Object tid : tids)
-			sb.append(tid + ",");
-		sb.append("0");
-		logger.info("Done all these todos : " + sb);
-		return getJdbcTemplate().update(
-				"update todo set status=9,deadline=CURRENT_TIMESTAMP where tid in ("
-						+ sb.toString() + ")");
+	public int doneTodo(long tid) {
+		String sql = 
+				"update todo set status=9,deadline=CURRENT_TIMESTAMP where tid ="+tid;
+		logger.debug(sql);
+		return getJdbcTemplate().update(sql);
 	}
 
 	public static final class TodoMapper implements RowMapper<Todo> {

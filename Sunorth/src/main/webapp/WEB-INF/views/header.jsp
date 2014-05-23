@@ -15,7 +15,7 @@
 	<meta name="description" content="<spring:message code="header.description" text="Sunorth" />">
 	<meta name="keywords" content="<spring:message code="header.keywords" text="Sunorth" />">
 	<meta name="author" content="Sun">
-    <meta property="qc:admins" content="0762654177635672406727" />
+    <meta property="qc:admins" content="0762654177635672406727" /><!-- qq verify -->
    
     <title><spring:message code="header.title" text="Sunorth" /></title>
 
@@ -78,7 +78,7 @@
 		            
 		      <c:if test="${user == null}">
 		      <ul class="nav navbar-nav navbar-right ">
-		      	<li><a href="<%=request.getContextPath()%>/user/redirectLogin"><spring:message code="common.signup" text="SignUp" /></a></li>
+		      	<li><a  href="<%=request.getContextPath()%>/user/redirectLogin"><spring:message code="common.signup" text="SignUp" /></a></li>
 		      </ul>		      
 		      
 		      

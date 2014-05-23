@@ -13,7 +13,9 @@ import org.orcsun.sunspace.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Task management controller
@@ -75,19 +77,26 @@ public class TodoController {
 	 * @param req
 	 * @return
 	 */
-	@RequestMapping(value = { "/done" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
-	public String doneTodo(HttpServletRequest req) {
-		Object user = req.getSession().getAttribute("user");
-		if (user != null) {
-			Object[] tids = req.getParameterValues("tid");
-			if (tids != null) {
-				try{
-				this.todoDao.doneTodo(tids);
-				}catch(Exception e){
-					logger.error("Failed to add todo since "+e.getMessage());
+	@RequestMapping(value = { "/{tid}/done" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
+	public @ResponseBody int doneTodo(@PathVariable long tid,HttpServletRequest req) {
+		Object u = req.getSession().getAttribute("user");
+		if (u != null) {
+			try{
+				User user = (User)u;
+				//check user
+				Todo todo = todoDao.getTodo(tid);
+				if(todo.getUser().getUid()==user.getUid()){
+					logger.info("Done a todo:"+todo.getTid());
+					return this.todoDao.doneTodo(tid);
+				}else{
+					return SunConstants.RESPONSE_CODE_FAILED;
 				}
+			}catch(Exception e){
+				logger.error("Failed to done todo since "+e.getMessage());
+				return SunConstants.RESPONSE_CODE_FAILED;
 			}
+		}else{
+			return SunConstants.RESPONSE_CODE_NOLOGIN;
 		}
-		return "redirect:/user/admin";
 	}
 }

@@ -21,6 +21,7 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 		jdbcInsert.withTableName("users").usingGeneratedKeyColumns(
 				new String[] { "uid" });
 		Map parameters = new HashMap();
+		parameters.put("openid", u.getOpenid());
 		parameters.put("name", u.getName());
 		parameters.put("passwd", u.getPasswd());
 		parameters.put("email", u.getEmail());
@@ -44,7 +45,7 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 	}
 
 	public User findUserByID(long uid) {
-		String sql = "select uid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume from users where uid='"
+		String sql = "select uid,openid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume from users where uid='"
 				+ uid + "'";
 		logger.info(sql);
 		User u = null;
@@ -57,7 +58,7 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 	}
 
 	public User findUserByEmail(String email) {
-		String sql = "select uid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume from users where email='"
+		String sql = "select uid,openid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume from users where email='"
 				+ email + "'";
 		logger.info(sql);
 		User u = null;
@@ -73,6 +74,7 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			User u = new User();
 			u.setUid(rs.getLong("uid"));
+			u.setOpenid(rs.getString("openid"));
 			u.setName(rs.getString("name"));
 			u.setPasswd(rs.getString("passwd"));
 			u.setEmail(rs.getString("email"));

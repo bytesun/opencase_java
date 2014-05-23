@@ -3,7 +3,7 @@
         <small class="col-md-12">
         <hr>
         <div class="well well-sm">
-        	&copy; 2014 All Right Reserved. Design by <a href="maileto:orcnsun@gmail.com">Sun </a> 
+        	&copy; 2014 All Right Reserved. Design by <a href="maileto:admin@sunorth.org">Sun </a> 
          ---------"Yesterday is history, Tomorrow is mystery, but Today is a gift, that is why it is called the present"--------  
 		</div>
 

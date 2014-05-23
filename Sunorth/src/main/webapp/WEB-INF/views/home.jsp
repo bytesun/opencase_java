@@ -1,7 +1,7 @@
 <%@include file="header.jsp" %>
-
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101073970" data-redirecturi="http://www.sunorth.org/qq/oauth2" charset="utf-8"></script>
  	<div class="row">
-	<div class="col-md-7"> <!-- main right panel for question list -->
+	<div class="col-md-8"> <!-- main right panel for question list -->
 	
 	<div class="jumbotron home-notice">
 	  <h1><spring:message code="home.welcome.ask" text="Find your solution." /></h1>
@@ -52,9 +52,17 @@
 		</div>
 	</div>
 	<!-- - RIGHT -->
-	<div class="col-md-5">  <!-- right side panel -->
-			 <!-- NEW ISSUE -->
+	<div class="col-md-4">  <!-- right side panel -->
+		<!-- Login -->
+		<c:if test="${user==null}">
+		<div id="login" class="panel panel-default" align="center">
+			<div class="panel-body">
+			<span id="qqLoginBtn"></span>
 		
+			</div>
+		</div>
+		</c:if>
+			 <!-- NEW ISSUE -->
 				<c:if test="${user!=null}">
 					<button class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target=".newissue"><spring:message code="question.new" text="New Issue" /> </button>
 					<br>
@@ -129,10 +137,23 @@
 			  </div>
 			</div>
  			-->
-
+ 			<!-- AD -->
+ 	
+ 			<div  class="panel panel-default"  align="center">
+				<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+				<!-- p8ecm_main_Blog1_300x250_as -->
+				<ins class="adsbygoogle"
+				     style="display:inline-block;width:300px;height:250px"
+				     data-ad-client="ca-pub-1018407477199873"
+				     data-ad-slot="5142696541"></ins>
+				<script>
+				(adsbygoogle = window.adsbygoogle || []).push({});
+				</script>
+			</div>
+			
 			<div  class="panel panel-default">
 			  <div class="panel-heading">
-			  	<spring:message code="home.msg.latest" text="The Latest Message"></spring:message>
+			  	<spring:message code="home.msg.latest" text="The Latest Status"></spring:message>
 			  </div>
 			  <div class="panel-body">
 			    <table id="latestMsg" class="table" style="table-layout: fixed; width: 100%"></table>
@@ -217,7 +238,21 @@
 	      });        
 
    });
-   </script>	
-	
+
+ 
+   QC.Login({
+      btnId:"qqLoginBtn",
+      size:"A_XL"
+	});
+   
+    (function () {
+      var po = document.createElement('script');
+      po.type = 'text/javascript';
+      po.async = true;
+      po.src = 'https://plus.google.com/js/client:plusone.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(po, s);
+    })();
+  </script>
 
 <%@include file="footer.jsp" %>
