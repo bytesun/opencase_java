@@ -15,6 +15,7 @@ public class User {
 	private String title;
 	private String profile;
 	private String resume;
+	private String skill;
 	
 	private String photo1;
 	private String photo2;
@@ -113,6 +114,14 @@ public class User {
 
 	public void setResume(String resume) {
 		this.resume = resume;
+	}
+
+	public String getSkill() {
+		return skill;
+	}
+
+	public void setSkill(String skill) {
+		this.skill = skill;
 	}
 
 	public String getPhoto1() {

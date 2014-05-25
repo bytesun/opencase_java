@@ -94,7 +94,7 @@
 	  <div class="tab-pane active" id="home">
 		  <!-- todo list -->
 
-		   <table class="table">
+		   <table id="todolist" class="table">
 			    <c:forEach items="${todos}" var="todo">
 			    	<tr><td>
 						<input type="checkbox" id="todo-id-${todo.tid}"/>
@@ -103,12 +103,11 @@
 			    		</td>
 			    	</tr>
 			    </c:forEach>
-		  		<tr><td>		  			<!-- new todo -->
-					<button class="btn btn-success" data-toggle="modal" data-target=".newtodo">
-						<spring:message code="user.todo.button" text="New TODO" />
-					</button>
+		  		<tr><td>		  		
+
 				</td></tr>			    
 		    </table>	
+	
 	
 	  </div>	
 	  <!-- ---------------Issue list----------------- -->
@@ -138,11 +137,28 @@
 	
 	</div><!-- end of left side -->
 	<div class="col-md-4"> 
-
-			
+		<div  class="panel panel-default">
+		  <div class="panel-body">
+		  
+		  	<!-- new user log -->
 			<button class="btn btn-success" data-toggle="modal" data-target=".newlog">
 			<spring:message code="user.ulog.newbtn" text="Write Log" />
 			</button>
+			
+			<!-- new todo -->
+			<button class="btn btn-success" data-toggle="modal" data-target=".newtodo">
+				<spring:message code="user.todo.button" text="New TODO" />
+			</button>
+			
+			<!-- new activity -->	
+			<button class="btn btn-success" data-toggle="modal" data-target=".newactivity">
+				<spring:message code="user.activity.startbtn" text="Start Activity" />
+			</button>			
+			
+		  </div>
+		</div>	
+			
+		
 			
 			<!-- new todo diag -->		
 			<div class="modal fade newtodo" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -175,7 +191,7 @@
 							<div class="col-md-12">
 								<div class="col-lg-12">	
 										<spring:message code="user.todo.note" text="Note" />									
-										<textarea class="form-control" rows="5" name="note" placeholder=""></textarea>
+										<textarea class="form-control richtextarea" rows="5" name="note" placeholder=""></textarea>
 									</div>
 								</div>
 							</div>
@@ -198,8 +214,8 @@
 			    </div>
 			  </div>
 			</div>	<!-- end new todo dialog -->	
-			<!-- new log diag -->
 			
+			<!-- new log diag -->			
 			<div class="modal fade newlog" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 			  <div class="modal-dialog modal-lg">
 			    <div class="modal-content">
@@ -253,17 +269,101 @@
 					</div>
 				</div>
 			</div>		
+			
+			<!-- new activity -->
+			<div class="modal fade newactivity" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-lg">
+			    <div class="modal-content">
+			    <form id="startActivityForm" class="form-horizontal" role="form" action="<%=request.getContextPath()%>/activity/add" method="POST">
+	
+					<div class="model-body">
+				  	 	<div class="form-group"> 
+				  	 		<div class="rows">
+								<div class="col-md-12">
+									<div class="col-lg-12">					  	
+									  	
+									</div>
+								</div>
+							</div>
+						</div>						
+				  	 	<div class="form-group"> 
+				  	 		<div class="rows">
+								<div class="col-md-12">
+									<div class="col-lg-12">		
+													  	
+									  	<input type="text" class="form-control input-default" name="subject" placeholder="<spring:message code="user.activity.subject" text="What's the activity?" /> " required>
+									</div>
+								</div>
+							</div>
+						</div>	
+			  	 	<div class="form-group"> 
+			  	 		<div class="rows">
+							<div class="col-md-12">
+								<div class="col-lg-12">	
+										<spring:message code="activity.description" text="Description" />									
+										<textarea class="form-control richtextarea" rows="20" name="description" placeholder=""></textarea>
+									</div>
+								</div>
+							</div>
+						</div>			
+						
+				  	 	<div class="form-group"> 
+				  	 		<div class="rows">
+								<div class="col-md-12">
+									<div class="col-lg-12">		
+													  	
+									  	<input type="text" class="form-control input-default" name="location" placeholder="<spring:message code="user.activity.location" text="Where is it?" /> " required>
+									</div>
+								</div>
+							</div>
+						</div>		
+																			
+			  	 	<div class="form-group"> 
+			  	 		<div class="rows">
+							<div class="col-md-12">
+								<div class="col-lg-12">
+										<spring:message code="activity.astime" text="Start Time" /><input type="date" name="astime" placeholder="" required>
+										<spring:message code="activity.aetime" text="End Time" /><input type="date" name="aetime" placeholder="" required>
 
+									</div>
+								</div>
+							</div>
+						</div>			
+						
+			  	 	<div class="form-group"> 
+			  	 		<div class="rows">
+							<div class="col-md-12">
+								<div class="col-lg-12">
+										<spring:message code="activity.attcnt" text="Persons" /><input type="number" name="attcnt" value="1" placeholder="" required>
+										<spring:message code="activity.cost" text="Cost" /><input type="text" name="cost" value="0" placeholder="" required>																									
+										<input type="hidden" name="atype" placeholder="" value="0"> 
+										
+										<button id="startActivityBtn" type="submit" class="btn btn-success">
+										<spring:message code="user.activity.startbtn" text="Start" /></button>	
+									</div>
+								</div>
+							</div>
+						</div>																				
+					</div>
+				</form>		
+			    </div>
+			  </div>
+			</div>	<!-- end new activity dialog -->	
 		
 		<!-- my consultants -->
 		<div  class="panel panel-default">
 		  <div class="panel-heading">
-		  	<spring:message code="user.console.events" text="Events"></spring:message>
+		  	<spring:message code="user.console.activities" text="My Activities"></spring:message>
 		  </div>
 		  <div class="panel-body">
-		    Comming sooooon!
+	  		<ol>
+			<c:forEach items="${activities}" var="activity">
+				<li>[<c:out value="${activity.astime}"/>]-<a href="<%=request.getContextPath()%>/activity/${activity.aid}/${lang}"><c:out value="${activity.subject}"></c:out></a></li>
+			</c:forEach>
+			</ol>
 		  </div>
-		</div>		
+		</div>
+				
 		<div  class="panel panel-default">
 		  <div class="panel-heading">
 		  	<spring:message code="user.console.consultants" text="My Consultants"></spring:message>
@@ -311,7 +411,16 @@ $(document).ready(function() {
 	             }
 	          });					
          });
-	});   
+	}); 
+	
+	//submit activity form
+	//$("#startActivityBtn").click(function(){
+		//$("#startActivityForm").on("submit",function(e){
+	//		e.preventDefault();
+			$("#activity_list").html("<tr><td>new activity</td></tr>");
+	//	});
+	//});
+	
   
 });
 </script>

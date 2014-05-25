@@ -6,6 +6,7 @@
 			  <img alt="" src="${userinfo.photo1}">
 			  <h1><c:out value="${userinfo.name}"/>
 			  <small>--<c:out value="${userinfo.title}"/></small></h1>
+			  <h2><a><c:out value="${userinfo.skill}"></c:out></a></h2>
 			  <p>
 			  	<c:out value="${userinfo.profile}"/>
 			  </p>
@@ -79,15 +80,18 @@
 		</div> <!-- end of right main view -->
 		
 		<div class="col-md-3"> <!-- side column -->
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- sunorth_left -->
-<ins class="adsbygoogle"
-     style="display:inline-block;width:300px;height:600px"
-     data-ad-client="ca-pub-1018407477199873"
-     data-ad-slot="3799301345"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>	
+		
+			<!-- AD -->
+				<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+				<!-- p8ecm_main_Blog1_300x250_as -->
+				<ins class="adsbygoogle"
+				     style="display:inline-block;width:300px;height:250px"
+				     data-ad-client="ca-pub-1018407477199873"
+				     data-ad-slot="5142696541"></ins>
+				<script>
+				(adsbygoogle = window.adsbygoogle || []).push({});
+				</script>
+
 		</div><!-- end of side -->
 		
 	</div>

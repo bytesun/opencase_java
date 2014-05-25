@@ -1,7 +1,10 @@
 package org.orcsun.sunspace;
 
 import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
+
+import org.orcsun.sunspace.dao.impl.ActivityDaoImpl;
 import org.orcsun.sunspace.dao.impl.AnswerDaoImpl;
 import org.orcsun.sunspace.dao.impl.CategoryDaoImpl;
 import org.orcsun.sunspace.dao.impl.QuestionDaoImpl;
@@ -22,16 +25,11 @@ public class HomeController {
 	@Autowired
 	QuestionDaoImpl quesDao;
 
-
-
 	@Autowired
 	CategoryDaoImpl catDao;
-
+	
 	@Autowired
-	AnswerDaoImpl ansDao;
-
-	@Autowired
-	TodoDaoImpl todoDao;
+	ActivityDaoImpl actDao;
 	
 	static Logger logger = Logger.getLogger(HomeController.class);
 	/**
@@ -57,8 +55,9 @@ public class HomeController {
 		model.addAttribute("topcats", this.catDao.findSubCategory(0L, lang));
 
 		model.addAttribute("newquestions",
-				this.quesDao.findLatestQuestions(0,10, lang));
-
+				this.quesDao.findLatestQuestions(0,20, lang));
+		
+		model.addAttribute("activities", this.actDao.getLatestActivities(10,lang));
 
 		return "home";
 	}

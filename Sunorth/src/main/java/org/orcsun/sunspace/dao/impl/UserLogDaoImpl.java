@@ -23,32 +23,32 @@ public class UserLogDaoImpl extends SunJdbcDaoSupport implements UserLogDAO {
 
 	static Logger logger = Logger.getLogger(UserLogDaoImpl.class);
 	@Override
-	public int newLog(UserLog ulog) {
-		String sql = "insert into userlog(uid,tag,subject,ulog,status,ltype) values(?,?,?,?,?,?)";
+	public int newLog(UserLog ulog,String lang) {
+		String sql = "insert into userlog_"+lang+" (uid,tag,subject,ulog,status,ltype) values(?,?,?,?,?,?)";
 		logger.debug(sql);
 		Object[] args=new Object[]{ulog.getUid(),ulog.getTag(),ulog.getSubject(),ulog.getUlog(),ulog.getStatus(),ulog.getLtype()};
 		return this.getJdbcTemplate().update(sql, args);
 	}
 	
 	@Override
-	public int updateLog(UserLog ulog) {
-		String sql ="update userlog set subject=?,ulog=?,tag=?,status=?,ltype=? where lid=?";
+	public int updateLog(UserLog ulog,String lang) {
+		String sql ="update userlog_"+lang+"  set subject=?,ulog=?,tag=?,status=?,ltype=? where lid=?";
 		logger.debug(sql);
 		Object[] args = new Object[]{ulog.getSubject(),ulog.getUlog(),ulog.getTag(),ulog.getStatus(),ulog.getLtype(),ulog.getLid()};
 		return this.getJdbcTemplate().update(sql,args);
 	}
 
 	@Override
-	public List<UserLog> findMyLogs(long uid,int start,int end) {
-		String sql ="select lid,uid,ltime,tag,subject,ulog,status,ltype from userlog where uid="+uid+" order by ltime desc limit "+start+","+end;
+	public List<UserLog> findMyLogs(long uid,int start,int end,String lang) {
+		String sql ="select lid,uid,ltime,tag,subject,ulog,status,ltype from userlog_"+lang+" where uid="+uid+" order by ltime desc limit "+start+","+end;
 		logger.debug(sql);
 		return this.getJdbcTemplate().query(sql, new UserLogMapper());
 	}
 
 
 	@Override
-	public List<UserLog> lastestLogs() {
-		String sql ="select lid,uid,ltime,tag,subject,ulog,status,ltype from userlog where status>0 order by ltime desc limit 5";
+	public List<UserLog> lastestLogs(String lang) {
+		String sql ="select lid,uid,ltime,tag,subject,ulog,status,ltype from userlog_"+lang+"  where status>0 order by ltime desc limit 5";
 		logger.debug(sql);
 		return this.getJdbcTemplate().query(sql, new UserLogMapper());
 	}	

@@ -10,6 +10,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.orcsun.sunspace.dao.impl.ActivityDaoImpl;
 import org.orcsun.sunspace.dao.impl.QuestionDaoImpl;
 import org.orcsun.sunspace.dao.impl.TodoDaoImpl;
 import org.orcsun.sunspace.dao.impl.UserDaoImpl;
@@ -45,6 +46,8 @@ public class UserController  extends SunController{
 	UserLogDaoImpl ulogDao;
 	@Autowired
 	QuestionDaoImpl quesDao;
+	@Autowired
+	ActivityDaoImpl actDao;
 	
 	private static final Logger logger = Logger.getLogger(UserController.class);
 	/**
@@ -55,7 +58,7 @@ public class UserController  extends SunController{
 	 */
 	@RequestMapping(value = { "/admin" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public String userAdmin(Locale locale, HttpServletRequest req, Model model) {
-		
+		String lang = this.getLanguage(locale, req);
 		Object u = req.getSession().getAttribute("user");
 		if (u == null) {
 			return "redirect:/user/redirectLogin";
@@ -63,7 +66,11 @@ public class UserController  extends SunController{
 		User user = (User)u;
 		model.addAttribute("todos",
 				this.todoDao.findTodayTodos(user.getUid()));
-		model.addAttribute("myquestions", quesDao.findMyQuestions(this.getLanguage(locale, req),user.getUid()));
+		//activities
+		model.addAttribute("activities", this.actDao.getLatestActivities(10,lang));		
+		model.addAttribute("myquestions", quesDao.findMyQuestions(lang,user.getUid()));
+		
+		
 		return "user_console";
 	}
 	
@@ -91,20 +98,24 @@ public class UserController  extends SunController{
 	
 	
 	@RequestMapping(value="/{uid}",method=RequestMethod.GET)
-	public String userInfo(@PathVariable long uid,Model model){
-
-		model.addAttribute("userinfo", userDao.findUserByID(uid));
-		model.addAttribute("ulogs", ulogDao.findMyLogs(uid,0,20));
+	public String userInfo(Locale locale,@PathVariable long uid,HttpServletRequest req,Model model){
+		User u =  userDao.findUserByID(uid);
+		String lang=this.getLanguage(locale, req);
+		model.addAttribute("userinfo",u);
+		model.addAttribute("ulogs", ulogDao.findMyLogs(uid,0,20,lang));
+//		model.addAttribute("activities", actDao.getMyActivities(uid,this.getLanguage(locale, req)));
+		
 		return "user_info";
 	}
 	
 	@RequestMapping(value="/latest",method=RequestMethod.GET)
-	public @ResponseBody List<UserLog>  latestMessage(Model model){
-		return ulogDao.lastestLogs();
+	public @ResponseBody List<UserLog>  latestMessage(Locale locale,HttpServletRequest req,Model model){
+		String lang=this.getLanguage(locale, req);
+		return ulogDao.lastestLogs(lang);
 	}
 	
 	@RequestMapping(value="/moreUlog/{uid}",method=RequestMethod.GET)
-	public @ResponseBody List<UserLog> moreUserLog(@PathVariable long uid,HttpServletRequest req){
+	public @ResponseBody List<UserLog> moreUserLog(Locale locale,@PathVariable long uid,HttpServletRequest req){
 		String start = req.getParameter("start");
 		int istart=0;
 		if(start!=null && !start.equals(""))
@@ -114,11 +125,11 @@ public class UserController  extends SunController{
 		if(end !=null && !end.equals(""))
 			iend = Integer.parseInt(end);
 		
-		return ulogDao.findMyLogs(uid, istart, iend);
+		return ulogDao.findMyLogs(uid, istart, iend,this.getLanguage(locale, req));
 	}
 	
 	@RequestMapping(value="/ulog/new",method=RequestMethod.POST)
-	public String addUserLog(HttpServletRequest req,Model model){
+	public String addUserLog(Locale locale,HttpServletRequest req,Model model){
 		Object u = req.getSession().getAttribute("user");
 		if(u!=null){
 			User user = (User)u;
@@ -136,7 +147,7 @@ public class UserController  extends SunController{
 				logger.error(e.getMessage());
 			}
 
-			ulogDao.newLog(ulog);
+			ulogDao.newLog(ulog,this.getLanguage(locale, req));
 			logger.debug("Added a new log:"+ulog.getSubject());
 			return "user_console";			
 		}else{

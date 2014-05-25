@@ -19,6 +19,7 @@ public class SunController {
 	 */
 	String getLanguage(Locale locale,HttpServletRequest req){
 		String lang = "en";
+		if(req == null)return lang;
 		Object olang = req.getSession().getAttribute("lang");
 		Object plang = req.getParameter("lang");
 		if (olang != null) {

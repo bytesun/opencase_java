@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -37,20 +38,20 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 	}
 
 	public int updateUser(User u) {
-		String sql = "update users set name=?,title=?,profile=?,resume=? where uid=?";
+		String sql = "update users set name=?,title=?,profile=?,resume=?, skill=? where uid=?";
 		logger.debug(sql);
 		Object[] args = new Object[] { u.getName(), u.getTitle(),
-				u.getProfile(), u.getResume(), u.getUid() };
+				u.getProfile(), u.getResume(),u.getSkill(), u.getUid() };
 		return this.getJdbcTemplate().update(sql, args);
 	}
 
 	public User findUserByID(long uid) {
-		String sql = "select uid,openid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume from users where uid='"
+		String sql = "select uid,openid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume,skill from users where uid='"
 				+ uid + "'";
 		logger.info(sql);
 		User u = null;
 		try {
-			u = (User) getJdbcTemplate().queryForObject(sql, new UserMapper());
+			u = (User) getJdbcTemplate().queryForObject(sql, new UserMapper(false));
 		} catch (Exception e) {
 			logger.warn("No user found :" + uid + ":" + e.getMessage());
 		}
@@ -58,19 +59,29 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 	}
 
 	public User findUserByEmail(String email) {
-		String sql = "select uid,openid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume from users where email='"
+		String sql = "select uid,openid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume,skill from users where email='"
 				+ email + "'";
 		logger.info(sql);
 		User u = null;
 		try {
-			u = (User) getJdbcTemplate().queryForObject(sql, new UserMapper());
+			u = (User) getJdbcTemplate().queryForObject(sql, new UserMapper(false));
 		} catch (Exception e) {
 			logger.warn("No user found :" + email + ":" + e.getMessage());
 		}
 		return u;
 	}
 
+	public List<User> findUsersBySkill(String skill){
+		String sql = "select uid,openid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume,skill from users where skill like '%"
+				+ skill + "%'";
+		logger.info(sql);
+		return this.getJdbcTemplate().query(sql, new UserMapper(true));
+	}
 	private static final class UserMapper implements RowMapper<User> {
+		boolean isBase = true;//get base information
+		public UserMapper(boolean isBase){
+			this.isBase=isBase;
+		}
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			User u = new User();
 			u.setUid(rs.getLong("uid"));
@@ -84,6 +95,8 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 			u.setStatus(rs.getInt("status"));
 			u.setTitle(rs.getString("title"));
 			u.setProfile(rs.getString("profile"));
+			u.setSkill(rs.getString("skill"));
+			if(!isBase)
 			u.setResume(rs.getString("resume"));
 			return u;
 		}

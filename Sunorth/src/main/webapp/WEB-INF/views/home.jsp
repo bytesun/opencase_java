@@ -153,6 +153,19 @@
 			
 			<div  class="panel panel-default">
 			  <div class="panel-heading">
+			  	<spring:message code="home.event.title" text="The Latest Event"></spring:message>
+			  </div>
+			  <div class="panel-body">
+			  		<ol>
+					<c:forEach items="${activities}" var="activity">
+						<li>[<c:out value="${activity.astime}"/>]-<a href="<%=request.getContextPath()%>/activity/${activity.aid}/${lang}"><c:out value="${activity.subject}"></c:out></a></li>
+					</c:forEach>
+					</ol>
+			  </div>
+			</div>
+						
+			<div  class="panel panel-default">
+			  <div class="panel-heading">
 			  	<spring:message code="home.msg.latest" text="The Latest Status"></spring:message>
 			  </div>
 			  <div class="panel-body">
@@ -161,15 +174,7 @@
 			</div>
 			
 			
-			<div  class="panel panel-default">
-			  <div class="panel-heading">
-			  	<spring:message code="home.event.title" text="The Latest Event"></spring:message>
-			  </div>
-			  <div class="panel-body">
 
-
-			  </div>
-			</div>
 			<!--desc -->
 
 

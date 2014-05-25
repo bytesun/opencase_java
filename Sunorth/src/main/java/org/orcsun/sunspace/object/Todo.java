@@ -1,75 +1,91 @@
-/*    */ package org.orcsun.sunspace.object;
+package org.orcsun.sunspace.object;
 
 import java.util.Date;
 
-/*    */ 
-/*    */ public class Todo
-/*    */ {
-/* 16 */   private long tid = 0L; private Date ttime; private Date deadline;
-/* 17 */   private String todo = ""; private String note = "";
-/* 18 */   private short ttype = 0; private boolean isDone; private short priority = 0;
-/*    */   private User user;
-/*    */ 
-/*    */   public long getTid()
-/*    */   {
-/* 21 */     return this.tid;
-/*    */   }
-/*    */   public void setTid(long tid) {
-/* 24 */     this.tid = tid;
-/*    */   }
+public class Todo {
+	private long tid = 0L;
+	private Date ttime;
+	private Date deadline;
+	private String todo = "";
+	private String note = "";
+	private short ttype = 0;
+	private boolean isDone;
+	private short priority = 0;
+	private User user;
 
-/*    */   public String getTodo() {
-/* 40 */     return this.todo;
-/*    */   }
-/*    */   public void setTodo(String todo) {
-/* 43 */     this.todo = todo;
-/*    */   }
-/*    */   public String getNote() {
-/* 46 */     return this.note;
-/*    */   }
-/*    */   public void setNote(String note) {
-/* 49 */     this.note = note;
-/*    */   }
-/*    */   public short getTtype() {
-/* 52 */     return this.ttype;
-/*    */   }
-/*    */   public void setTtype(short ttype) {
-/* 55 */     this.ttype = ttype;
-/*    */   }
+	public long getTid() {
+		return this.tid;
+	}
 
-/*    */   public short getPriority() {
-/* 64 */     return this.priority;
-/*    */   }
-/*    */   public void setPriority(short priority) {
-/* 67 */     this.priority = priority;
-/*    */   }
-/*    */ 
+	public void setTid(long tid) {
+		this.tid = tid;
+	}
 
-/*    */   public User getUser() {
-/* 71 */     return this.user;
-/*    */   }
-public Date getTtime() {
-	return ttime;
+	public String getTodo() {
+		return this.todo;
+	}
+
+	public void setTodo(String todo) {
+		this.todo = todo;
+	}
+
+	public String getNote() {
+		return this.note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public short getTtype() {
+		return this.ttype;
+	}
+
+	public void setTtype(short ttype) {
+		this.ttype = ttype;
+	}
+
+	public short getPriority() {
+		return this.priority;
+	}
+
+	public void setPriority(short priority) {
+		this.priority = priority;
+	}
+
+	public User getUser() {
+		return this.user;
+	}
+
+	public Date getTtime() {
+		return ttime;
+	}
+
+	public void setTtime(Date ttime) {
+		this.ttime = ttime;
+	}
+
+	public Date getDeadline() {
+		return deadline;
+	}
+
+	public void setDeadline(Date deadline) {
+		this.deadline = deadline;
+	}
+
+	public boolean isDone() {
+		return isDone;
+	}
+
+	public void setDone(boolean isDone) {
+		this.isDone = isDone;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String toString() {
+		return this.todo;
+	}
 }
-public void setTtime(Date ttime) {
-	this.ttime = ttime;
-}
-public Date getDeadline() {
-	return deadline;
-}
-public void setDeadline(Date deadline) {
-	this.deadline = deadline;
-}
-public boolean isDone() {
-	return isDone;
-}
-public void setDone(boolean isDone) {
-	this.isDone = isDone;
-}
-/*    */   public void setUser(User user) {
-/* 74 */     this.user = user;
-/*    */   }
-/*    */   public String toString() {
-/* 77 */     return this.todo;
-/*    */   }
-/*    */ }

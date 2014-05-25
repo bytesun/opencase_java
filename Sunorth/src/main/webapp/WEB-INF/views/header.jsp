@@ -49,7 +49,7 @@
 			<div class="container">		
 		    <!-- Brand and toggle get grouped for better mobile display -->
 		    <div class="navbar-header">
-		      <a class="navbar-brand" href="<%=request.getContextPath()%>/"><b><spring:message code="header.sunspace" text="SunSpace" /></b></a>
+		      <a class="navbar-brand" href="<%=request.getContextPath()%>/"><img alt="" src="${pageContext.request.contextPath}/resources/img/sunorth.png" height="25" width="25"><b><spring:message code="header.sunspace" text="SunSpace" /></b></a>
 		    </div>
 		
 		    <!-- Collect the nav links, forms, and other content for toggling -->
@@ -98,9 +98,11 @@
 		    <c:if test="${user!=null}">
 			 <ul class="nav navbar-nav navbar-right">
 		        <li class="dropdown">
-		          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><c:out value="${user.name}"/> <b class="caret"></b></a>
+		        
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img alt="" src="${user.photo1}" height="25" width="25"> &nbsp;<c:out value="${user.name}"/> <b class="caret"></b></a>
 		          <ul class="dropdown-menu">
 		            <li>
+		            
 		            	<a href="<%=request.getContextPath()%>/user/admin">
 		            	<spring:message code="user.mypage" text="MyPage" />
 		            </li>
