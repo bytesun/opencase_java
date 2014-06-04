@@ -36,15 +36,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.orcsun.sunspace.SunConstants;
 import org.orcsun.sunspace.dao.impl.UserDaoImpl;
 import org.orcsun.sunspace.object.User;
+import org.orcsun.sunspace.utils.RestfulUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,97 +83,92 @@ public class GoogleAPI extends CommonAPI{
 	@Autowired 
 	UserDaoImpl userDao;
 
+	@RequestMapping(value="/login",method=RequestMethod.GET)
+	public String login(HttpServletRequest req,Model model){
+		String state = new BigInteger(130, new SecureRandom()).toString(32);
+		req.getSession().setAttribute("state", state);
+//		model.addAttribute("clientid", SunConstants.GOOGLE_API_CLIENT_ID);
+		return "redirect:https://accounts.google.com/o/oauth2/auth?scope=email%20profile&approval_prompt=auto&response_type=code&client_id="+
+		SunConstants.GOOGLE_API_CLIENT_ID+"&redirect_uri="+SunConstants.AUTH_REDIRECT_URL_GOOGLE+"&state="+state;
+	}
+	
 	/**
 	 * Upgrade given auth code to token, and store it in the session. POST body
 	 * of request should be the authorization code. Example URI:
 	 * /connect?state=...&gplus_id=...
 	 * @throws Exception 
 	 */
-		@RequestMapping(value="/storeToken",method=RequestMethod.POST)
-		protected @ResponseBody String validateToken(HttpServletRequest request,HttpServletRequest response,
+		@RequestMapping(value="/oauth2callback",method=RequestMethod.GET)
+		protected String validateToken(HttpServletRequest request,HttpServletRequest response,
 				Model model) throws Exception {
-			String returnpage = "-1";
-			// Only connect a user that is not already connected.
-			String tokenData = (String) request.getParameter("token");
-			logger.info("token:"+tokenData);
-			if(tokenData == null){
-				return returnpage;
-			}
+			String error = request.getParameter("error");
+			if(error !=null){//wrong 
+				logger.error(error);
+				model.addAttribute("msg", error);
+				return "redirect:/user/redirectLogin";
+			}else{
+				String code = request.getParameter("code");
+				logger.info("==========code"+code);
+				String original_state = (String)request.getSession().getAttribute("state");
+				String state = request.getParameter("state");
+				if(code != null && state.equals(original_state)){//request access token
 
-			if (!request.getParameter("state").equals(
-					request.getSession().getAttribute("state"))) {	
-				    return returnpage;
-			}
-
-			ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
-			getContent(request.getInputStream(), resultStream);
-			String code = new String(resultStream.toByteArray(), "UTF-8");
-			logger.info("code="+code);
-			try {
-				// Upgrade the authorization code into an access and refresh
-				// token.
-				GoogleTokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(
-						TRANSPORT, JSON_FACTORY, SunConstants.GOOGLE_API_CLIENT_ID, SunConstants.GOOGLE_API_CLIENT_SECRET,
-						code, "postmessage").execute();
-
-				GoogleIdToken idToken = tokenResponse.parseIdToken();
-				
-				String gplusId = idToken.getPayload().getSubject();
-				String email = idToken.getPayload().getEmail();
-
-				if(email == null)return returnpage;
-				else{
-					logger.info("gplusid:"+gplusId);
-					logger.info("email:"+email);
-					User user = userDao.findUserByEmail(email);
-					if(user == null){
-						user = new User();
-						user.setName("GoogleUser");
-						user.setOpenid(gplusId);
-						user.setEmail(email);
-						user.setPasswd(tokenData);
-						long uid = userDao.addUser(user);
-						user.setUid(uid);
-					}
-
-					// Store the token in the session for later use.
-					request.getSession().setAttribute("token",
-							tokenResponse.toString());
+					GoogleTokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(
+							TRANSPORT, JSON_FACTORY, SunConstants.GOOGLE_API_CLIENT_ID, SunConstants.GOOGLE_API_CLIENT_SECRET,
+							code, SunConstants.AUTH_REDIRECT_URL_GOOGLE).execute();
+	
+					GoogleIdToken idToken = tokenResponse.parseIdToken();
 					
-					//get user profile
-					GoogleCredential credential = new GoogleCredential.Builder()
-					.setJsonFactory(JSON_FACTORY)
-					.setTransport(TRANSPORT)
-					.setClientSecrets(SunConstants.GOOGLE_API_CLIENT_ID, SunConstants.GOOGLE_API_CLIENT_SECRET)
-					.build()
-					.setFromTokenResponse(
-							JSON_FACTORY.fromString(tokenResponse.toString(),
-									GoogleTokenResponse.class));
-					// Create a new authorized API client.
-					Plus service = new Plus.Builder(TRANSPORT, JSON_FACTORY,
-							credential).setApplicationName(APPLICATION_NAME)
-							.build();
-					// Get a list of people that this user has shared with this app.
-					Person person = service.people().get("me").execute();	
-					user.setPhoto1(person.getImage().getUrl());
-					user.setName(person.getDisplayName());
-					user.setPhoto2(person.getCover().getCoverPhoto().getUrl());
-					
-					
-					request.getSession().setAttribute("user", user);
+					String gplusId = idToken.getPayload().getSubject();
+					String email = idToken.getPayload().getEmail();
+	
+					if(email == null)return "redirect:/user/redirectLogin";
+					else{
+						logger.info("gplusid:"+gplusId);
+						logger.info("email:"+email);
+						User user = userDao.findUserByEmail(email);
+						if(user == null){
+							user = new User();
+							user.setName("GoogleUser");
+							user.setOpenid(gplusId);
+							user.setEmail(email);
+							user.setPasswd(tokenResponse.toString());
+							long uid = userDao.addUser(user);
+							user.setUid(uid);
+						}
+	
+						// Store the token in the session for later use.
+						request.getSession().setAttribute("token",
+								tokenResponse.toString());
+						
+						//get user profile
+						GoogleCredential credential = new GoogleCredential.Builder()
+						.setJsonFactory(JSON_FACTORY)
+						.setTransport(TRANSPORT)
+						.setClientSecrets(SunConstants.GOOGLE_API_CLIENT_ID, SunConstants.GOOGLE_API_CLIENT_SECRET)
+						.build()
+						.setFromTokenResponse(
+								JSON_FACTORY.fromString(tokenResponse.toString(),
+										GoogleTokenResponse.class));
+						// Create a new authorized API client.
+						Plus service = new Plus.Builder(TRANSPORT, JSON_FACTORY,
+								credential).setApplicationName(APPLICATION_NAME)
+								.build();
+						// Get a list of people that this user has shared with this app.
+						Person person = service.people().get("me").execute();	
+						user.setPhoto1(person.getImage().getUrl());
+						user.setName(person.getDisplayName());
+						user.setPhoto2(person.getCover().getCoverPhoto().getUrl());
+						
+						
+						request.getSession().setAttribute("user", user);
+					}					
 				}
-				
-				return gplusId;
-
-			} catch (TokenResponseException e) {
-//						return GSON.toJson("Failed to upgrade the authorization code.");
-						return returnpage;
-			} catch (IOException e) {
-				e.printStackTrace();
-				return returnpage;
+				return "redirect:/user/admin";
 			}
-
 		}
+		
+
 
 		/*
 		 * Read the content of an InputStream.

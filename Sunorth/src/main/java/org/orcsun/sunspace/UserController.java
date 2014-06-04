@@ -170,9 +170,9 @@ public class UserController  extends SunController{
 		req.getSession().setAttribute("state", state);
 		if(openVendor != null){
 			if(openVendor.equals(SunConstants.OPEN_VENDOR_GOOGLE)){
-				return "redirect:https://accounts.google.com/o/oauth2/auth?response_type=code&client_id="+SunConstants.GOOGLE_API_CLIENT_ID+"&redirect_uri="+SunConstants.AUTH_REDIRECT_URL_GOOGLE+"&state="+state;
+				
 			}else if(openVendor.equals(SunConstants.OPEN_VENDOR_QQ)){
-				return "redirect:https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id="+SunConstants.QQ_API_CLIENT_ID+"&redirect_uri="+SunConstants.AUTH_REDIRECT_URL_QQ+"&state="+state;
+				
 			}
 		}
 		return "login";

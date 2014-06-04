@@ -8,6 +8,7 @@ public class User {
 	private Date regtime;
 	private String name;
 	private String passwd;
+	private String refreshtoken;
 	private String email;
 	private int credit;
 	private int reputation;
@@ -50,6 +51,14 @@ public class User {
 
 	public void setPasswd(String passwd) {
 		this.passwd = passwd;
+	}
+
+	public String getRefreshtoken() {
+		return refreshtoken;
+	}
+
+	public void setRefreshtoken(String refreshtoken) {
+		this.refreshtoken = refreshtoken;
 	}
 
 	public String getEmail() {

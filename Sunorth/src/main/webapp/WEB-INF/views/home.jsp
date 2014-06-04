@@ -17,7 +17,7 @@
 	</div>
 	<ul class="nav nav-tabs">
 	  
-	  <li  class="active"><a href="#issues" data-toggle="tab">
+	  <li  class="active unsolved-title"><a href="#issues" data-toggle="tab">
 		<b><spring:message code="home.questionlist.ordertype.unsolved" text="Unsolved" /></b></a>
 	  </li>	
 	</ul>	
@@ -55,12 +55,83 @@
 	<div class="col-md-4">  <!-- right side panel -->
 		<!-- Login -->
 		<c:if test="${user==null}">
-		<div id="login" class="panel panel-default" align="center">
-			<div class="panel-body">
-			<span id="qqLoginBtn"></span>
-		
+			<form action="<%=request.getContextPath()%>/user/login" class="form-horizontal " method="post">
+			<input type="hidden" name="cid" value="${cid}">
+			<input type="hidden" name="qid" value="${qid}">				
+			<div class="form-group"> 
+				<div class="rows">
+					<div class="col-md-12">
+						<div class="col-lg-12">
+					
+							<input class="form-control input-lg" id="email" name=
+							"email" placeholder="<spring:message code="common.email" text="Email" />" type="email" required>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
+			<div class="form-group">
+				<div class="rows">
+					<div class="col-md-12">
+						<div class="col-lg-12">
+							<input class="form-control input-lg" id="passwd"
+							name="passwd" placeholder="<spring:message code="common.pwd" text="Password" />" type=
+							"password" required>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="rows">
+					<div class="col-md-12">
+						<div class="col-lg-12">
+							<button class="btn btn-lg btn-success btn-lg" type="submit"><spring:message code="common.login" text="Login" /></button>
+							<a href="<%=request.getContextPath()%>/user/register/new"><spring:message code="common.signup" text="SignUp" /></a>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="rows">
+					<div class="col-md-12">
+						<div class="col-lg-12">
+							<table>
+								<tr>
+									<td>
+										<!-- qq -->
+										<a id="qq_login_btn" href="<%=request.getContextPath()%>/qq/login">
+										<img alt="" src="${pageContext.request.contextPath}/resources/img/qq_logo.png"></a>									
+									</td>
+									
+									<td>
+									
+										<!-- google -->
+									  <div id="gSignInWrapper">
+									   &nbsp;&nbsp;&nbsp;
+									  <a href="<%=request.getContextPath()%>/google/login">
+									    <div id="googleBtn" class="customGPlusSignIn">
+									      <span class="icon"></span>
+									      <span class="buttonText">Google</span>
+									    </div>
+									    </a>
+									  </div>									
+									</td>
+								</tr>
+								
+							</table>
+							
+						
+						</div>
+
+					</div>
+				</div>
+			</div>			
+			</form>
+		
+		
+
 		</c:if>
 			 <!-- NEW ISSUE -->
 				<c:if test="${user!=null}">
@@ -69,8 +140,9 @@
 					<div class="modal fade newissue" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 					  <div class="modal-dialog modal-lg">
 					    <div class="modal-content">
-					    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/0/ask" method="POST">
-	
+					    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/ask" method="POST">
+							<input type="hidden" name="cid" value="0">
+							<input type="hidden" name="qid" value="0">
 							<div class="model-body">
 							
 								<input type="hidden" name="cid" value="${thecat.cid}">
@@ -152,7 +224,7 @@
 			</div>
 			
 			<div  class="panel panel-default">
-			  <div class="panel-heading">
+			  <div class="panel-heading side-title">
 			  	<spring:message code="home.event.title" text="The Latest Event"></spring:message>
 			  </div>
 			  <div class="panel-body">
@@ -165,7 +237,7 @@
 			</div>
 						
 			<div  class="panel panel-default">
-			  <div class="panel-heading">
+			  <div class="panel-heading side-title">
 			  	<spring:message code="home.msg.latest" text="The Latest Status"></spring:message>
 			  </div>
 			  <div class="panel-body">
@@ -189,15 +261,7 @@
    $(document).ready(function() {
 	   var qindex=${qindex+1};
        //top 20 categories 
-	   $.ajax( {
-           url:'<%=request.getContextPath()%>/cat/top50',
-           dataType: 'json',
-           success:function(data) {
-          	   $.each(data, function(index, category) {
-          		   $('#top50cat').append('<a class="btn btn-lg btn-default" role="button" href="<%=request.getContextPath()%>/question/searchtag?tag='+category.catname+'">'+category.catname+'</a>&nbsp;');
-                 });
-           }
-        });
+
         
 		$.ajax({
 			url:'<%=request.getContextPath()%>/user/latest',
@@ -241,23 +305,8 @@
 	             }
 	          });
 	      });        
-
    });
 
- 
-   QC.Login({
-      btnId:"qqLoginBtn",
-      size:"A_XL"
-	});
-   
-    (function () {
-      var po = document.createElement('script');
-      po.type = 'text/javascript';
-      po.async = true;
-      po.src = 'https://plus.google.com/js/client:plusone.js';
-      var s = document.getElementsByTagName('script')[0];
-      s.parentNode.insertBefore(po, s);
-    })();
-  </script>
+ 	</script>
 
 <%@include file="footer.jsp" %>

@@ -78,6 +78,7 @@
 				<c:otherwise>
 					<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/ask" method="POST">
 						<input type="hidden" name="cid" value="${thecat.cid}">
+						<input type="hidden" name="qid" value="0">
 						
 				  	 	<div class="form-group"> 
 				  	 		<div class="rows">

@@ -11,6 +11,7 @@ import org.orcsun.sunspace.dao.impl.QuestionDaoImpl;
 import org.orcsun.sunspace.dao.impl.TodoDaoImpl;
 import org.orcsun.sunspace.dao.impl.UserDaoImpl;
 import org.orcsun.sunspace.object.User;
+import org.orcsun.sunspace.utils.RestfulUtils;
 import org.orcsun.sunspace.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.apache.log4j.Logger;
 
 @Controller
-public class HomeController {
+public class HomeController extends SunController {
 
 	
 	@Autowired
@@ -43,16 +44,8 @@ public class HomeController {
 	@RequestMapping(value = { "/" }, method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public String home(Locale locale, HttpServletRequest req, Model model) {
 		logger.info("The locale is " + locale);
-		String lang = "en";
-		Object olang = req.getSession().getAttribute("lang");
-		if (olang != null) {
-			lang = (String) olang;
-		} else if (locale.getLanguage().equalsIgnoreCase("zh")) {
-			lang = "zh";
-		}
-		req.getSession().setAttribute("lang", lang);
-
-		model.addAttribute("topcats", this.catDao.findSubCategory(0L, lang));
+		String lang = this.getLanguage(locale, req);
+//		model.addAttribute("topcats", this.catDao.findSubCategory(0L, lang));
 
 		model.addAttribute("newquestions",
 				this.quesDao.findLatestQuestions(0,20, lang));

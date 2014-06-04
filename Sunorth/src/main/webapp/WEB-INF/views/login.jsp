@@ -17,7 +17,7 @@
 
     <!-- Bootstrap -->
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-
+	<link href="${pageContext.request.contextPath}/resources/css/sunorth.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -100,7 +100,7 @@
 															<button class="btn btn-lg btn-success btn-lg" type="submit"><spring:message code="common.login" text="Login" /></button>
 															<br>
 													        <spring:message code="reg.askNoAccount" text="No Account?" /> 
-													        <a id="linkSignup" href="#">
+													        <a id="linkSignup" href="<%=request.getContextPath()%>/user/register/new">
 													        <spring:message code="common.signup" text="SignUp" /></a>
 														</div>
 
@@ -109,102 +109,48 @@
 											</div>
 											</form>
 										</div>
-										
-										
-										<!-- register panel -->									
-										<div id="registerPanel" class="col-xs-6">
-											<form action="<%=request.getContextPath()%>/user/register" class="form-horizontal well" method="post">
-												<input type="hidden" name="cid" value="${cid}">
-												<input type="hidden" name="qid" value="${qid}">										
-											<div class="form-group"> 
-												<div class="rows">
-													<div class="col-md-12">
-														<div class="col-lg-12">
-															<input class="form-control input-lg" id="p1" name=
-															"name" placeholder="<spring:message code="common.user" text="UserName" />" type="text" required>										
-					
-														</div>
-													</div>
-												</div>
-											</div>
-				
-											<div class="form-group"> 
-												<div class="rows">
-													<div class="col-md-12">
-														<div class="col-lg-12">
-													
-															<input class="form-control input-lg" id="email" name=
-															"email" placeholder="<spring:message code="common.email" text="Email" />" type="email" required>
-														</div>
-													</div>
-												</div>
-											</div>
-				 
-				 
-											<div class="form-group">
-												<div class="rows">
-													<div class="col-md-12">
-														<div class="col-lg-12">
-															<input class="form-control input-lg" id="passwd"
-															name="passwd" placeholder="<spring:message code="common.pwd" text="Password" />" type=
-															"password" required>
-														</div>
-													</div>
-												</div>
-											</div>
-				 
-					
-				 
-				 
-											<div class="form-group">
-												<div class="rows">
-													<div class="col-md-12">
-														<div class="col-lg-12">
-															<button class="btn btn-success btn-lg" type=
-															"submit"><spring:message code="common.signup" text="SignUp" /></button>
-															<br> <spring:message code="reg.askHaveAccount" text="Do you have account" />
-															 <a id="linkSignin" href="#">
-															<spring:message code="common.login" text="Login" /></a>
-														</div>
-																				
-													</div>
-												</div>
-											</div>
+			 
+
 											
-										</form>
-										</div>			<!-- end of register panel -->	
+									
+									
 										
 										<!-- login with 3rd party account -->						
-										<div class="col-xs-6">
-											<div class="form-group">
+										<div id="3rdLogin" class="col-xs-6">
 												<div class="rows">
-													<div class="col-md-12">
-														<!-- google account -->
-														<div class="col-lg-12">
-														<div id="signinButton">
-														  <span class="g-signin"
-														    data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read"
-														    data-clientid="902137185992-74tltkpbsqjose7e98o6mqjvuhb1beq6.apps.googleusercontent.com"
-														    data-redirecturi="postmessage"
-														    data-accesstype="offline"
-														    data-cookiepolicy="single_host_origin"
-														    data-width="wide"
-														    data-callback="signInCallback">
-														  </span>
-														</div>
-														<div id="loginresult"></div>
-														</div>
-														<!-- qq -->
-														<span id="qqLoginBtn"></span>
-														<script type="text/javascript">
-														    QC.Login({
-														       btnId:"qqLoginBtn"    //插入按钮的节点id
-														});
-														</script>
+																<table width="100%" height="100%">
+																	<tr>
+																		<td> &nbsp;&nbsp;&nbsp;</td>
+																	</tr>
+																
+																	<tr>
+																	<td align="center"><!-- qq -->
+																		<a id="qq_login_btn" href="<%=request.getContextPath()%>/qq/login">
+																		<img alt="" src="${pageContext.request.contextPath}/resources/img/qq_logo.png"></a>
+																	</td>
+																	</tr>
+																	<tr>
+																		<td> &nbsp;&nbsp;&nbsp;</td>
+																	</tr>																	
+																	<tr>
+																		<td align="center">
+																		  <div id="gSignInWrapper">
+																		  <a href="<%=request.getContextPath()%>/google/login">
+																		    <div id="googleBtn" class="customGPlusSignIn">
+																		      <span class="icon"></span>
+																		      <span class="buttonText">Google</span>
+																		    </div>
+																		    </a>
+																		  </div>
+																		
+																		</td>
+																	</tr>
+																</table>
+																																														
 
-													</div>
 												</div>
-											</div>	
+											</div> <!-- end of right panel -->	
+
 										</div>
 									</div>
 								</fieldset>
@@ -221,51 +167,7 @@
 		</div><!-- end of right column -->
 	</div><!-- /container -->
 
-  	<!-- Last part of BODY element in file index.html -->
-		<script type="text/javascript">
-		function signInCallback(authResult) {
-		  if (authResult['code']) {
-		
-		    // Hide the sign-in button now that the user is authorized, for example:
-		    $('#signinButton').attr('style', 'display: none');
-		
-		    // Send the code to the server
-		    $.ajax({
-		      type: 'POST',
-		      url: '<%=request.getContextPath()%>/google/storeToken?state=${state}&token='+authResult['access_token'],
-		      contentType: 'application/octet-stream; charset=utf-8',
-		      success: function(result) {
-		    	  console.log('userid is :'+result);
-		    	  window.location.href = '<%=request.getContextPath()%>/user/admin';
-		      },
-		      error: function(){
-		    	  $('#loginresult').html('Failed to login with your google account!');
-		      },
-		      processData: false,
-		      data: authResult['code']
-		    });
-		  } else if (authResult['error']) {
-			 
-		  }
-		}
-		$(document).ready(function(){
-			$("#registerPanel").hide();
-			$("#loginPanel").show();
-			
-			$( "#linkSignin" ).click(function() {
-			  $("#loginPanel").show();
-			  $("#registerPanel").hide();
-			});
-			
-			$("#linkSignup").click(function() {
-				  $("#registerPanel").show(); 	
-				  $("#loginPanel").hide();
-				});
-		});
-		</script> 
 
-		<script type="text/javascript"
-		src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8" data-callback="true"></script>
 
 	</body>
 	</html>

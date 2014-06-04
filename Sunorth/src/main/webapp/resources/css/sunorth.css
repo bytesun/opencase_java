@@ -1,6 +1,19 @@
 .home-notice {
 	color: #27AF56;
 }
+
+.side-title{
+	color: #27AF56;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.unsolved-title{
+	color: #CC6600;
+	font-size: 24px;
+	font-weight: bold;
+}
+
 .todo-markeddone{
 	text-decoration: line-through;
 }
@@ -201,3 +214,34 @@
     text-transform: uppercase;
     white-space: normal;
 }
+    .customGPlusSignIn {
+      display: inline-block;
+      background: #dd4b39;
+      color: white;
+      width: 120px;
+      border-radius: 5px;
+      white-space: nowrap;
+      cursor: hand;
+    }
+    .customGPlusSignIn:hover {
+      background: #e74b37;
+      cursor: hand;
+    }
+
+    span.icon {
+      background: url('/+/images/branding/btn_red_32.png') transparent 5px 50% no-repeat;
+      display: inline-block;
+      vertical-align: middle;
+      width: 35px;
+      height: 24px;
+      border-right: #bb3f30 1px solid;
+    }
+    span.buttonText {
+      display: inline-block;
+      vertical-align: middle;
+
+      font-size: 14px;
+      font-weight: bold;
+      /* Use the Roboto font that is loaded in the <head> */
+      font-family: 'Roboto',arial,sans-serif;
+    }

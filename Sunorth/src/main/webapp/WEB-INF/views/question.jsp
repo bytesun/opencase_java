@@ -274,8 +274,10 @@
 			<div class="modal fade newissue" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 					  <div class="modal-dialog modal-lg">
 					    <div class="modal-content">
-					    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/${question.qid}/ask" method="POST">
-
+					    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/ask" method="POST">
+							<input type="hidden" name="cid" value="0">
+							<input type="hidden" name="qid" value="${question.qid}">
+							
 							<div class="model-body">
 						  	 	<div class="form-group"> 
 						  	 		<div class="rows">

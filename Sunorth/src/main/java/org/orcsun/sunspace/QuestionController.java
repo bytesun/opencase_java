@@ -95,22 +95,20 @@ public class QuestionController extends SunController{
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = { "/{qid}/ask" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
-	public String askQuestion(Locale locale, @PathVariable long qid,HttpServletRequest req, Model model) {
+	@RequestMapping(value = { "/ask" }, method = { org.springframework.web.bind.annotation.RequestMethod.POST })
+	public String askQuestion(Locale locale, HttpServletRequest req, Model model) {
 		Object u = req.getSession().getAttribute("user");
 		String lang = getLanguage(locale,req);
 		if (u != null) {
+			long cid = Long.parseLong(req.getParameter("cid"));
+			long qid = Long.parseLong(req.getParameter("qid"));
 			try {
-	
+				
 				Question q = new Question();
 				String qtitle = req.getParameter("questitle");
 				q.setQuestion(StringUtil.iso2utf8(qtitle));
-
-				if (qid != 0){
-					q.setPid(qid);
-				}else{
-					q.setCid(0);
-				}
+				q.setPid(qid);
+				q.setCid(cid);
 				String question = req.getParameter("question");
 				if (question != null)
 					q.setDescription(StringUtil.iso2utf8(question));
@@ -120,14 +118,19 @@ public class QuestionController extends SunController{
 					q.setTag(StringUtil.iso2utf8(tag));
 				q.setUser((User) u);
 				this.quesDao.addQuestion(q, lang);
+				
 			} catch (Exception e) {
 				logger.error(e.getMessage());
-				model.addAttribute("errormsg", e.getMessage());
+				model.addAttribute("msg", e.getMessage());
 			}
+			if(qid>0){
+				return "redirect:/question/"+lang+"/"+qid;
+			}else
+				return "redirect:/cat/"+lang+"/"+cid;
+		}else{
+			return "redirect:/user/loginRedirect";
 		}
-		if(qid==0)return "redirect:/";
-		else
-		return "redirect:/question/"+lang+"/"+qid;
+
 	}
 
 	@RequestMapping(value="/{qid}/edit",method=RequestMethod.POST)

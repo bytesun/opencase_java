@@ -10,7 +10,9 @@ public class SunConstants
 	public static final String QQ_API_CLIENT_SECRET="71586aef4c811bcbc0b282837af4a159";
 	 
 	public static final String AUTH_REDIRECT_URL_QQ="http://www.sunorth.org/qq/oauth2";
-	public static final String AUTH_REDIRECT_URL_GOOGLE="http://www.sunorth.org/google/storeToken";
+//	public static final String AUTH_REDIRECT_URL_GOOGLE="http://www.sunorth.org/google/oauth2callback";
+	public static final String AUTH_REDIRECT_URL_GOOGLE="http://localhost:8080/sunspace/google/oauth2callback";
+	
 	  
   public static final String GOOGLE_API_CLIENT_ID="902137185992-74tltkpbsqjose7e98o6mqjvuhb1beq6.apps.googleusercontent.com";
   public static final String GOOGLE_API_CLIENT_SECRET="eokan1I0JGKcR9AzE9hG4HGL";

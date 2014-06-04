@@ -18,20 +18,19 @@ public class SunController {
 	 * @return
 	 */
 	String getLanguage(Locale locale,HttpServletRequest req){
-		String lang = "en";
-		if(req == null)return lang;
-		Object olang = req.getSession().getAttribute("lang");
-		Object plang = req.getParameter("lang");
-		if (olang != null) {
-			lang = (String) olang;
-		} else if ((plang != null) && (!plang.equals(""))) {
-			if (((String) plang).equals("zh"))
-				lang = "zh";
-			req.getSession().setAttribute("lang", lang);
-		} else if (locale.getLanguage().equalsIgnoreCase("zh")) {
-			lang = "zh";
-		}	
-		return lang;
+		Object lang = req.getParameter("lang");
+		if(lang == null){
+			lang = req.getSession().getAttribute("lang");
+			if(lang == null){
+				if (locale.getLanguage().equalsIgnoreCase("zh")){
+					lang = "zh";
+				}else{
+					lang = "en";
+				}
+				req.getSession().setAttribute("lang", lang);
+			}
+		}
+		return (String)lang;
 	}
 		
 }

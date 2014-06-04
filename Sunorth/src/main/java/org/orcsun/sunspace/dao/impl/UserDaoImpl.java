@@ -16,7 +16,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 	private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
-
+	
+	@Override
 	public long addUser(User u) {
 		SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(getJdbcTemplate());
 		jdbcInsert.withTableName("users").usingGeneratedKeyColumns(
@@ -36,15 +37,27 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 				parameters));
 		return key.intValue();
 	}
-
+	
+	@Override
 	public int updateUser(User u) {
-		String sql = "update users set name=?,title=?,profile=?,resume=?, skill=? where uid=?";
+		String sql = "update users set name=?,email=?,title=?,profile=?,resume=?,skill=? where uid=?";
 		logger.debug(sql);
-		Object[] args = new Object[] { u.getName(), u.getTitle(),
+		Object[] args = new Object[] { u.getName(),u.getEmail(),u.getTitle(),
 				u.getProfile(), u.getResume(),u.getSkill(), u.getUid() };
 		return this.getJdbcTemplate().update(sql, args);
 	}
 
+	@Override
+	public int updatePasswd(long uid, String pwd) {
+		String sql = "update users set passwd='"+pwd+"' where uid="+uid;
+		return this.getJdbcTemplate().update(sql);
+	}
+
+	@Override
+	public int updateRefreshToken(long uid, String token) {
+		String sql = "update users set refreshtoken='"+token+"' where uid="+uid;
+		return this.getJdbcTemplate().update(sql);
+	}
 	public User findUserByID(long uid) {
 		String sql = "select uid,openid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume,skill from users where uid='"
 				+ uid + "'";
@@ -70,13 +83,32 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 		}
 		return u;
 	}
-
+	@Override
+	public User findUserByOpenid(String openid) {
+		String sql = "select uid,openid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume,skill from users where openid='"
+				+ openid + "'";
+		logger.info(sql);
+		User u = null;
+		try {
+			u = (User) getJdbcTemplate().queryForObject(sql, new UserMapper(false));
+		} catch (Exception e) {
+			logger.warn("No user found :" + openid + ":" + e.getMessage());
+		}
+		return u;
+	}
 	public List<User> findUsersBySkill(String skill){
 		String sql = "select uid,openid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume,skill from users where skill like '%"
 				+ skill + "%'";
 		logger.info(sql);
 		return this.getJdbcTemplate().query(sql, new UserMapper(true));
 	}
+	
+	@Override
+	public String getRefreshToken(long uid) {
+		String sql = "select refreshtoken from users where uid="+uid;
+		return this.getJdbcTemplate().queryForObject(sql, String.class);
+	}
+
 	private static final class UserMapper implements RowMapper<User> {
 		boolean isBase = true;//get base information
 		public UserMapper(boolean isBase){
@@ -101,4 +133,6 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 			return u;
 		}
 	}
+
+	
 }

@@ -22,7 +22,7 @@
     <!-- Bootstrap -->
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 	<link href="${pageContext.request.contextPath}/resources/css/sunorth.css" rel="stylesheet">
-	<link href="${pageContext.request.contextPath}/resources/css/dw.css" rel="stylesheet">
+	
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -75,25 +75,6 @@
 		          </ul>		          
 		        </li>
 			</ul>			
-		            
-		      <c:if test="${user == null}">
-		      <ul class="nav navbar-nav navbar-right ">
-		      	<li><a  href="<%=request.getContextPath()%>/user/redirectLogin"><spring:message code="common.signup" text="SignUp" /></a></li>
-		      </ul>		      
-		      
-		      
-		      <form class="navbar-form navbar-right" role="signin" action="<%=request.getContextPath()%>/user/login" method="post">
-		      	<input type="hidden" name="cid" value="${thecat.cid}">
-		      	<input type="hidden" name="qid" value="${question.qid}">
-		        <div class="form-group">
-		          <input type="email" class="form-control" placeholder="<spring:message code="common.email" text="Email" />" name="email" required>
-		          <input type="password" class="form-control" placeholder="<spring:message code="common.pwd" text="Password" />" name="passwd" required>
-		        </div>
-		        <button class="btn btn-success" type="submit">
-		        <spring:message code="common.login" text="Login" /></button>
-		      </form>
-
-    	    </c:if>
     	    
 		    <c:if test="${user!=null}">
 			 <ul class="nav navbar-nav navbar-right">
