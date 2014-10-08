@@ -64,7 +64,7 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 		logger.info(sql);
 		User u = null;
 		try {
-			u = (User) getJdbcTemplate().queryForObject(sql, new UserMapper(false));
+			u = (User) getJdbcTemplate().queryForObject(sql, new UserMapper());
 		} catch (Exception e) {
 			logger.warn("No user found :" + uid + ":" + e.getMessage());
 		}
@@ -77,7 +77,7 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 		logger.info(sql);
 		User u = null;
 		try {
-			u = (User) getJdbcTemplate().queryForObject(sql, new UserMapper(false));
+			u = (User) getJdbcTemplate().queryForObject(sql, new UserMapper());
 		} catch (Exception e) {
 			logger.warn("No user found :" + email + ":" + e.getMessage());
 		}
@@ -90,7 +90,7 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 		logger.info(sql);
 		User u = null;
 		try {
-			u = (User) getJdbcTemplate().queryForObject(sql, new UserMapper(false));
+			u = (User) getJdbcTemplate().queryForObject(sql, new UserMapper());
 		} catch (Exception e) {
 			logger.warn("No user found :" + openid + ":" + e.getMessage());
 		}
@@ -100,7 +100,7 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 		String sql = "select uid,openid,name,passwd,email,credit,reputation,regtime,status,title,profile,resume,skill from users where skill like '%"
 				+ skill + "%'";
 		logger.info(sql);
-		return this.getJdbcTemplate().query(sql, new UserMapper(true));
+		return this.getJdbcTemplate().query(sql, new UserMapper());
 	}
 	
 	@Override
@@ -110,10 +110,7 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 	}
 
 	private static final class UserMapper implements RowMapper<User> {
-		boolean isBase = true;//get base information
-		public UserMapper(boolean isBase){
-			this.isBase=isBase;
-		}
+
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			User u = new User();
 			u.setUid(rs.getLong("uid"));
@@ -128,10 +125,34 @@ public class UserDaoImpl extends SunJdbcDaoSupport implements UserDAO {
 			u.setTitle(rs.getString("title"));
 			u.setProfile(rs.getString("profile"));
 			u.setSkill(rs.getString("skill"));
-			if(!isBase)
+
 			u.setResume(rs.getString("resume"));
 			return u;
 		}
+	}
+
+	/**
+	
+	 * UID BIGINT NOT NULL,
+	FID BIGINT NOT NULL,
+	LANG VARCHAR(6),
+	FTYPE INT, -- 1 USER,2 CAT,3 TAG,4 ISSUE
+	ALIAS VARCHAR(50)	
+	 */
+	@Override
+	public int follow(long uid, long fid, int ftype, String lang, String alias) {
+		String sql = "insert into follow(uid,fid,ftype,lang,alias) values(?,?,?,?,?) ";
+		logger.debug(sql);
+		Object[] args = new Object[]{uid,fid,ftype,lang,alias};
+		return this.getJdbcTemplate().update(sql, args);
+	}
+
+	@Override
+	public int unfollow(long uid, long fid, int ftype, String lang) {
+		String sql = "delete follow where uid=?,fid=?,ftype=?,alias=?";
+		logger.debug(sql);
+		Object[] args = new Object[]{uid,fid,ftype,lang};
+		return this.getJdbcTemplate().update(sql, args);
 	}
 
 	

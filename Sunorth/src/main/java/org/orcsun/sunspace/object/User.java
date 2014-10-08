@@ -20,6 +20,11 @@ public class User {
 	
 	private String photo1;
 	private String photo2;
+	
+	private long[] followUsers;
+	private long[] followIssues;
+	private long[] followCats;
+	private long[] followTags;
 
 	public long getUid() {
 		return this.uid;
@@ -147,6 +152,38 @@ public class User {
 
 	public void setPhoto2(String photo2) {
 		this.photo2 = photo2;
+	}
+
+	public long[] getFollowUsers() {
+		return followUsers;
+	}
+
+	public void setFollowUsers(long[] followUsers) {
+		this.followUsers = followUsers;
+	}
+
+	public long[] getFollowIssues() {
+		return followIssues;
+	}
+
+	public void setFollowIssues(long[] followIssues) {
+		this.followIssues = followIssues;
+	}
+
+	public long[] getFollowCats() {
+		return followCats;
+	}
+
+	public void setFollowCats(long[] followCats) {
+		this.followCats = followCats;
+	}
+
+	public long[] getFollowTags() {
+		return followTags;
+	}
+
+	public void setFollowTags(long[] followTags) {
+		this.followTags = followTags;
 	}
 
 	public String toString() {

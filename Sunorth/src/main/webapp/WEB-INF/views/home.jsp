@@ -4,15 +4,7 @@
 	<div class="col-md-8"> <!-- main right panel for question list -->
 	
 	<div class="jumbotron home-notice">
-	  <h1><spring:message code="home.welcome.ask" text="Find your solution." /></h1>
-
-	 <ul>
-  		<li><h4><spring:message code="home.welcome.notice1" text="Find your solution." /></h4></li>
-  		<li><h4><spring:message code="home.welcome.notice2" text="Give others proposals.." /></h4></li>
-  		<li><h4><spring:message code="home.welcome.notice3" text="Build your knowledge and skills." /></h4></li>
-  		<li><h4><spring:message code="home.welcome.notice4" text="Build a project with other people. " /></h4></li>
-  		<li><h4><spring:message code="home.welcome.notice5" text="To be an independent consultant." /></h4></li>
-  	</ul>
+	  <h1><spring:message code="home.welcome.ask" text="VS" /></h1>
 	  
 	</div>
 	<ul class="nav nav-tabs">
@@ -223,37 +215,8 @@
 				</script>
 			</div>
 			
-			<div  class="panel panel-default">
-			  <div class="panel-heading side-title">
-			  	<spring:message code="home.event.title" text="The Latest Event"></spring:message>
-			  </div>
-			  <div class="panel-body">
-			  		<ol>
-					<c:forEach items="${activities}" var="activity">
-						<li>[<c:out value="${activity.astime}"/>]-<a href="<%=request.getContextPath()%>/activity/${activity.aid}/${lang}"><c:out value="${activity.subject}"></c:out></a></li>
-					</c:forEach>
-					</ol>
-			  </div>
-			</div>
-						
-			<div  class="panel panel-default">
-			  <div class="panel-heading side-title">
-			  	<spring:message code="home.msg.latest" text="The Latest Status"></spring:message>
-			  </div>
-			  <div class="panel-body">
-			    <table id="latestMsg" class="table" style="table-layout: fixed; width: 100%"></table>
-			  </div>
-			</div>
-			
-			
-
-			<!--desc -->
-
-
-
-		
+	
 	</div><!-- end of left side -->
-
 	
 	</div><!-- end of the whole row -->
 

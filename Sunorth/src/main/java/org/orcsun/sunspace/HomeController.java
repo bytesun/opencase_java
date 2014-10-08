@@ -48,9 +48,9 @@ public class HomeController extends SunController {
 //		model.addAttribute("topcats", this.catDao.findSubCategory(0L, lang));
 
 		model.addAttribute("newquestions",
-				this.quesDao.findLatestQuestions(0,20, lang));
+				this.quesDao.findLatestQuestions(0,5, lang));
 		
-		model.addAttribute("activities", this.actDao.getLatestActivities(10,lang));
+		//model.addAttribute("activities", this.actDao.getLatestActivities(10,lang));
 
 		return "home";
 	}

@@ -10,6 +10,11 @@
 			  <p>
 			  	<c:out value="${userinfo.profile}"/>
 			  </p>
+			  <c:if test="${user!=null && user.uid!=userinfo.uid}">
+				<div id="follow_user_div"><button id="follow_user" class="btn btn-success">
+					<spring:message code="global.action.follow" text="Follow" />
+				</button></div>
+			  </c:if>
 			  
 		</div>		
 
@@ -122,7 +127,28 @@
 	            	   lindex = lindex+count+1;
 	             }
 	          });
-	      });        
+	      }); 
+	      //follow user
+	      $("#follow_user").click(function(event){
+	    	  console.log('following a user');
+	    	  var uid=${userinfo.uid};
+	    	  var request = $.ajax({
+	    		  type:"POST",
+	    		  url:'<%=request.getContextPath()%>/user/follow',
+	    		  dataType:"json",
+	    		  //contentType :"application/json; charset=utf-8",
+	    		  data:{"fid":uid,"ftype":1,"followOp":1}
+	
+	    	  });
+	    	  request.done(function( msg ) {
+	    			  $("#follow_user_div").html('');
+	    		});
+	    		 
+	    	  request.fail(function( jqXHR, textStatus ) {
+	    			console.log("Request failed: " + textStatus +jqXHR);
+	    		});
+	    	  
+	      });
 
    });
    </script>

@@ -10,6 +10,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.orcsun.sunspace.dao.impl.ActivityDaoImpl;
 import org.orcsun.sunspace.dao.impl.QuestionDaoImpl;
 import org.orcsun.sunspace.dao.impl.TodoDaoImpl;
@@ -23,8 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -165,16 +168,7 @@ public class UserController  extends SunController{
 	public String redirectLogin(HttpServletRequest req, Model model) {
 		model.addAttribute("cid", req.getParameter("cid"));
 		model.addAttribute("qid", req.getParameter("qid"));
-		String openVendor=req.getParameter("openVendor");
-		String state = new BigInteger(130, new SecureRandom()).toString(32);
-		req.getSession().setAttribute("state", state);
-		if(openVendor != null){
-			if(openVendor.equals(SunConstants.OPEN_VENDOR_GOOGLE)){
-				
-			}else if(openVendor.equals(SunConstants.OPEN_VENDOR_QQ)){
-				
-			}
-		}
+
 		return "login";
 	}
 
@@ -299,5 +293,29 @@ public class UserController  extends SunController{
 			return -1;
 		}
 		
+	}
+	
+	
+	@RequestMapping(value="/follow",method=RequestMethod.POST)
+	public @ResponseBody int follow(Locale locale, HttpServletRequest req,
+			@RequestParam int followOp,
+			@RequestParam long fid,
+			@RequestParam int ftype){
+		Object u = req.getSession().getAttribute("user");
+		if(u == null){
+			return SunConstants.RESPONSE_CODE_NOLOGIN;
+		}else{
+			
+			User user = (User)u;
+//			int followOp = json.getInt("followOp");
+			
+			if(followOp == 1){
+				return userDao.follow(user.getUid(),fid, ftype, this.getLanguage(locale, req)
+						, "");				
+			}else if(followOp==-1){
+				return userDao.unfollow(user.getUid(), fid, ftype, this.getLanguage(locale, req));
+			}
+		}
+		return SunConstants.RESPONSE_CODE_NOTHING;
 	}
 }

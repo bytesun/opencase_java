@@ -18,4 +18,8 @@ public abstract interface UserDAO
   public abstract int updatePasswd(long uid,String pwd);
   
   public abstract int updateRefreshToken(long uid,String token);
+  
+  public abstract int follow(long uid,long fid,int ftype,String lang,String alias);
+  public abstract int unfollow(long uid,long fid,int ftype,String lang);
+
 }

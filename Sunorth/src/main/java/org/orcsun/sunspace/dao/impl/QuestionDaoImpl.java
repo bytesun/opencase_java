@@ -33,22 +33,23 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 				Long.valueOf(q.getUser().getUid()), q.getDescription() };
 		logger.info("Add a new question :" + sql);
 		int retn= getJdbcTemplate().update(sql, args);
+		
 		String[] tags = q.getTag().split(" ");
 		if(tags!=null && tags.length>0){
-			int iupdate = this.addTags(tags, lang);
+			int iupdate = this.addTags(tags, lang,false);
 			logger.debug("insert/update "+iupdate+" tags");
 		}
 		return retn;
 	}
 
-	private int addTags(String[] tags,String lang){
+	private int addTags(String[] tags,String lang,boolean isUpdated){
 		String[] sqls=new String[tags.length];
 		for(int i=0;i<tags.length;i++){
 			String tag = tags[i];
 			int cnt = this.getJdbcTemplate().queryForInt("select count(*) from tag_"+lang+" where name='"+tag+"'");
 			if(cnt == 0){
 				sqls[i] = "insert into tag_"+lang+ "(name,cnt_use) values('"+tag+"',1)";
-			}else{
+			}else if(!isUpdated){
 				sqls[i]="update tag_"+lang+" set cnt_use=(cnt_use+1) where name='"+tag+"'";
 			}
 			
@@ -69,7 +70,7 @@ public class QuestionDaoImpl extends SunJdbcDaoSupport implements QuestionDAO {
 				Long.valueOf(q.getQid()) };
 		String[] tags = q.getTag().split(" ");
 		if(tags!=null && tags.length>0){
-			int iupdate = this.addTags(tags, lang);
+			int iupdate = this.addTags(tags, lang,true);
 			logger.debug("insert/update "+iupdate+" tags");
 		}
 		logger.info("Update node :" + sql);
