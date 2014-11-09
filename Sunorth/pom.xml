@@ -6,15 +6,58 @@
 	<artifactId>Sunorth</artifactId>
 	<name>Sunorth</name>
 	<packaging>war</packaging>
-	<version>1.1.10</version>
+	<version>1.1.10.19</version>
 	<properties>
 		<java-version>1.6</java-version>
 		<org.springframework-version>3.1.1.RELEASE</org.springframework-version>
-		<org.aspectj-version>1.6.10</org.aspectj-version>
+		<org.aspectj-version>1.6.10.1</org.aspectj-version>
 		<commons.dbcp-version>1.2.2</commons.dbcp-version>
-
+		<google.apis.client-version>1.17.0-rc</google.apis.client-version>
+		<google-api-services-plus-version>v1-rev122-1.17.0-rc</google-api-services-plus-version>
+		<jackson-version>1.9.12</jackson-version>	
+		<javamail-version>1.4</javamail-version>
+		<JSON-version>20140107</JSON-version>
 	</properties>
+	
 	<dependencies>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>${javamail-version}</version>
+		</dependency>
+		            
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>${google.apis.client-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client-jackson</artifactId>
+			<version>${google.apis.client-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client-gson</artifactId>
+			<version>${google.apis.client-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-plus</artifactId>
+			<version>${google-api-services-plus-version}</version>
+		</dependency>
+        <!-- JSON -->
+        <dependency>
+		    <groupId>org.codehaus.jackson</groupId>
+		    <artifactId>jackson-mapper-asl</artifactId>
+		    <version>${jackson-version}</version>
+		</dependency>    
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>${JSON-version}</version>
+		</dependency>
+        		                    
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -51,13 +94,7 @@
 			<version>5.1.29</version>
 		</dependency>            
 	            
-		<!-- AspectJ -->
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>${org.aspectj-version}</version>
-		</dependency>	
-		
+
 		<!-- Logging -->
 		<dependency>
 			<groupId>log4j</groupId>
@@ -110,6 +147,7 @@
 			<version>1.2</version>
 		</dependency>
 	
+		
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>

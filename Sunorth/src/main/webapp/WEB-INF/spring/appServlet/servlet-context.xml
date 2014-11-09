@@ -74,8 +74,21 @@
 	
 	<beans:bean id="activityDao" class="org.orcsun.sunspace.dao.impl.ActivityDaoImpl">
 	    <beans:property name="dataSource" ref="dataSource"/>
+	</beans:bean>
+	
+	<beans:bean id="caseDao" class="org.orcsun.sunspace.dao.impl.CaseDaoImpl">
+	    <beans:property name="dataSource" ref="dataSource"/>
 	</beans:bean>	
-
+	<beans:bean id="phaseDao" class="org.orcsun.sunspace.dao.impl.PhaseDaoImpl">
+	    <beans:property name="dataSource" ref="dataSource"/>
+	</beans:bean>	
+	<beans:bean id="itemDao" class="org.orcsun.sunspace.dao.impl.ItemDaoImpl">
+	    <beans:property name="dataSource" ref="dataSource"/>
+	</beans:bean>	
+	<beans:bean id="solutionDao" class="org.orcsun.sunspace.dao.impl.SolutionDaoImpl">
+	    <beans:property name="dataSource" ref="dataSource"/>
+	</beans:bean>			
+<!-- 
 	 <beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 	    <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
 	    <beans:property name="url" value="jdbc:mysql://sundbinst.clnfizorgrdu.us-west-2.rds.amazonaws.com:3306/sunorthdb" />
@@ -83,5 +96,12 @@
 	    <beans:property name="username" value="orcsun" />
 	    <beans:property name="password" value="Sunadmin7" />
 	</beans:bean>
- 
+  -->
+  		 <beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	    <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
+	    <beans:property name="url" value="jdbc:mysql://localhost:3306/sunorth" />
+	    
+	    <beans:property name="username" value="root" />
+	    <beans:property name="password" value="" />
+	</beans:bean>
 </beans:beans>

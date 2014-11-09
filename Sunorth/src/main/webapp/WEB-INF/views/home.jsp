@@ -3,44 +3,50 @@
  	<div class="row">
 	<div class="col-md-8"> <!-- main right panel for question list -->
 	
-	<div class="jumbotron home-notice">
-	  <h1><spring:message code="home.welcome.ask" text="VS" /></h1>
-	  
-	</div>
+		<div class="jumbotron">
+		  <h1>Get solution</h1>
+		  <p> </p>
+		  <p>		  
+		  <form class="navbar-form" role="search" method="post" id="search-form" name="search-form" action="<%=request.getContextPath()%>/search">
+						        <div class="input-group">
+						            <input type="text" class="form-control" placeholder="Find a solution for an idea or issue..." id="tag" name="tag" value="" size="80" required>
+							            <div class="input-group-btn">
+						            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></button>
+						            </div>
+						        </div>
+			 </form>
+
+		 </p>
+		</div>
+
+ 
 	<ul class="nav nav-tabs">
 	  
 	  <li  class="active unsolved-title"><a href="#issues" data-toggle="tab">
-		<b><spring:message code="home.questionlist.ordertype.unsolved" text="Unsolved" /></b></a>
+		<b><spring:message code="home.tab.1" text="Latest Cases" /></b></a>
 	  </li>	
 	</ul>	
-		<div id="questionlist">
-			<c:set var="qindex" value="0"/>				
-			<c:forEach items="${newquestions}" var="question">
+		<div id="caselist">
+							
+			<c:forEach items="${cases}" var="suncase">
 		   
           		   <div class="short-summary"><div class="question-summary-wrapper"><h4 class="list-heading">
-          		   		<a href="<%=request.getContextPath()%>/question/${lang}/${question.qid}"><strong>
-				 	${question.question}</strong></a></h4>
+          		   		<a href="<%=request.getContextPath()%>/case/${suncase.caseid}"><strong>
+				 	${suncase.subject}</strong></a></h4>
 				 	
-				<c:if test="${question.tag!=null}">
+				<c:if test="${suncase.tag!=null}">
 					<div class="tags">
-					<c:set var="tags" value="${fn:split(question.tag,' ')}"/>
+					<c:set var="tags" value="${fn:split(suncase.tag,' ')}"/>
 					<c:forEach items="${tags}" var="tag">
-						<a href="<%=request.getContextPath()%>/question/searchtag?tag=${tag}">
+						<a href="<%=request.getContextPath()%>/search?tag=${tag}">
 						<c:out value="${tag}"/></a>
 					</c:forEach>
 					</div>
 				</c:if>			 						 	
 				</div>
 			</div>
-			<c:set var="qindex" value="${qindex+1}"/>
+
 		</c:forEach>
-		</div>
-	  	<div class="btn-group btn-group-justified">
-		  <div class="btn-group">
-		    <button type="button" id="moreNewQuestion" class="btn btn-default">
-		    	<spring:message code="global.action.more" text="More..." />
-		    </button>
-		  </div>
 		</div>
 	</div>
 	<!-- - RIGHT -->
