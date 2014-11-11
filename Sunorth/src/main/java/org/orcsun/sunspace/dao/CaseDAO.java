@@ -11,4 +11,5 @@ public interface CaseDAO {
 	public abstract List<Case> listAll(int count);
 	public abstract List<Case> listMy(long uid);
 	public abstract List<Case> search(String tag);
+	public abstract int nextPhase(long theCaseId);
 }

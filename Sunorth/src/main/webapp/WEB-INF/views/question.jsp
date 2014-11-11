@@ -136,8 +136,7 @@
 		  	 		<div class="rows">
 						<div class="col-md-12">
 							<div class="col-lg-12">	
-							<spring:message code="common.tag" text="Tag" />
-					  		<input type="text" name="tag" value="<c:out value="${question.tag}"/>">
+
 						  	<input type="submit" class="btn btn-success" name="submit" value="<spring:message code="global.action.save" text="Save" />">							
 							</div>
 						</div>

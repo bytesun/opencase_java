@@ -8,14 +8,13 @@
 		  <p> </p>
 		  <p>		  
 		  <form class="navbar-form" role="search" method="post" id="search-form" name="search-form" action="<%=request.getContextPath()%>/search">
-						        <div class="input-group">
-						            <input type="text" class="form-control" placeholder="Find a solution for an idea or issue..." id="tag" name="tag" value="" size="80" required>
-							            <div class="input-group-btn">
-						            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></button>
-						            </div>
-						        </div>
+		        <div class="input-group">
+		            <input type="text" class="form-control" placeholder="An idea, project or issue?" id="tag" name="tag" value="" size="80" required>
+			            <div class="input-group-btn">
+		           		 <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></button>
+		            	</div>
+		        </div>
 			 </form>
-
 		 </p>
 		</div>
 
@@ -131,70 +130,6 @@
 		
 
 		</c:if>
-			 <!-- NEW ISSUE -->
-				<c:if test="${user!=null}">
-					<button class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target=".newissue"><spring:message code="question.new" text="New Issue" /> </button>
-					<br>
-					<div class="modal fade newissue" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-					  <div class="modal-dialog modal-lg">
-					    <div class="modal-content">
-					    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/question/ask" method="POST">
-							<input type="hidden" name="cid" value="0">
-							<input type="hidden" name="qid" value="0">
-							<div class="model-body">
-							
-								<input type="hidden" name="cid" value="${thecat.cid}">
-						  	 	<div class="form-group"> 
-						  	 		<div class="rows">
-										<div class="col-md-12">
-											<div class="col-lg-12">	
-											
-											</div>
-										</div>
-									</div>
-								</div>	
-							  	
-							  	
-						  	 	<div class="form-group"> 
-						  	 		<div class="rows">
-										<div class="col-md-12">
-											<div class="col-lg-12">	
-											<spring:message code="question.new" text="New Issue" />
-											<input type="text" class="form-control input-default" name="questitle" placeholder=" " required>											
-											</div>
-										</div>
-									</div>
-								</div>								
-	
-						  	 	<div class="form-group"> 
-						  	 		<div class="rows">
-										<div class="col-md-12">
-											<div class="col-lg-12">	
-											<spring:message code="question.description" text="Description" />
-											<textarea class="form-control richtextarea" rows="5" name="question" placeholder=" "></textarea>											
-											</div>
-										</div>
-									</div>
-								</div>	
-						  	 	<div class="form-group"> 
-						  	 		<div class="rows">
-										<div class="col-md-12">
-											<div class="col-lg-12">	
-												<input type="text" name="tag" placeholder="<spring:message code="common.tag" text="Tag" />"> 
-												<button type="submit" class="btn btn-success">
-												<spring:message code="question.consult" text="Consult" /></button>												
-											</div>
-										</div>
-									</div>
-								</div>																
-					
-							</div>
-						</form>		
-					    </div>
-					  </div>
-					</div>	<!-- end vote dialog -->
-				</c:if>			
-
 
 
 			<!-- hottest categories
@@ -228,54 +163,9 @@
 
  <script type="text/javascript">
    $(document).ready(function() {
-	   var qindex=${qindex+1};
-       //top 20 categories 
-
-        
-		$.ajax({
-			url:'<%=request.getContextPath()%>/user/latest',
-			dataType:'json',
-			success:function(data){
-				$.each(data, function(index, userlog){
-					$('#latestMsg').append('<tr><td  style="word-wrap: break-word" width="100%"><a href="<%=request.getContextPath()%>/user/'+userlog.uid+'">'+userlog.subject+'</a><br>'+userlog.ulog+'</td></tr>');
-				});
-			}
-		});
-  
-	      $("#moreNewQuestion").click(function(event){
-
-	          $.ajax( {
-	             url:'<%=request.getContextPath()%>/question/latestQuestions?start='+qindex,
-	             dataType: 'json',
-	             success:function(data) {
-	            	 var count = 0;
-	            	   $.each(data, function(index, question) {
-	               		   var tags = question.tag.split(" ");
-	            		   var strtags='<div class="tags">';
-	                  		
-	    				   if(tags != ''){
-	    	           		   $.each(tags,function(index,tag){
-	    	           			 strtags=strtags+'<a  href="<%=request.getContextPath()%>/question/searchtag?tag='+tag+'">'+tag+'</a>';
-	    	           		   });
-	    				   }
-	               			
-	               			strtags=strtags+'</div>';
-	               		   $('#questionlist').append('<div class="short-summary"><div class="question-summary-wrapper"><h4 class="list-heading">'+
-	               		   		'<a href="<%=request.getContextPath()%>/question/${lang}/'+question.qid+'"><strong>'+ 
-	    					 	question.question+'</strong></a></h4>'+
-	    					 	//'<div class="userinfo"><a href="<%=request.getContextPath()%>/user/'+question.user.uid+'">'+question.user.name+'</a></div> '+
-	    					 	strtags+
-	    					 	//'</div><div class="counts"><div  class="status  answered-accepted"><div class="item-count">'+
-	    					 	//question.answercnt+'</div></div></div>'+
-	    					 	'</div>');
-	               		count = index;
-	                   });
-	            	   qindex = qindex+count+1;
-	             }
-	          });
-	      });        
+	     
    });
 
- 	</script>
+ </script>
 
 <%@include file="footer.jsp" %>

@@ -59,7 +59,7 @@ public class CaseDaoImpl extends SunJdbcDaoSupport  implements CaseDAO {
 
 	@Override
 	public List<Case> search(String tag) {
-		String sql = "SELECT * FROM CASES WHERE TAG LIKE '%"+tag+"%'";
+		String sql = "SELECT * FROM CASES WHERE SUBJECT LIKE '%"+tag+"%' OR TAG LIKE '%"+tag+"%'";
 		return this.getJdbcTemplate().query(sql,new CaseMapper());
 	}
 
@@ -76,9 +76,16 @@ public class CaseDaoImpl extends SunJdbcDaoSupport  implements CaseDAO {
 			c.setEnddate(rs.getDate("ENDDATE"));
 			c.setTag(rs.getString("TAG"));
 			c.setStatus(rs.getShort("STATUS"));
+			c.setUid(rs.getLong("UID"));
 			return c;
 		}
 		
+	}
+
+	@Override
+	public int nextPhase(long theCaseId) {
+		String sql = "UPDATE CASES SET PHASEID=PHASEID+1 WHERE CASEID="+theCaseId;
+		return this.getJdbcTemplate().update(sql);
 	}
 
 }

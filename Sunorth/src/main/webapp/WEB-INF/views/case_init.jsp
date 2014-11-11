@@ -9,8 +9,8 @@
 		  	 		<div class="rows">
 						<div class="col-md-12">
 							<div class="col-lg-12">	
-							<spring:message code="common.question" text="Issue" />
-							<input type="text" class="form-control input-default" name="subject" value="">
+							<spring:message code="case.subject" text="Create a new case" />
+							<input type="text" class="form-control input-default" name="subject" value="" placeholder="Input case title">
 							</div>
 						</div>
 					</div>
