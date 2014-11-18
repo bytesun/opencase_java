@@ -39,7 +39,7 @@ public class CaseDaoImpl extends SunJdbcDaoSupport  implements CaseDAO {
 
 	@Override
 	public Case get(long id) {
-		String sql = "SELECT * FROM CASES WHERE CASEID="+id+" ORDER BY STATUS";
+		String sql = "SELECT * FROM CASES WHERE CASEID="+id;
 		try{
 			return this.getJdbcTemplate().queryForObject(sql, new CaseMapper());
 		}catch(Exception e){
@@ -50,7 +50,7 @@ public class CaseDaoImpl extends SunJdbcDaoSupport  implements CaseDAO {
 
 	@Override
 	public List<Case> listMy(long uid) {
-		String sql = "SELECT * FROM CASES WHERE UID="+uid+" ORDER BY STARTDATE DESC ";
+		String sql = "SELECT * FROM CASES WHERE UID="+uid+" ORDER BY STATUS ";
 		return this.getJdbcTemplate().query(sql,new CaseMapper());
 	}
 	

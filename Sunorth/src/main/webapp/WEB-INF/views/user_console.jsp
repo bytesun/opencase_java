@@ -119,7 +119,12 @@
 		  	<table class="table" style="table-layout: fixed; width: 100%">
 				<c:forEach items="${myCases}" var="ca">
 					<tr>
-						
+					<td>
+						<c:if test="${ca.status ==9}">
+							<div class="accept-answer on" title="<spring:message code="case_list.status.tip" text="Closed" />"> </div>
+						</c:if>
+					
+					</td>						
 	 				<td width="15%">[
 	          		   	<c:choose>
 	          		   		<c:when test="${ca.ctype==1}">
@@ -138,7 +143,7 @@
 	          		   	</td>
 	          		   							
 						<td><a href="<%=request.getContextPath()%>/case/${ca.caseid}"><c:out value="${ca.subject}"/></a></td>
-						<td><c:out value="${ca.status}"/></td>
+
 						</tr>
 				</c:forEach>
 
