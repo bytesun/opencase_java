@@ -30,10 +30,10 @@
 					<c:if test="${thecase.phaseid>0}">
 						<c:forEach var="i" begin="1" end="${thecase.phaseid}">
 							<c:if test="${i==thephase.phaseid}">
-								<button type="button" class="btn btn-success"><a href="<%=request.getContextPath()%>/case/${thecase.caseid}/${i}"><c:out value="${i}"/></a></button>
+								<a class="btn btn-success" href="<%=request.getContextPath()%>/case/${thecase.caseid}/${i}"><c:out value="${i}"/></a>
 							</c:if>
 							<c:if test="${i!=thephase.phaseid}">
-								<button type="button" class="btn btn-default"><a href="<%=request.getContextPath()%>/case/${thecase.caseid}/${i}"><c:out value="${i}"/></a></button>
+								<a class="btn btn-default" href="<%=request.getContextPath()%>/case/${thecase.caseid}/${i}"><c:out value="${i}"/></a>
 							</c:if>
 							
 						</c:forEach>
@@ -41,9 +41,9 @@
 					
 				</div>	
 				
-				<c:if test="${user != null && user.uid==thecase.uid || cookie.mysuncase.value==thecase.caseid}">
+				<c:if test="${(user != null && user.uid==thecase.uid || cookie.mysuncase.value==thecase.caseid) && thecase.status!=9}">
 					<button class="btn btn-primary" data-toggle="modal" data-target=".newphase">
-					<spring:message code="phase.new" text="New Step" /> </button>
+					<spring:message code="case.phase.btn.new" text="Follow UP" /> </button>
 				</c:if>
 				</div>		
 			</div> <!-- end phase bar -->
@@ -65,15 +65,22 @@
 			<!-- right : item list -->
 			<div class="col-md-8">
 				<div id="phase-item-list">
-					<ul class="list-group">
+					<table class="table">
 						<c:forEach items="${theitems}" var="item">
-							<li class="list-group-item"><c:out value="${item.item}"></c:out></li>
-							
+							<tr>
+				
+								<td><c:out value="${item.item}"/></td>
+								<td width="5%"></td>
+							</tr>
 						</c:forEach>
-					</ul>
-					<c:if test="${(user != null && user.uid==thecase.uid|| cookie.mysuncase.value==thecase.caseid) && thecase.phaseid==thephase.phaseid}">
-						<a id="addItem" href=""><spring:message code="item.new" text="New check item" /></a>
-					</c:if>
+						<tr>
+							<td colspan="2" align="right">
+								<c:if test="${(user != null && user.uid==thecase.uid|| cookie.mysuncase.value==thecase.caseid) && thecase.phaseid==thephase.phaseid && thecase.status!=9}">
+									<a  id="addItem" href=""><spring:message code="case.item.btn.new" text="New Check-Item" /></a>
+								</c:if>							
+							</td>
+						</tr>
+					</table>
 				</div>
 			</div>
 		
@@ -85,22 +92,28 @@
 <!-- comment/suggestion from others -->
 <div class="row">
 	<div class="col-md-12">
-		<hr/>
-		<div id="comment-list">
-			<a id="addComment" href=""><spring:message code="comment.new" text="Add comment" /></a>
+			<div class="row">
+			<div  class="col-md-12"> 
+				<c:if test="${ thecase.phaseid==thephase.phaseid}">	
+					<hr/>
+					<div id="comment-list">
+						<a class="btn btn-primary" id="addComment" href=""><spring:message code="case.comment.btn.new" text="Add" /></a> 
+						<spring:message code="case.comment.label.comments" text="Comment / Suggestion / Proposal..." />
+					</div>
+				</c:if>
+				<table class="table">
+					
+					<c:forEach var="comment" items="${comments}">
+						<tr><td width="20%">
+							 [<c:out value="${comment.createtime}"/>]
+							 </td>
+							 <td> <c:out value="${comment.comment}"/>
+							 </td> 
+						</tr>
+					</c:forEach>
+				</table>
+			</div>
 		</div>
-		<table class="table">
-			
-			<c:forEach var="comment" items="${comments}">
-				<tr><td width="20%">
-					 [<c:out value="${comment.createtime}"/>]
-					 </td>
-					 <td> <c:out value="${comment.comment}"/>
-					 </td> 
-				</tr>
-			</c:forEach>
-		</table>
-
 	</div>
 
 </div>
@@ -120,7 +133,7 @@
 						  	 		<div class="rows">
 										<div class="col-md-12">
 											<div class="col-lg-12">	
-											<input type="text" class="form-control input-default" name="phase" placeholder="Input next phase name " required>											
+											<input type="text" class="form-control input-default" name="phase" placeholder="<spring:message code="case.form.phase.phase.placeholder" text="Input follow up things..." />" required>											
 											</div>
 										</div>
 									</div>
@@ -130,7 +143,7 @@
 						  	 		<div class="rows">
 										<div class="col-md-12">
 											<div class="col-lg-12">	
-											<spring:message code="phase.description" text="Description" />
+											<spring:message code="case.form.phase.description" text="Description" />
 											<textarea class="form-control richtextarea" rows="5" name="description" placeholder=" "></textarea>											
 											</div>
 										</div>
@@ -140,9 +153,10 @@
 						  	 		<div class="rows">
 										<div class="col-md-12">
 											<div class="col-lg-12">	
-												<input type="text" name="tag" placeholder="<spring:message code="common.tag" text="Tag" />"> 
+												<input type="text" name="tag" placeholder="<spring:message code="case.form.phase.tag" text="Tag" />"> 
+												<input type="checkbox" name="isClose"><spring:message code="case.form.phase.label.closecase" text="Close Case?" />
 												<button type="submit" class="btn btn-primary">
-												<spring:message code="common.save" text="Save" /></button>												
+												<spring:message code="case.form.phase.btn.save" text="Save" /></button>												
 											</div>
 										</div>
 									</div>
@@ -163,7 +177,7 @@
    	    			'<input type="hidden" name="thephaseid" value="${thecase.phaseid}">'+
 							'<input type="hidden" name="thecaseid" value="${thecase.caseid}">'+
    	    			'<input  name="item" size="100" required/><button type="submit" class="btn btn-primary">'+
-							'<spring:message code="item.new" text="Save" /></button>&nbsp;'+
+							'<spring:message code="case.form.item.btn.new" text="Save" /></button>&nbsp;'+
 							//'<button type="submit" class="btn btn-default">Cancel</button>'+
 							'</form>');
    	    	$("#addItem").hide();
@@ -176,7 +190,7 @@
    	    			'<input type="hidden" name="thephaseid" value="${thecase.phaseid}">'+
 							'<input type="hidden" name="thecaseid" value="${thecase.caseid}"/>'+
    	    			'<textarea  name="comment" cols="100" rows="6" required></textarea><br><button type="submit" class="btn btn-primary">'+
-							'<spring:message code="common.save" text="Save" /></button>&nbsp;'+
+							'<spring:message code="case.form.comment.btn.save" text="Save" /></button>&nbsp;'+
 							//'<button type="submit" class="btn btn-default">Cancel</button>'+
 							'</form>');
    	    	$("#addComment").hide();

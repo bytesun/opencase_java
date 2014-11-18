@@ -8,8 +8,9 @@ public interface CaseDAO {
 
 	public abstract long add(Case c);
 	public abstract Case get(long id);
-	public abstract List<Case> listAll(int count);
 	public abstract List<Case> listMy(long uid);
-	public abstract List<Case> search(String tag);
+	public abstract List<Case> search(String tag,short ctype,int count);
 	public abstract int nextPhase(long theCaseId);
+	public abstract int changeStatus(long caseId,int status);
+	public abstract List<Case> listCases(int listType,int count);	 
 }

@@ -41,5 +41,9 @@ public class SunConstants
   public static final int RESPONSE_CODE_FAILED=-1;
   public static final int RESPONSE_CODE_NOTHING=0;
   public static final int RESPONSE_CODE_NOLOGIN=99;
+  
+  //CASES
+  //STATUS : 0-INIT, 1-PROGRESS . 9-CLOSE
+  public static final int CASE_STATUS_CLOSE = 9;
 }
 

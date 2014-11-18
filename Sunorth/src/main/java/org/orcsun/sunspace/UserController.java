@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
+import org.orcsun.sunspace.dao.CaseDAO;
 import org.orcsun.sunspace.dao.impl.ActivityDaoImpl;
 import org.orcsun.sunspace.dao.impl.QuestionDaoImpl;
 import org.orcsun.sunspace.dao.impl.TodoDaoImpl;
@@ -51,6 +52,8 @@ public class UserController  extends SunController{
 	QuestionDaoImpl quesDao;
 	@Autowired
 	ActivityDaoImpl actDao;
+	@Autowired
+	CaseDAO caseDao;
 	
 	private static final Logger logger = Logger.getLogger(UserController.class);
 	/**
@@ -71,8 +74,8 @@ public class UserController  extends SunController{
 				this.todoDao.findTodayTodos(user.getUid()));
 		//activities
 		model.addAttribute("activities", this.actDao.getLatestActivities(10,lang));		
-		model.addAttribute("myquestions", quesDao.findMyQuestions(lang,user.getUid()));
-		
+		//model.addAttribute("myquestions", quesDao.findMyQuestions(lang,user.getUid()));
+		model.addAttribute("myCases", caseDao.listMy(user.getUid()));
 		
 		return "user_console";
 	}

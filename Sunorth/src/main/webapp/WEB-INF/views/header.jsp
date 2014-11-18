@@ -12,12 +12,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title><spring:message code="header.title" text="Sunorth" /></title>
 	<meta name="description" content="<spring:message code="header.description" text="Sunorth" />">
 	<meta name="keywords" content="<spring:message code="header.keywords" text="Sunorth" />">
 	<meta name="author" content="Sun">
-    <meta property="qc:admins" content="0762654177635672406727" /><!-- qq verify -->
-   
-    <title><spring:message code="header.title" text="Sunorth" /></title>
+	<!-- 
+    <meta property="qc:admins" content="0762654177635672406727" /--><!-- qq verify -->
+    
+    
 
     <!-- Bootstrap -->
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
@@ -35,10 +37,10 @@
 	        tinymce.init({selector:'.richtextarea'});
 	</script> 
 	
-	<!-- social sharing -->
+	<!-- social sharing 
 	<script type="text/javascript">var switchTo5x=true;</script>
 	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-	
+	-->
 </head>
  <body style="padding-top: 70px;">  
 
@@ -49,12 +51,13 @@
 			<div class="container">		
 		    <!-- Brand and toggle get grouped for better mobile display -->
 		    <div class="navbar-header">
-		      <a class="navbar-brand" href="<%=request.getContextPath()%>/"><img alt="" src="${pageContext.request.contextPath}/resources/img/sunorth.png" height="25" width="25"><b><spring:message code="header.sunspace" text="SunSpace" /></b></a>
+		      <a class="navbar-brand" href="<%=request.getContextPath()%>/"><img alt="" src="${pageContext.request.contextPath}/resources/img/sunorth.png" height="25" width="25"><b>
+		      <spring:message code="header.sunspace" text="SunSpace" /></b></a>
 		    </div>
 		
 		    <!-- Collect the nav links, forms, and other content for toggling -->
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-		      
+		      <!-- 
 		      <form class="navbar-form navbar-left" role="search" action="<%=request.getContextPath()%>/question/search" method="GET">
 		        <div class="form-group">
 		          <input type="text" class="form-control" placeholder="<spring:message code="common.search" text="search"/>" name="searchkey" title="Search input" required>
@@ -62,8 +65,8 @@
 		        <button type="submit" class="btn btn-seccess"><spring:message code="common.search" text="search" /></button>
 	        
 		      </form>
-			  
-      
+			   -->
+      		<!-- 
 			 <ul class="nav navbar-nav navbar-right">
 		        <li class="dropdown">
 		          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="language.title" text="Language" /> <b class="caret"></b></a>
@@ -75,7 +78,7 @@
 		          </ul>		          
 		        </li>
 			</ul>			
-    	    
+    	     -->
 		    <c:if test="${user!=null}">
 			 <ul class="nav navbar-nav navbar-right">
 		        <li class="dropdown">

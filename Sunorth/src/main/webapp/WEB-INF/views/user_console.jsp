@@ -78,11 +78,15 @@
 	  <li  class="active"><a href="#home" data-toggle="tab">
 		<spring:message code="user.console.home" text="Home" />
 	  </a></li>	
-	  
+	  <li><a href="#cases" data-toggle="tab">
+		<spring:message code="user.myprojects" text="Cases" />
+	  </a></li>	  
+
+<!-- 
 	  <li><a href="#issues" data-toggle="tab">
 		<spring:message code="user.myquestions" text="Issues" />
 	  </a></li>
-<!-- 
+	  
 	  <li><a href="#projects" data-toggle="tab">
 		<spring:message code="user.myprojects" text="Projects" />
 	  </a></li>
@@ -110,6 +114,36 @@
 	
 	
 	  </div>	
+	  <!-- cases list -->
+	   <div class="tab-pane" id="cases">
+		  	<table class="table" style="table-layout: fixed; width: 100%">
+				<c:forEach items="${myCases}" var="ca">
+					<tr>
+						
+	 				<td width="15%">[
+	          		   	<c:choose>
+	          		   		<c:when test="${ca.ctype==1}">
+	          		   			IDEA 
+	          		   		</c:when>
+	          		   		<c:when test="${ca.ctype==2}">
+	          		   			PROJECT
+	          		   		</c:when>
+	          		   		<c:when test="${ca.ctype==3}">
+	          		   		 	ISSUE
+	          		   		</c:when>
+	          		   	
+	          		   	
+	          		   	</c:choose>
+	          		   	]
+	          		   	</td>
+	          		   							
+						<td><a href="<%=request.getContextPath()%>/case/${ca.caseid}"><c:out value="${ca.subject}"/></a></td>
+						<td><c:out value="${ca.status}"/></td>
+						</tr>
+				</c:forEach>
+
+		  	</table>		   	
+	   </div>
 	  <!-- ---------------Issue list----------------- -->
 		  <div class="tab-pane" id="issues">
 		  
@@ -127,12 +161,7 @@
 
 	  </div><!-- end of tab panel -->
 	
-	  <!-- ---------------Project list----------------- -->
-	  <div class="tab-pane" id="projects">
-		  
-		  
 
-	  </div><!-- end of tab panel -->	
 	</div>	<!-- end of tab-content -->
 	
 	</div><!-- end of left side -->
@@ -363,7 +392,7 @@
 			</ol>
 		  </div>
 		</div>
-				
+	<!-- 
 		<div  class="panel panel-default">
 		  <div class="panel-heading">
 		  	<spring:message code="user.console.consultants" text="My Consultants"></spring:message>
@@ -372,8 +401,9 @@
 		    Comming sooooon!
 		  </div>
 		</div>
-		
+		 -->			
 		<!-- my favoriates -->
+		<!-- 
 		<div  class="panel panel-default">
 		  <div class="panel-heading">
 		  	<spring:message code="user.console.favoriates" text="My Favoriates"></spring:message>
@@ -382,7 +412,7 @@
 		    Comming sooooon!
 		  </div>
 		</div>		
-		
+		 -->			
 		
 	</div>
 </div>

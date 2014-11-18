@@ -24,7 +24,9 @@ public class Case {
 	private int phaseid;
 	private Date startdate;
 	private Date enddate;
-	private short status;
+	private short status;//0-init,1-progress,-1-issue/question,9-done
+	private short ctype;//1-idea,2-project,3-issue
+	private boolean isOpen=true;
 	private long uid;
 	public long getCaseid() {
 		return caseid;
@@ -74,11 +76,24 @@ public class Case {
 	public void setStatus(short status) {
 		this.status = status;
 	}
+	
+	public short getCtype() {
+		return ctype;
+	}
+	public void setCtype(short ctype) {
+		this.ctype = ctype;
+	}
 	public long getUid() {
 		return uid;
 	}
 	public void setUid(long uid) {
 		this.uid = uid;
+	}
+	public boolean isOpen() {
+		return isOpen;
+	}
+	public void setOpen(boolean isOpen) {
+		this.isOpen = isOpen;
 	}
 	
 	
