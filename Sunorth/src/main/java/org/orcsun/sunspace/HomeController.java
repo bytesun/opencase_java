@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.orcsun.sunspace.dao.CaseDAO;
 import org.orcsun.sunspace.dao.SolutionDAO;
+import org.orcsun.sunspace.dao.TagDAO;
 import org.orcsun.sunspace.object.Case;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,8 @@ import org.apache.log4j.Logger;
 @Controller
 public class HomeController extends SunController {
 
+	@Autowired
+	TagDAO tagDao;
 	@Autowired
 	CaseDAO caseDao;
 	@Autowired
@@ -36,7 +39,8 @@ public class HomeController extends SunController {
 		logger.info("The locale is " + locale);
 //		String lang = this.getLanguage(locale, req);
 		Case c = caseDao.get(1);
-		model.addAttribute("comments", solutionDao.listForPhase(c.getCaseid(), c.getPhaseid()));
+		model.addAttribute("comments", solutionDao.listForPhase(c.getCaseid(), c.getPhaseid(),SunConstants.UI_PAGE_SIZE));
+//		model.addAttribute("top10tags", tagDao.listTag(10));
 //		model.addAttribute("cases", caseDao.listAll(10));
 		return "home";
 	}

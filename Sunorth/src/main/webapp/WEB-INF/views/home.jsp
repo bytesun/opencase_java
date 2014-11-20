@@ -4,12 +4,12 @@
 	<div class="col-md-8"> <!-- main right panel for question list -->
 	
 		<div class="jumbotron">
-		  <h2><spring:message code="home.welcome.h2" text="My Business Management" /></h2>
+		  <h2 class="text-primary"><b><spring:message code="home.welcome.h2" text="My Business Management" /></b></h2>
 		  
 		 <p>
 			 <a class="btn btn-success btn-lg" href="<%=request.getContextPath()%>/case/init" role="button"><spring:message code="home.btn.newcase" text="New Case" /></a>
-			 <a class="btn btn-primary btn-lg" href="<%=request.getContextPath()%>/case/list/1" role="button"><spring:message code="home.btn.latestcases" text="Latest Cases" /></a>
-			 <a class="btn btn-warning btn-lg" href="<%=request.getContextPath()%>/case/list/2" role="button"><spring:message code="home.btn.activecases" text="Active Cases" /></a>
+			 <a class="btn btn-primary btn-lg" href="<%=request.getContextPath()%>/case/list" role="button"><spring:message code="home.btn.latestcases" text="Latest Cases" /></a>
+			 <a class="btn btn-warning btn-lg" href="<%=request.getContextPath()%>/case/listactive" role="button"><spring:message code="home.btn.activecases" text="Active Cases" /></a>
 			 <!-- 
 			 <a class="btn btn-danger btn-lg" href="<%=request.getContextPath()%>/case/list/3" role="button">Help Cases</a>
 			  -->
@@ -38,13 +38,61 @@
 		 </p>
 
 		</div>
+		
+		<!-- Introduction -->
+		
+		<div class="row">
+		  <div class="col-sm-6 col-md-3">
+		    <div class="thumbnail">
+		      <!-- img data-src="holder.js/300x300" alt="..."-->
+		      <div class="caption">
+		        <h3 class="text-success"><b>Digging</b></h3>
+		        <p class="text-success">Analyze an <span class="text-success"><b>IDEA, PROJECT or ISSUE</b></span> with asking for open  help. </p>
+		        
+		      </div>
+		    </div>
+		  </div>
+
+ 		<div class="col-sm-6 col-md-3">
+		    <div class="thumbnail">
+		      <!-- img data-src="holder.js/300x300" alt="..."-->
+		      <div class="caption">
+		        <h3 class="text-primary"><b>Sharing</b></h3>
+		        <p class="text-primary">Share your solution on any kinds of cases by showing the process. </p>
+		        
+		      </div>
+		    </div>
+		  </div>
+		  
+		 <div class="col-sm-6 col-md-3">
+		    <div class="thumbnail">
+		      <!-- img data-src="holder.js/300x300" alt="..."-->
+		      <div class="caption">
+		        <h3 class="text-info"><b>Collaborating</b></h3>
+		        <p class="text-info">Launch a project and invite people to achieve it by cooperation.</p>
+		        
+		      </div>
+		    </div>
+		  </div>
+		  
+		  <div class="col-sm-6 col-md-3">
+		    <div class="thumbnail">
+		      <!-- img data-src="holder.js/300x300" alt="..."-->
+		      <div class="caption">
+		        <h3 class="text-danger"><b>Tracking</b></h3>
+		        <p class="text-danger">Record any phase and checklist for you daily cases or make a plan and trace it.</p>
+		        <!-- <p><a href="<%=request.getContextPath()%>/case/1" class="btn btn-primary" role="button">Demo</a> </p> -->
+		      </div>
+		    </div>
+		  </div>
+		</div>		
 		<!-- latest update -->
 		<div>
 			<table class="table">
 				
 				<c:forEach var="comment" items="${comments}">
-					<tr><td width="25%">
-						 [<c:out value="${comment.createtime}"/>]
+					<tr><td  class="text-danger" width="25%">
+						 <c:out value="${comment.createtime}"/>
 						 </td>
 						 <td> 
 						 <a href="<%=request.getContextPath()%>/case/1"><c:out value="${comment.comment}"/></a>
@@ -59,8 +107,7 @@
 		<!-- Login -->
 		<c:if test="${user==null}">
 			<form action="<%=request.getContextPath()%>/user/login" class="form-horizontal " method="post">
-			<input type="hidden" name="cid" value="${cid}">
-			<input type="hidden" name="qid" value="${qid}">				
+			
 			<div class="form-group"> 
 				<div class="rows">
 					<div class="col-md-12">
@@ -139,8 +186,10 @@
 
 
 			<!-- top10 tags -->
-			<div id="top10tag">
-			
+			<div>
+				<ul id="top10tag" class="list-group">
+
+  				</ul>
 			</div>
 
  			<!-- AD -->
@@ -169,9 +218,15 @@
            url:'<%=request.getContextPath()%>/tag/top10',
            dataType: 'json',
            success:function(data) {
+        	   var strTagList='';
         	   $.each(data,function(index, tag){
-        		   console.log(tag.tag);   
+        		   strTagList = strTagList+'<li class="list-group-item">'+
+  						'<a  href="<%=request.getContextPath()%>/case/searchbytag?tag='+tag.tag+'">'+tag.tag+'</a>'+
+  						'<span class="badge">'+tag.count+'</span></li>';
+  						console.log(strTagList);
+        		   
         	   });
+        	   $("#top10tag").append(strTagList); 
 				
            }
         });

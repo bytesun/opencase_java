@@ -25,6 +25,8 @@ public class ItemDaoImpl extends SunJdbcDaoSupport implements ItemDAO {
 		parameters.put("DOTIME", item.getDotime());
 		parameters.put("PHASEID", item.getPhaseid());
 		parameters.put("CASEID",item.getCaseid());
+		parameters.put("OWNER",item.getOwner());
+		parameters.put("STATUS",item.getStatus());
 		
 		Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(
 				parameters));
@@ -52,9 +54,17 @@ public class ItemDaoImpl extends SunJdbcDaoSupport implements ItemDAO {
 			item.setDotime(rs.getTimestamp("DOTIME"));
 			item.setCaseid(rs.getLong("CASEID"));
 			item.setPhaseid(rs.getInt("PHASEID"));
+			item.setOwner(rs.getLong("OWNER"));
+			item.setStatus(rs.getInt("STATUS"));
 			return item;
 		}
 		
+	}
+
+	@Override
+	public int changeStatus(long itemid, int status) {
+		String sql = "UPDATE ITEM SET STATUS="+status+" WHERE ITEMID="+itemid;
+		return this.getJdbcTemplate().update(sql);
 	}
 
 }

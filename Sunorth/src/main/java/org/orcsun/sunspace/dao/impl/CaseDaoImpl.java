@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.orcsun.sunspace.dao.CaseDAO;
 import org.orcsun.sunspace.object.Case;
-
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -49,42 +48,53 @@ public class CaseDaoImpl extends SunJdbcDaoSupport  implements CaseDAO {
 
 
 	@Override
-	public List<Case> listMy(long uid) {
+	public List<Case> listMyAll(long uid) {
 		String sql = "SELECT * FROM CASES WHERE UID="+uid+" ORDER BY STATUS ";
 		return this.getJdbcTemplate().query(sql,new CaseMapper());
 	}
 	
-	/**
-	 * 1-latest
-	 * 2-active
-	 * 3-need help
-	 */
-	@Override
-	public List<Case> listCases(int listType, int count) {
-		String sql = null;
-		switch(listType){
-		case 1: 
-			sql = "SELECT * FROM CASES WHERE ISOPEN=true ORDER BY STARTDATE DESC LIMIT "+count;
-			break;
-		case 2:
-			sql = "SELECT * FROM CASES WHERE ISOPEN=true AND CASEID IN (SELECT CASEID FROM ITEM GROUP BY CASEID  ORDER BY DOTIME DESC) LIMIT "+count;
-			break;
-//		case 3:
-//			sql = "SELECT * FROM CASES CASEID IN (SELECT CASEID, MAX(PHASEID)  FROM PHASE WHERE ISQUESTION <> 0 GROUP BY CASEID ) LIMIT "+count;
-		}
-		return this.getJdbcTemplate().query(sql, new CaseMapper());
-	}
-	
-
-	@Override
-	public List<Case> search(String tag,short ctype,int count) {
-		String sql = "SELECT * FROM CASES WHERE  ISOPEN=true AND (SUBJECT LIKE '%"+tag+"%')";
-		if(ctype>0)
-			sql = sql + " AND CTYPE="+ctype;
-		sql = sql +" LIMIT "+count;
+	public List<Case> listMyActive(long uid) {
+		String sql = "SELECT * FROM CASES WHERE UID="+uid+" AND STATUS<5 ORDER BY STATUS ";
 		return this.getJdbcTemplate().query(sql,new CaseMapper());
 	}
 
+	@Override
+	public List<Case> listCases(int pageSize) {
+		String	sql = "SELECT * FROM CASES WHERE ISOPEN=true ORDER BY STARTDATE DESC LIMIT "+pageSize;
+		return this.getJdbcTemplate().query(sql, new CaseMapper());
+	}
+	
+	@Override
+	public List<Case> listCasesByType(int cType, int pageSize) {
+		String	sql = "SELECT * FROM CASES WHERE ISOPEN=true AND CTYPE="+cType+" ORDER BY STARTDATE DESC LIMIT "+pageSize;
+		return this.getJdbcTemplate().query(sql, new CaseMapper());
+	}
+	
+	@Override
+	public List<Case> listCasesByStatus(int status, int pageSize) {
+		String	sql = "SELECT * FROM CASES WHERE ISOPEN=true AND STATUS="+status+" ORDER BY STARTDATE DESC LIMIT "+pageSize;
+		return this.getJdbcTemplate().query(sql, new CaseMapper());
+	}	
+
+	@Override
+	public List<Case> listActiveCases(int pageSize) {
+		String	sql = "SELECT * FROM CASES WHERE ISOPEN=true AND CASEID IN (SELECT CASEID FROM ITEM GROUP BY CASEID  ORDER BY DOTIME DESC) LIMIT "+pageSize;
+		return this.getJdbcTemplate().query(sql, new CaseMapper());
+	}
+
+
+	@Override
+	public List<Case> searchByKey(String key,int count) {
+		String sql = "SELECT * FROM CASES WHERE  ISOPEN=true AND (SUBJECT LIKE '%"+key+"%')";
+		sql = sql +" LIMIT "+count;
+		return this.getJdbcTemplate().query(sql,new CaseMapper());
+	}
+	@Override
+	public List<Case> searchByTag(String tag, int count) {
+		String sql = "SELECT * FROM CASES WHERE  ISOPEN=true AND (TAG LIKE '%"+tag+"%')";
+		sql = sql +" LIMIT "+count;
+		return this.getJdbcTemplate().query(sql,new CaseMapper());
+	}
 	private static final class CaseMapper implements RowMapper<Case> {
 
 		@Override
@@ -117,6 +127,7 @@ public class CaseDaoImpl extends SunJdbcDaoSupport  implements CaseDAO {
 		String sql = "UPDATE CASES SET STATUS="+status+" WHERE CASEID="+caseId;
 		return this.getJdbcTemplate().update(sql);
 	}
+
 
 
 }

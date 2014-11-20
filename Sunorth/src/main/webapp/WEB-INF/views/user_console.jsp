@@ -119,7 +119,7 @@
 		  	<table class="table" style="table-layout: fixed; width: 100%">
 				<c:forEach items="${myCases}" var="ca">
 					<tr>
-					<td>
+					<td width="5%">
 						<c:if test="${ca.status ==9}">
 							<div class="accept-answer on" title="<spring:message code="case_list.status.tip" text="Closed" />"> </div>
 						</c:if>

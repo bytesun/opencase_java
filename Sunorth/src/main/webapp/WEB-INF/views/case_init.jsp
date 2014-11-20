@@ -3,7 +3,7 @@
 <div class="row">
 	<div class="col-md-9"> <!-- main right panel for question list -->
 
-	  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/case/new" method="POST">
+	  	 <form class="form-horizontal" action="<%=request.getContextPath()%>/case/save" method="POST">
 
 		  	 	<div class="form-group"> 
 		  	 		<div class="rows">
@@ -36,7 +36,7 @@
 		  	 		<div class="rows">
 						<div class="col-md-12">
 							<div class="col-lg-12">	
-							<input type="text" class="form-control input-default" name="tag" value="" placeholder="input tags">
+							<input type="text" class="form-control input-default" name="tags" value="" placeholder="input tags">
 							<c:if test="${user != null }">
 								<input type="checkbox" name="isOpen" checked> <spring:message code="case_init.form.label.isPrivate" text="Set Private?" />
 							</c:if>

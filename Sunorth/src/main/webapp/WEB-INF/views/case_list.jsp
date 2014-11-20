@@ -7,7 +7,7 @@
 		<table class="table">
 			<c:forEach items="${cases}" var="ca">
 				<tr>
-					<td>
+					<td width="5%">
 						<c:if test="${ca.status ==9}">
 							<div class="accept-answer on" title="<spring:message code="case_list.status.tip" text="Closed" />"> </div>
 						</c:if>
@@ -16,13 +16,13 @@
  				<td width="15%">[
           		   	<c:choose>
           		   		<c:when test="${ca.ctype==1}">
-          		   			<spring:message code="case_list.ctype.idea" text="IDEA" />
+          		   			<a href="<%=request.getContextPath()%>/case/listbytype/1"><spring:message code="case_list.ctype.idea" text="IDEA" /></a>
           		   		</c:when>
           		   		<c:when test="${ca.ctype==2}">
-          		   			<spring:message code="case_list.ctype.project" text="PROJECT" />
+          		   			<a href="<%=request.getContextPath()%>/case/listbytype/2"><spring:message code="case_list.ctype.project" text="PROJECT" /></a>
           		   		</c:when>
           		   		<c:when test="${ca.ctype==3}">
-          		   		 	<spring:message code="case_list.ctype.issue" text="ISSUE" />
+          		   		 	<a href="<%=request.getContextPath()%>/case/listbytype/3"><spring:message code="case_list.ctype.issue" text="ISSUE" /></a>
           		   		</c:when>
           		   	
           		   	

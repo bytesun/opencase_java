@@ -19,9 +19,9 @@ public class Solution {
 	private long commentid;
 	private String comment;
 	private long caseid;
-	private int phaseid;
+	private int phaseid=0;
 	private Date createtime;
-	private long uid;
+	private long uid=0;
 	public long getCommentid() {
 		return commentid;
 	}

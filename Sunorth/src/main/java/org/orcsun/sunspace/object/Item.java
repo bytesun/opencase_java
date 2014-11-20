@@ -19,6 +19,15 @@ public class Item {
 	private Date dotime;
 	private int phaseid;
 	private long caseid;
+	private long owner=0;
+	private int status=0;//0-plan, 1-done
+	
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
 	public long getItemid() {
 		return itemid;
 	}
@@ -54,6 +63,12 @@ public class Item {
 	}
 	public void setCaseid(long caseid) {
 		this.caseid = caseid;
+	}
+	public long getOwner() {
+		return owner;
+	}
+	public void setOwner(long owner) {
+		this.owner = owner;
 	}
 	
 }

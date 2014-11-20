@@ -33,13 +33,16 @@ public class SolutionDaoImpl extends SunJdbcDaoSupport  implements SolutionDAO {
 
 	@Override
 	public List<Solution> listForCase(long caseid, int count) {
-		String sql = "SELECT * FROM COMMENT WHERE CASEID="+caseid+" ORDER BY CREATETIME DESC LIMIT "+count;
+		String sql = "SELECT * FROM COMMENT WHERE CASEID="+caseid+" AND PHASEID=0 ORDER BY CREATETIME DESC LIMIT "+count;
 		return this.getJdbcTemplate().query(sql, new SolutionMapper());
 	}
 
+	/**
+	 * List all comments under a phase and include case's comments
+	 */
 	@Override
-	public List<Solution> listForPhase(long caseid, int phaseid) {
-		String sql = "SELECT * FROM COMMENT WHERE CASEID="+caseid+" AND PHASEID= "+phaseid+" ORDER BY CREATETIME DESC";
+	public List<Solution> listForPhase(long caseid, int phaseid,int pagesize) {
+		String sql = "SELECT * FROM COMMENT WHERE CASEID="+caseid+" AND (PHASEID= "+phaseid+" OR PHASEID=0) ORDER BY CREATETIME DESC LIMIT "+pagesize;
 		return this.getJdbcTemplate().query(sql, new SolutionMapper());
 	}
 

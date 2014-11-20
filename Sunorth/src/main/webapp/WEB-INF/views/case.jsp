@@ -5,11 +5,20 @@
 	<div class="col-md-12"> <!-- main right panel for question list -->
 		<div class="panel panel-default">
 			<div class="panel-heading">
-			<h2><c:out value="${thecase.subject}"/></h2>
+			<h2><c:out value="${thecase.subject}"/></h2>			
 			</div>
 			
 			<div class="panel-body">
 				<c:out value="${thecase.desc}" escapeXml="false"></c:out>
+				<p>
+				<!-- <a href="<%=request.getContextPath()%>/user/<c:out value="${thecase.uid}"/>"><c:out value="${thecase.uid}"></c:out></a>| -->
+				<c:if test="${user.uid==thecase.uid || cookie.mysuncase.value==thecase.caseid}">
+					<a href="#" data-toggle="modal" data-target=".editcase"><spring:message code="global.action.edit" text="Edit" /></a>|
+				</c:if>
+				<a href="#" class="label label-default"><c:out value="${thecase.tag}"></c:out></a>|
+				<c:out value="${thecase.startdate}"></c:out>
+				</p>
+
 			</div>
 			
 		</div>
@@ -65,16 +74,32 @@
 			<!-- right : item list -->
 			<div class="col-md-8">
 				<div id="phase-item-list">
+					<c:if test="${thecase.status==9 }">
+						<img alt="" src="${pageContext.request.contextPath}/resources/img/smile.jpg">
+					</c:if>
+					
 					<table class="table">
 						<c:forEach items="${theitems}" var="item">
 							<tr>
-				
-								<td><c:out value="${item.item}"/></td>
-								<td width="5%"></td>
+					
+								<td width="5%">
+								<c:if test="${item.status ==0 && (user.uid==thecase.uid || cookie.mysuncase.value == thecase.caseid)}">
+									<input id="todo-id-${item.itemid}" type="checkbox" name="isDone">
+								</c:if>
+								<c:if test="${item.status != 0}">
+									<input id="todo-id-${item.itemid}" type="checkbox" name="hasDone" disabled checked>
+								</c:if>
+								</td>
+								<td><span id="todo-item-${item.itemid}" title="${item.item}" ><c:out value="${item.item}"/></span></td>
+								<td width="5%">
+								<c:if test="${user.uid==thecase.uid}">
+									<a href="<%=request.getContextPath()%>/user/<c:out value="${item.owner}"/>"><c:out value="${item.owner}"/></a>
+								</c:if>
+								</td>
 							</tr>
 						</c:forEach>
 						<tr>
-							<td colspan="2" align="right">
+							<td colspan="3" align="right">
 								<c:if test="${(user != null && user.uid==thecase.uid|| cookie.mysuncase.value==thecase.caseid) && thecase.phaseid==thephase.phaseid && thecase.status!=9}">
 									<a  id="addItem" href=""><spring:message code="case.item.btn.new" text="New Check-Item" /></a>
 								</c:if>							
@@ -94,6 +119,7 @@
 	<div class="col-md-12">
 			<div class="row">
 			<div  class="col-md-12"> 
+ 
 				<c:if test="${ thecase.phaseid==thephase.phaseid}">	
 					<hr/>
 					<div id="comment-list">
@@ -101,28 +127,29 @@
 						<spring:message code="case.comment.label.comments" text="Comment / Suggestion / Proposal..." />
 					</div>
 				</c:if>
-				<table class="table">
-					
-					<c:forEach var="comment" items="${comments}">
-						<tr><td width="20%">
-							 [<c:out value="${comment.createtime}"/>]
-							 </td>
-							 <td> <c:out value="${comment.comment}"/>
-							 </td> 
-						</tr>
-					</c:forEach>
-				</table>
+			<table class="table">
+				
+				<c:forEach var="comment" items="${comments}">
+					<tr><td width="20%">
+						 <c:out value="${comment.createtime}"/>
+						 </td>
+						 <td> <c:out value="${comment.comment}"/>
+						 </td> 
+					</tr>
+				</c:forEach>
+			</table>				
 			</div>
 		</div>
 	</div>
 
 </div>
+<!-- all hidden components -->
 
 		<!-- dialog : new phase -->		
 			<div class="modal fade newphase" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 					  <div class="modal-dialog modal-lg">
 					    <div class="modal-content">
-					    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/case/newphase" method="POST">
+					    <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/case/phase/save" method="POST">
 							<input type="hidden" name="thephaseid" value="${thecase.phaseid}">
 							<input type="hidden" name="thecaseid" value="${thecase.caseid}">
 							
@@ -153,7 +180,7 @@
 						  	 		<div class="rows">
 										<div class="col-md-12">
 											<div class="col-lg-12">	
-												<input type="text" name="tag" placeholder="<spring:message code="case.form.phase.tag" text="Tag" />"> 
+												<!-- <input type="text" name="tag" placeholder="<spring:message code="case.form.phase.tag" text="Tag" />"> --> 
 												<input type="checkbox" name="isClose"><spring:message code="case.form.phase.label.closecase" text="Close Case?" />
 												<button type="submit" class="btn btn-primary">
 												<spring:message code="case.form.phase.btn.save" text="Save" /></button>												
@@ -167,16 +194,20 @@
 					    </div>
 					  </div>
 					</div>	<!-- end phase dialog -->	
+					
+
 
 <script type="text/javascript">
    $(document).ready(function() {
   	    
    	    $("#addItem").click(function(e){
    	    	event.preventDefault();
-   	    	$("#phase-item-list").append('<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/case/newitem" method="POST">'+
+   	    	$("#phase-item-list").append('<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/case/item/save" method="POST">'+
    	    			'<input type="hidden" name="thephaseid" value="${thecase.phaseid}">'+
-							'<input type="hidden" name="thecaseid" value="${thecase.caseid}">'+
-   	    			'<input  name="item" size="100" required/><button type="submit" class="btn btn-primary">'+
+							'<input type="hidden" name="thecaseid" value="${thecase.caseid}">'+							
+   	    			'<input  name="item" size="100" required/>'+
+   	    			'<input type="checkbox" name="status"><spring:message code="case.form.item.label.isDone" text="Is Done?" />'+
+   	    			'<button type="submit" class="btn btn-primary">'+
 							'<spring:message code="case.form.item.btn.new" text="Save" /></button>&nbsp;'+
 							//'<button type="submit" class="btn btn-default">Cancel</button>'+
 							'</form>');
@@ -186,17 +217,43 @@
    	    
    	    $("#addComment").click(function(e){
    	    	event.preventDefault();
-   	    	$("#comment-list").append('<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/case/newcomment" method="POST">'+
+   	    	$("#comment-list").append('<form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/case/comment/save" method="POST">'+
    	    			'<input type="hidden" name="thephaseid" value="${thecase.phaseid}">'+
 							'<input type="hidden" name="thecaseid" value="${thecase.caseid}"/>'+
-   	    			'<textarea  name="comment" cols="100" rows="6" required></textarea><br><button type="submit" class="btn btn-primary">'+
-							'<spring:message code="case.form.comment.btn.save" text="Save" /></button>&nbsp;'+
+   	    				'<textarea  name="comment" cols="100" rows="6" required></textarea><br>'+
+   	    					'<input type="checkbox" name="casecomment" /><spring:message code="case.form.comment.lable.casecomment" text="On case" />'+
+   	    					'<button type="submit" class="btn btn-primary"><spring:message code="case.form.comment.btn.save" text="Save" /></button>'+
 							//'<button type="submit" class="btn btn-default">Cancel</button>'+
 							'</form>');
    	    	$("#addComment").hide();
    	    });
+   	    
+   	   $("input[id|='todo-id']").each(function() {
+   	       $(this).click(function(e) {
+   	      	 var svid = $(this).attr('id');
+   	      	 var vid = svid.substring(svid.lastIndexOf('-')+1);
+   	      	  console.log(vid);
+   		   	  	  
+   	         $.ajax({
+   	            url:'<%=request.getContextPath()%>/case/item/'+vid+'/finish',
+   	            method:'post',
+   	            success:function(data) {
+	   	           	if(data==1){
+	   						var stodo = $('#todo-item-'+vid).text();
+	   						$('#todo-id-'+vid).html('<input id="todo-id-'+vid+'" type="checkbox" checked disabled>');
+	   						$('#todo-item-'+vid).html('<span id="todo-item-'+vid+'" class="todo-markeddone">'+stodo+'</span>');
+	   	           	}else{
+	   	           		console.log('Failed to mark the todo done!'+data);
+	   	           	}
+   	            }
+   	         });					
+   	    });
+   	});  	    
    });
-   </script>
+   
 
+
+
+   </script>
 <%@include file="footer.jsp" %>
 

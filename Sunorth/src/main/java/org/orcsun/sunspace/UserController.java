@@ -75,7 +75,7 @@ public class UserController  extends SunController{
 		//activities
 		model.addAttribute("activities", this.actDao.getLatestActivities(10,lang));		
 		//model.addAttribute("myquestions", quesDao.findMyQuestions(lang,user.getUid()));
-		model.addAttribute("myCases", caseDao.listMy(user.getUid()));
+		model.addAttribute("myCases", caseDao.listMyActive(user.getUid()));
 		
 		return "user_console";
 	}
@@ -197,18 +197,11 @@ public class UserController  extends SunController{
 				}
 			}
 		}
-		String cid = req.getParameter("cid");
-		String qid = req.getParameter("qid");
 		if (islogin) {
-			if ((cid != null) && (!cid.equals("")))
-				return "redirect:/cat/"+req.getSession().getAttribute("lang") +"/"+ cid;
-			if ((qid != null) && (!qid.equals(""))) {
-				return "redirect:/question/"+req.getSession().getAttribute("lang") +"/" + qid;
-			}
 			return "redirect:/user/admin";
+		}else{
+			return "login";
 		}
-
-		return "redirect:/user/redirectLogin?cid=" + cid + "&qid=" + qid;
 	}
 
 	/**

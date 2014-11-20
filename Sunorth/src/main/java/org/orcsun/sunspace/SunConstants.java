@@ -2,6 +2,9 @@ package org.orcsun.sunspace;
 
 public class SunConstants
 {
+	public static final int UI_PAGE_SIZE = 20;
+	public static final int HTTP_RETURN_CODE_SESSIONEXPIRED=-1;
+	public static final int HTTP_RETURN_CODE_COMMONEXCEPTION=-2;
 	
 	public static final String OPEN_VENDOR_QQ="qq";
 	public static final String OPEN_VENDOR_GOOGLE="google";
