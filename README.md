@@ -1,0 +1,1 @@
+java version for bluepage
